@@ -1,4 +1,4 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
 # Invoke-SPClientLoadQuery.ps1
 #
@@ -76,7 +76,7 @@ function Invoke-SPClientLoadQuery {
                     $buffer += $Retrievals[$index]
                 }
                 if ($depth -ne 0) {
-                    throw 'Braces is not closed.'
+                    throw 'Cannot convert expression because braces is not closed.'
                 }
                 $propExpr = Convert-SPClientMemberAccessExpression -InputString $buffer.Trim() -Expression $paramExpr
                 $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [Object])

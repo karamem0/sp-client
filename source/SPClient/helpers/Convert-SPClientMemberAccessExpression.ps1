@@ -1,4 +1,4 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
 # Convert-SPClientMemberAccessExpression.ps1
 #
@@ -40,9 +40,10 @@ function Convert-SPClientMemberAccessExpression {
         $buffer = ''
         for ($index = 0; $index -lt $InputString.Length; $index += 1) {
             if ($InputString[$index] -eq '.') {
-                $prop = $type.GetProperty($buffer.Trim())
+                $buffer = $buffer.Trim()
+                $prop = $type.GetProperty($buffer)
                 if ($prop -eq $null) {
-                    throw '"' + $type + '" doesn''t contain "' + $buffer.Trim() + '".'
+                    throw "Cannot convert expression because '${type}' has no member named '${buffer}'."
                 }
                 $expr = [System.Linq.Expressions.Expression]::Property($expr, $prop)
                 $type = $prop.PropertyType
@@ -54,9 +55,10 @@ function Convert-SPClientMemberAccessExpression {
         if (Test-GenericSubclassOf -InputType $type -TestType 'Microsoft.SharePoint.Client.ClientObjectCollection`1') {
             $expr = Convert-SPClientIncludeExpression -InputString $buffer -Expression $expr
         } else {
-            $prop = $type.GetProperty($buffer.Trim())
+            $buffer = $buffer.Trim()
+            $prop = $type.GetProperty($buffer)
             if ($prop -eq $null) {
-                throw '"' + $type + '" doesn''t contain "' + $buffer.Trim() + '".'
+                throw "Cannot convert expression because '${type}' has no member named '${buffer}'."
             }
             $expr = [System.Linq.Expressions.Expression]::Property($expr, $prop)
         }

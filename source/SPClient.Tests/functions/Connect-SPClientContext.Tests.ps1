@@ -13,7 +13,7 @@ $testConfig = [Xml](Get-Content "${testProjectDir}\TestConfiguration.xml")
 $Script:SPClient = @{}
 
 Describe 'Connect-SPClientContext' {
-	Context 'Loads Network context' {
+	Context 'Connects to SharePoint Server' {
         Add-SPClientType
         $result = Connect-SPClientContext `
             -Url $testConfig.configuration.sharePointServerUrl `
@@ -29,8 +29,8 @@ Describe 'Connect-SPClientContext' {
             $result.Credentials.UserName | Should Be $testConfig.configuration.sharePointServerUserName
             $result.Credentials.Domain | Should Be $testConfig.configuration.sharePointServerDomain
         }
-	}
-	Context 'Loads SharePoint Online context' {
+    }
+	Context 'Connects to SharePoint Online' {
         Add-SPClientType
         $result = Connect-SPClientContext `
             -Url $testConfig.configuration.sharePointOnlineUrl `
@@ -44,5 +44,5 @@ Describe 'Connect-SPClientContext' {
             $result.Credentials.GetType().Name | Should Be 'SharePointOnlineCredentials' 
             $result.Credentials.UserName | Should Be $testConfig.configuration.sharePointOnlineUserName
         }
-	}
+    }
 }

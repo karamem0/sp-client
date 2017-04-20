@@ -3,12 +3,16 @@
 PowerShell module for SharePoint client-side object model (CSOM).
 
 ## Requirement
-Install [SharePoint Server 2013 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=35585) in order to use this module.
+Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=51679) or [SharePoint Server 2013 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=35585) in order to use this module.
 
 ## Cmdlets
 - Add-SPClientType
 - Connect-SPClientContext
+- Disconnect-SPClientContext
 - Get-SPClientList
+- Get-SPClientField
+- Get-SPClientUser
+- Get-SPClientView
 - Get-SPClientWeb
 
 ## Getting started
@@ -38,8 +42,8 @@ $clientContext.Load($web)
 $clientContext.ExecuteQuery()
 Write-Host $web.Title
 
-# Get All lists ServerRelativeUrl
-# You can't use Load method with retrievals!
+# Get all lists 'ServerRelativeUrl'
+# You can not use Load method with retrievals!
 $lists = $web.Lists
 $clientContext.Load($lists)
 $clientContext.ExecuteQuery()
@@ -68,7 +72,7 @@ Connect-SPClientContext -Network `
 Get-SPClientWeb `
     | %{ Write-Host $_.Title }
 
-# Get All lists ServerRelativeUrl
+# Get all lists 'ServerRelativeUrl'
 # You can use JSOM like retrieval expression
 Get-SPClientList -Retrievals 'Include(RootFolder.ServerRelativeUrl)' `
     | %{ Write-Host $_.RootFolder.ServerRelativeUrl }

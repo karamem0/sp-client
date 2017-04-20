@@ -54,5 +54,5 @@ Describe 'Add-SPClientType' {
             Mock Get-ChildItem { return $false }
             { Add-SPClientType } | Should Throw
         }
-	}
+    }
 }

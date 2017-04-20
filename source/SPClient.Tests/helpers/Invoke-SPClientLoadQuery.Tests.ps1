@@ -1,4 +1,4 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
 $testProjectDir = [String](Resolve-Path -Path ($MyInvocation.MyCommand.Path + '\..\..\'))
 $targetProjectDir = $testProjectDir.Replace('.Tests\', '\')
@@ -13,7 +13,7 @@ $testConfig = [Xml](Get-Content "${testProjectDir}\TestConfiguration.xml")
 $Script:SPClient = @{}
 
 Describe 'Invoke-SPClientLoadQuery' {
-    Context 'Loads ClientObject without Retrievals' {
+    Context 'Loads Microsoft.SharePoint.Client.ClientObject without retrievals' {
         Add-SPClientType
         $clientContext = Connect-SPClientContext `
             -Url $testConfig.configuration.sharePointOnlineUrl `
@@ -27,7 +27,7 @@ Describe 'Invoke-SPClientLoadQuery' {
             $result | Should Be $null
         }
     }
-    Context 'Loads ClientObject with Retrievals' {
+    Context 'Loads Microsoft.SharePoint.Client.ClientObject with retrievals' {
         Add-SPClientType
         $clientContext = Connect-SPClientContext `
             -Url $testConfig.configuration.sharePointOnlineUrl `
@@ -42,7 +42,7 @@ Describe 'Invoke-SPClientLoadQuery' {
             $result | Should Be $null
         }
     }
-    Context 'Loads ClientObjectCollection without Retrievals' {
+    Context 'Loads Microsoft.SharePoint.Client.ClientObjectCollection without retrievals' {
         Add-SPClientType
         $clientContext = Connect-SPClientContext `
             -Url $testConfig.configuration.sharePointOnlineUrl `
@@ -56,7 +56,7 @@ Describe 'Invoke-SPClientLoadQuery' {
             $result | Should Be $null
         }
     }
-    Context 'Loads ClientObjectCollection with Retrievals' {
+    Context 'Loads Microsoft.SharePoint.Client.ClientObjectCollection with retrievals' {
         Add-SPClientType
         $clientContext = Connect-SPClientContext `
             -Url $testConfig.configuration.sharePointOnlineUrl `

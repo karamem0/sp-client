@@ -1,4 +1,4 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
 # Convert-SPClientIncludeExpression.ps1
 #
@@ -36,10 +36,10 @@ function Convert-SPClientIncludeExpression {
 
     process {
         if (-not $InputString.StartsWith('Include(')) {
-            throw '$InputString doesn''t start with "Include(".'
+            throw "Cannot convert expression because 'InputString' parameter does not start with 'Include(  '."
         }
         if (-not $InputString.EndsWith(')')) {
-            throw '$InputString doesn''t end with ")".'
+            throw "Cannot convert expression because 'InputString' parameter does not end with ')'."
         }
         $buffer = ''
         $depth = 0
@@ -63,7 +63,7 @@ function Convert-SPClientIncludeExpression {
             $buffer += $InputString[$index]
         }
         if ($depth -ne 0) {
-            throw 'Braces is not closed.'
+            throw 'Cannot convert expression because braces is not closed.'
         }
         $properties.Add($buffer) | Out-Null
         $itemType = $Expression.Type.BaseType.GenericTypeArguments[0]

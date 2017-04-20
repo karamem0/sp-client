@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Get-SPClientWeb.ps1
+# Get-SPClientUser.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,21 +22,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Get-SPClientWeb {
+function Get-SPClientUser {
 
 <#
 .SYNOPSIS
-  Get SharePoint client web object.
+  Get SharePoint client user object.
 .DESCRIPTION
-  If not specified 'Identity' and 'Url', returns the root web.
+  If not specified 'Identitiy', returns site all users.
   Otherwise, returns a web which matches the parameter.
 .PARAMETER ClientContext
   Indicates the SharePoint client context.
   If not specified, uses the default context.
+.PARAMETER Web
+  Indicates the SharePoint web object.
+  If not specified, uses the root web of default context.
 .PARAMETER Identity
-  Indicates the SharePoint web GUID to get.
-.PARAMETER Url
-  Indicates the SharePoint web relative url to get.
+  Indicates the SharePoint user login name to get.
+    - SharePoint Server: domain\username
+    - SharePoint Online: username@domain
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -46,12 +49,12 @@ function Get-SPClientWeb {
         [Parameter(Position = 0, Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Position = 1, Mandatory = $false, ParameterSetName = "IdentitySet")]
-        [Guid]
-        $Identity,
-        [Parameter(Position = 2, Mandatory = $true, ParameterSetName = "UrlSet")]
+        [Parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $true)]
+        [Microsoft.SharePoint.Client.Web]
+        $Web = $SPClient.ClientContext.Web,
+        [Parameter(Position = 2, Mandatory = $false)]
         [String]
-        $Url,
+        $Identity,
         [Parameter(Position = 3, Mandatory = $false)]
         [String]
         $Retrievals
@@ -61,21 +64,24 @@ function Get-SPClientWeb {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ($PSCmdlet.ParameterSetName -eq 'IdentitySet') {
-            if ($Identity -eq $null) {
-                $web = $ClientContext.Site.RootWeb
-            } else {
-                $web = $ClientContext.Site.OpenWebById($Identity)
-            }
+        if ($Web -eq $null) {
+            throw "Cannot bind argument to parameter 'Web' because it is null."
         }
-        if ($PSCmdlet.ParameterSetName -eq 'UrlSet') {
-            $web = $ClientContext.Site.OpenWeb($Url)
+        if ([String]::IsNullOrEmpty($Identity)) {
+            $users = $Web.SiteUsers
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $users `
+                -Retrievals $Retrievals
+            Write-Output $users
+        } else {
+            $user = $Web.EnsureUser($Identity)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $user `
+                -Retrievals $Retrievals
+            Write-Output $user
         }
-        Invoke-SPClientLoadQuery `
-            -ClientContext $ClientContext `
-            -ClientObject $web `
-            -Retrievals $Retrievals
-        Write-Output $web
     }
 
 }

@@ -12,7 +12,7 @@
 # RootModule = 'Module.psd1'
 
 # Version number of this module.
-ModuleVersion = '0.1'
+ModuleVersion = '0.2'
 
 # ID used to uniquely identify this module
 GUID = '70f6c652-6c79-4b8b-b4a9-79635ea6ae9c'
@@ -24,7 +24,7 @@ Author = 'karamem0'
 CompanyName = 'karamem0'
 
 # Copyright statement for this module
-Copyright = 'Copyright © 2017 karamem0'
+Copyright = 'Copyright (c) 2017 karamem0'
 
 # Description of the functionality provided by this module
 Description = 'PowerShell module for SharePoint client-side object model'
@@ -69,7 +69,11 @@ NestedModules = @('SPClient.psm1')
 FunctionsToExport = @(
     'Add-SPClientType',
     'Connect-SPClientContext',
+    'Disconnect-SPClientContext',
+    'Get-SPClientField',
     'Get-SPClientList',
+    'Get-SPClientUser',
+    'Get-SPClientView',
     'Get-SPClientWeb'
 )
 
@@ -93,7 +97,7 @@ PrivateData = @{
     PSData = @{
         ProjectUri = 'https://github.com/karamem0/spclient'
         LicenseUri = 'https://github.com/karamem0/spclient/blob/master/LICENSE'
-        Tags = @('SharePoint', 'SharePoint Client', 'CSOM')
+        Tags = @('SharePoint', 'CSOM')
     }
 }
 

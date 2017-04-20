@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Get-SPClientList.ps1
+# Get-SPClientView.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,26 +22,25 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Get-SPClientList {
+function Get-SPClientView {
 
 <#
 .SYNOPSIS
-  Get SharePoint client list object.
+  Get SharePoint client view object.
 .DESCRIPTION
-  If not specified 'Identity', 'Url' and 'Title', returns all lists.
-  Otherwise, returns a list which matches the parameter.
+  If not specified 'Identity' and 'Title', returns all views.
+  Otherwise, returns a view which matches the parameter.
 .PARAMETER ClientContext
   Indicates the SharePoint client context.
   If not specified, uses the default context.
-.PARAMETER Web
-  Indicates the SharePoint web object.
-  If not specified, uses the root web of default context.
+.PARAMETER List
+  Indicates the SharePoint list object.
 .PARAMETER Identity
-  Indicates the SharePoint list GUID to get.
-.PARAMETER Url
-  Indicates the SharePoint list relative url to get.
+  Indicates the SharePoint view GUID to get.
 .PARAMETER Title
-  Indicates the SharePoint list title to get.
+  Indicates the SharePoint view title to get.
+.PARAMETER Default
+  If specified, get default view.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -52,17 +51,17 @@ function Get-SPClientList {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.Web]
-        $Web = $SPClient.ClientContext.Web,
+        [Microsoft.SharePoint.Client.List]
+        $List,
         [Parameter(Position = 2, Mandatory = $false, ParameterSetName = 'IdentitySet')]
         [Guid]
         $Identity,
-        [Parameter(Position = 3, Mandatory = $true, ParameterSetName = 'UrlSet')]
-        [String]
-        $Url,
-        [Parameter(Position = 4, Mandatory = $true, ParameterSetName = 'TitleSet')]
+        [Parameter(Position = 3, Mandatory = $true, ParameterSetName = 'TitleSet')]
         [String]
         $Title,
+        [Parameter(Position = 4, Mandatory = $true, ParameterSetName = 'DefaultSet')]
+        [Switch]
+        $Default,
         [Parameter(Position = 5, Mandatory = $false)]
         [String]
         $Retrievals
@@ -72,41 +71,41 @@ function Get-SPClientList {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ($Web -eq $null) {
-            throw "Cannot bind argument to parameter 'Web' because it is null."
+        if ($List -eq $null) {
+            throw "Cannot bind argument to parameter 'List' because it is null."
         }
         if ($PSCmdlet.ParameterSetName -eq 'IdentitySet') {
             if ($Identity -eq $null) {
-                $lists = $Web.Lists
+                $views = $List.Views
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $lists `
+                    -ClientObject $views `
                     -Retrievals $Retrievals
-                Write-Output $lists
+                Write-Output $views
             } else {
-                $list = $Web.Lists.GetById($Identity)
+                $view = $List.Views.GetById($Identity)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $list `
+                    -ClientObject $view `
                     -Retrievals $Retrievals
-                Write-Output $list
+                Write-Output $view
             }
         }
-        if ($PSCmdlet.ParameterSetName -eq 'UrlSet') {
-            $list = $Web.GetList($Url)
-            Invoke-SPClientLoadQuery `
-                -ClientContext $ClientContext `
-                -ClientObject $list `
-                -Retrievals $Retrievals
-            Write-Output $list
-        }
         if ($PSCmdlet.ParameterSetName -eq 'TitleSet') {
-            $list = $Web.Lists.GetByTitle($Title)
+            $view = $List.Views.GetByTitle($Title)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $list `
+                -ClientObject $view `
                 -Retrievals $Retrievals
-            Write-Output $list
+            Write-Output $view
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'DefaultSet') {
+            $view = $List.DefaultView
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $view `
+                -Retrievals $Retrievals
+            Write-Output $view
         }
     }
 

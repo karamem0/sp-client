@@ -12,53 +12,56 @@ $testConfig = [Xml](Get-Content "${testProjectDir}\TestConfiguration.xml")
 
 $Script:SPClient = @{}
 
-Describe 'Get-SPClientList' {
-	Context 'Gets lists without parameter' {
+Describe 'Get-SPClientField' {
+	Context 'Gets fields without parameter' {
         Add-SPClientType
         Connect-SPClientContext `
             -Url $testConfig.configuration.sharePointOnlineUrl `
             -Online `
             -UserName $testConfig.configuration.sharePointOnlineUserName `
             -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Get-SPClientList
+        $list = Get-SPClientList -Url '/SitePages'
+        $result = Get-SPClientField -List $list
         It 'Return value is not null' {
             $result | Should Not Be $null
             $result.Count | Should Not Be 0
         }
         $result | ForEach-Object { Write-Host $_.Title } 
 	}
-	Context 'Gets a list by url' {
+	Context 'Gets a field by title' {
         Add-SPClientType
         Connect-SPClientContext `
             -Url $testConfig.configuration.sharePointOnlineUrl `
             -Online `
             -UserName $testConfig.configuration.sharePointOnlineUserName `
             -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Get-SPClientList -Url '/SitePages'
+        $list = Get-SPClientList -Url '/SitePages'
+        $result = Get-SPClientField -List $list -Title 'Checked Out To'
         It 'Return value is not null' {
             $result | Should Not Be $null
             $result.Count | Should Be 1
         }
-        It 'List title is valid' {
-            $result.Title | Should Be 'Site Pages'
+        It 'View title is valid' {
+            $result.Title | Should Be 'Checked Out To'
         }
         $result | ForEach-Object { Write-Host $_.Title } 
 	}
-	Context 'Gets a list by title' {
+	Context 'Gets a field by internal name' {
         Add-SPClientType
         Connect-SPClientContext `
             -Url $testConfig.configuration.sharePointOnlineUrl `
             -Online `
             -UserName $testConfig.configuration.sharePointOnlineUserName `
             -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Get-SPClientList -Title 'Site Pages'
+        $list = Get-SPClientList -Url '/SitePages'
+        $result = Get-SPClientField -List $list -Title 'CheckoutUser'
         It 'Return value is not null' {
             $result | Should Not Be $null
             $result.Count | Should Be 1
         }
-        It 'List title is valid' {
-            $result.Title | Should Be 'Site Pages'
+        It 'View title is valid' {
+            $result.Title | Should Be 'Checked Out To'
         }
         $result | ForEach-Object { Write-Host $_.Title } 
-    }
+	}
 }

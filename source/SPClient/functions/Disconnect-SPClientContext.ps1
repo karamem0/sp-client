@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Get-SPClientWeb.ps1
+# Disconnect-SPClientContext.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,60 +22,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Get-SPClientWeb {
+function Disconnect-SPClientContext {
 
 <#
 .SYNOPSIS
-  Get SharePoint client web object.
-.DESCRIPTION
-  If not specified 'Identity' and 'Url', returns the root web.
-  Otherwise, returns a web which matches the parameter.
+  Disposes SharePoint client context.
 .PARAMETER ClientContext
-  Indicates the SharePoint client context.
-  If not specified, uses the default context.
-.PARAMETER Identity
-  Indicates the SharePoint web GUID to get.
-.PARAMETER Url
-  Indicates the SharePoint web relative url to get.
-.PARAMETER Retrievals
-  Indicates the data retrieval expression.
+  Indicates the SharePoint client context to disconnect.
 #>
 
     [CmdletBinding()]
     param (
         [Parameter(Position = 0, Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
-        $ClientContext = $SPClient.ClientContext,
-        [Parameter(Position = 1, Mandatory = $false, ParameterSetName = "IdentitySet")]
-        [Guid]
-        $Identity,
-        [Parameter(Position = 2, Mandatory = $true, ParameterSetName = "UrlSet")]
-        [String]
-        $Url,
-        [Parameter(Position = 3, Mandatory = $false)]
-        [String]
-        $Retrievals
+        $ClientContext = $SPClient.ClientContext
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ($PSCmdlet.ParameterSetName -eq 'IdentitySet') {
-            if ($Identity -eq $null) {
-                $web = $ClientContext.Site.RootWeb
-            } else {
-                $web = $ClientContext.Site.OpenWebById($Identity)
-            }
-        }
-        if ($PSCmdlet.ParameterSetName -eq 'UrlSet') {
-            $web = $ClientContext.Site.OpenWeb($Url)
-        }
-        Invoke-SPClientLoadQuery `
-            -ClientContext $ClientContext `
-            -ClientObject $web `
-            -Retrievals $Retrievals
-        Write-Output $web
+        $ClientContext.Dispose()
+        $ClientContext = $null
     }
 
 }

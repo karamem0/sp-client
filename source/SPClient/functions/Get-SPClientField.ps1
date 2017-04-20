@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Get-SPClientWeb.ps1
+# Get-SPClientField.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,21 +22,23 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Get-SPClientWeb {
+function Get-SPClientField {
 
 <#
 .SYNOPSIS
-  Get SharePoint client web object.
+  Get SharePoint client field object.
 .DESCRIPTION
-  If not specified 'Identity' and 'Url', returns the root web.
-  Otherwise, returns a web which matches the parameter.
+  If not specified 'Identity' and 'Title', returns all fields.
+  Otherwise, returns a field which matches the parameter.
 .PARAMETER ClientContext
   Indicates the SharePoint client context.
   If not specified, uses the default context.
+.PARAMETER List
+  Indicates the SharePoint list object.
 .PARAMETER Identity
-  Indicates the SharePoint web GUID to get.
-.PARAMETER Url
-  Indicates the SharePoint web relative url to get.
+  Indicates the SharePoint field GUID to get.
+.PARAMETER Title
+  Indicates the SharePoint field title or internal name to get.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -46,13 +48,16 @@ function Get-SPClientWeb {
         [Parameter(Position = 0, Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Position = 1, Mandatory = $false, ParameterSetName = "IdentitySet")]
+        [Parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $true)]
+        [Microsoft.SharePoint.Client.List]
+        $List,
+        [Parameter(Position = 2, Mandatory = $false, ParameterSetName = 'IdentitySet')]
         [Guid]
         $Identity,
-        [Parameter(Position = 2, Mandatory = $true, ParameterSetName = "UrlSet")]
+        [Parameter(Position = 3, Mandatory = $true, ParameterSetName = 'TitleSet')]
         [String]
-        $Url,
-        [Parameter(Position = 3, Mandatory = $false)]
+        $Title,
+        [Parameter(Position = 4, Mandatory = $false)]
         [String]
         $Retrievals
     )
@@ -61,21 +66,34 @@ function Get-SPClientWeb {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
+        if ($List -eq $null) {
+            throw "Cannot bind argument to parameter 'List' because it is null."
+        }
         if ($PSCmdlet.ParameterSetName -eq 'IdentitySet') {
             if ($Identity -eq $null) {
-                $web = $ClientContext.Site.RootWeb
+                $fields = $List.Fields
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $fields `
+                    -Retrievals $Retrievals
+                Write-Output $fields
             } else {
-                $web = $ClientContext.Site.OpenWebById($Identity)
+                $field = $List.Fields.GetById($Identity)
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $field `
+                    -Retrievals $Retrievals
+                Write-Output $field
             }
         }
-        if ($PSCmdlet.ParameterSetName -eq 'UrlSet') {
-            $web = $ClientContext.Site.OpenWeb($Url)
+        if ($PSCmdlet.ParameterSetName -eq 'TitleSet') {
+            $field = $List.Fields.GetByInternalNameOrTitle($Title)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $field `
+                -Retrievals $Retrievals
+            Write-Output $field
         }
-        Invoke-SPClientLoadQuery `
-            -ClientContext $ClientContext `
-            -ClientObject $web `
-            -Retrievals $Retrievals
-        Write-Output $web
     }
 
 }

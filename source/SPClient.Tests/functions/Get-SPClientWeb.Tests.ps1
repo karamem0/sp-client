@@ -27,6 +27,7 @@ Describe 'Get-SPClientWeb' {
         It 'Web url is valid' {
             $result.ServerRelativeUrl | Should Be '/'
         }
+        $result | ForEach-Object { Write-Host $_.Title } 
 	}
 	Context 'Gets a web by url' {
         Add-SPClientType
@@ -42,8 +43,9 @@ Describe 'Get-SPClientWeb' {
         It 'Web url is valid' {
             $result.ServerRelativeUrl | Should Be '/'
         }
+        $result | ForEach-Object { Write-Host $_.Title } 
 	}
-	Context 'Fails when the web is not found' {
+	Context 'Fails when the specified web could not be found' {
         Add-SPClientType
         Connect-SPClientContext `
             -Url $testConfig.configuration.sharePointOnlineUrl `
@@ -54,5 +56,5 @@ Describe 'Get-SPClientWeb' {
         It 'Error thrown' {
             $result | Should Throw
         }
-	}
+    }
 }
