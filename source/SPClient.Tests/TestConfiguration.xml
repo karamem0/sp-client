@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <sharePointServerUrl>http://localhost</sharePointServerUrl>
+    <sharePointServerUserName>administrator</sharePointServerUserName>
+    <sharePointServerPassword>password</sharePointServerPassword>
+    <sharePointServerDomain>domain.local</sharePointServerDomain>
+    <sharePointOnlineUrl>https://tenantname.sharepoint.com</sharePointOnlineUrl>
+    <sharePointOnlineUserName>admin@tenantname.onmicrosoft.com</sharePointOnlineUserName>
+    <sharePointOnlinePassword>password</sharePointOnlinePassword>
+</configuration>

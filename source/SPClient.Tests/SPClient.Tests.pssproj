@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{c0b17bec-de7a-487e-aef4-596ce490d4cf}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SPClient.Tests</RootNamespace>
+    <AssemblyName>SPClient.Tests</AssemblyName>
+    <Name>SPClient.Tests</Name>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="functions\" />
+    <Folder Include="helpers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="functions\Add-SPClientType.Tests.ps1" />
+    <Compile Include="functions\Connect-SPClientContext.Tests.ps1" />
+    <Compile Include="functions\Get-SPClientList.Tests.ps1" />
+    <Compile Include="functions\Get-SPClientWeb.Tests.ps1" />
+    <Compile Include="helpers\Convert-SPClientIncludeExpression.Tests.ps1" />
+    <Compile Include="helpers\Convert-SPClientMemberAccessExpression.Tests.ps1" />
+    <Compile Include="helpers\Invoke-SPClientLoadQuery.Tests.ps1" />
+    <Compile Include="TestConfiguration.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="Build" />
+</Project>
