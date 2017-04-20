@@ -42,7 +42,7 @@ function Add-SPClientType {
     param (
         [Parameter(Mandatory = $false)]
         [ValidateSet('15', '16')]
-        [String]
+        [string]
         $Version
     )
 
@@ -54,8 +54,8 @@ function Add-SPClientType {
         if (-not (Get-ChildItem $path)) {
             throw 'SharePoint Client Component is not installed.'
         }
-        if ([String]::IsNullOrEmpty($Version)) {
-            $Version = [String](Get-ChildItem $path | Sort-Object -Descending)[0]
+        if ([string]::IsNullOrEmpty($Version)) {
+            $Version = [string](Get-ChildItem $path | Sort-Object -Descending)[0]
         }
         $path = Join-Path $path $Version
         $path = Join-Path $path 'ISAPI'

@@ -16,7 +16,7 @@ Describe 'Convert-SPClientMemberAccessExpression' {
         }
         $result = Convert-SPClientMemberAccessExpression @param
         $result | Should Not Be $null
-        $result | Write-Host
+        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
     }
 
     It 'Converts "RootFolder.Name"' {
@@ -27,7 +27,7 @@ Describe 'Convert-SPClientMemberAccessExpression' {
         }
         $result = Convert-SPClientMemberAccessExpression @param
         $result | Should Not Be $null
-        $result | Write-Host
+        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
     }
 
     It 'Converts "Fields.Include(Title)"' {
@@ -38,7 +38,7 @@ Describe 'Convert-SPClientMemberAccessExpression' {
         }
         $result = Convert-SPClientMemberAccessExpression @param
         $result | Should Not Be $null
-        $result | Write-Host
+        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
     }
 
 }

@@ -27,15 +27,15 @@ function Test-GenericSubclassOf {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
-        [Type]
+        [type]
         $InputType,
         [Parameter(Mandatory = $true)]
-        [Type]
+        [type]
         $TestType
     )
 
     process {
-        while ($InputType -ne $null -and $InputType -ne [Object]) {
+        while ($InputType -ne $null -and $InputType -ne [object]) {
             $type = $InputType
             if ($type.IsGenericType) {
                 $type = $type.GetGenericTypeDefinition()

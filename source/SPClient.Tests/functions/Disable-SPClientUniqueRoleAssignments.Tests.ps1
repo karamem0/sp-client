@@ -2,7 +2,7 @@
 
 . "${PSScriptRoot}\..\TestInitialize.ps1"
 
-Describe 'Disconnect-SPClientContext' {
+Describe 'Disable-SPClientUniqueRoleAssignments' {
 
     BeforeEach {
         Add-SPClientType
@@ -13,18 +13,13 @@ Describe 'Disconnect-SPClientContext' {
             -Password (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
     }
 
-    It 'Disconnects the context' {
+    It 'Disables unique role assignment' {
         try {
-            $result = Disconnect-SPClientContext
+            $list = Get-SPClientList -Title $TestConfig.ListTitle
+            $list | Enable-SPClientUniqueRoleAssignments
+            $result = $list | Disable-SPClientUniqueRoleAssignments
             $result | Should Be $null
-        } finally { }
-    }
-
-    It 'Throws an error when context is null' {
-        try {
-            $SPClient.ClientContext = $null
-            $throw = { Disconnect-SPClientContext }
-            $throw | Should Throw "Cannot bind argument to parameter 'ClientContext' because it is null."
+            $list.HasUniqueRoleAssignments | Should Be $false
         } finally { }
     }
 

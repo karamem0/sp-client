@@ -33,17 +33,17 @@ function Invoke-SPClientLoadQuery {
         [Microsoft.SharePoint.Client.ClientObject]
         $ClientObject,
         [Parameter(Mandatory = $false)]
-        [String]
+        [string]
         $Retrievals
     )
 
     process {
         $objType = $ClientObject.GetType()
-        $funcType = [Type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($objType, [Object]) }
-        $exprType = [Type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($funcType) }
-        $listType = [Type]'System.Collections.Generic.List`1' | ForEach-Object { $_.MakeGenericType($exprType) }
+        $funcType = [type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($objType, [object]) }
+        $exprType = [type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($funcType) }
+        $listType = [type]'System.Collections.Generic.List`1' | ForEach-Object { $_.MakeGenericType($exprType) }
         $exprList = New-Object $listType
-        if (-not [String]::IsNullOrEmpty($Retrievals)) {
+        if (-not [string]::IsNullOrEmpty($Retrievals)) {
             if (Test-GenericSubclassOf -InputType $objType -TestType 'Microsoft.SharePoint.Client.ClientObjectCollection`1') {
                 if ((-not $Retrievals.StartsWith('Include(')) -or
                     (-not $Retrievals.EndsWith(')'))) {
@@ -61,7 +61,7 @@ function Invoke-SPClientLoadQuery {
                 $paramExpr = [System.Linq.Expressions.Expression]::Parameter($objType, $objType.Name)
                 Split-SPClientExpressionString -InputString $Retrievals -Separator ',' | ForEach-Object {
                     $propExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $paramExpr
-                    $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [Object])
+                    $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [object])
                     $lambdaExpr = [System.Linq.Expressions.Expression]::Lambda($funcType, $castExpr, $paramExpr)
                     $exprList.Add($lambdaExpr)
                 }

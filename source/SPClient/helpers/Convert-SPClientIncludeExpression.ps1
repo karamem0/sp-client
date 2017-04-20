@@ -27,7 +27,7 @@ function Convert-SPClientIncludeExpression {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
-        [String]
+        [string]
         $InputString,
         [Parameter(Mandatory = $true)]
         [System.Linq.Expressions.Expression]
@@ -43,12 +43,12 @@ function Convert-SPClientIncludeExpression {
         }
         $InputString = $InputString.Substring(8, $InputString.Length - 9)
         $itemType = $Expression.Type.BaseType.GenericTypeArguments[0]
-        $funcType = [Type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($itemType, [Object]) }
-        $exprType = [Type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($funcType) }
+        $funcType = [type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($itemType, [object]) }
+        $exprType = [type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($funcType) }
         $paramExpr = [System.Linq.Expressions.Expression]::Parameter($itemType, $itemType.Name)
         $lambdaExprArray = Split-SPClientExpressionString -InputString $InputString -Separator ',' | ForEach-Object {
             $propExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $paramExpr
-            $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [Object])
+            $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [object])
             $lambdaExpr = [System.Linq.Expressions.Expression]::Lambda($funcType, $castExpr, $paramExpr)
             Write-Output $lambdaExpr
         }

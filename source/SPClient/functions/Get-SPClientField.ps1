@@ -56,24 +56,21 @@ function Get-SPClientField {
         [Microsoft.SharePoint.Client.List]
         $List,
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Guid]
+        [guid]
         $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Title')]
-        [String]
+        [string]
         $Title,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
-        [String]
+        [string]
         $Retrievals
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
-        }
-        if ($List -eq $null) {
-            throw "Cannot bind argument to parameter 'List' because it is null."
         }
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             $fields = $List.Fields

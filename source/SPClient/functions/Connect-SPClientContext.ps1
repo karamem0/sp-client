@@ -46,29 +46,29 @@ function Connect-SPClientContext {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true, ParameterSetName = 'Network')]
-        [Switch]
+        [switch]
         $Network,
         [Parameter(Mandatory = $true, ParameterSetName = 'Online')]
-        [Switch]
+        [switch]
         $Online,
         [Parameter(Mandatory = $true, ParameterSetName = 'Network')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Online')]
-        [String]
+        [string]
         $Url,
         [Parameter(Mandatory = $true, ParameterSetName = 'Network')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Online')]
-        [String]
+        [string]
         $UserName,
         [Parameter(Mandatory = $true, ParameterSetName = 'Network')]
         [Parameter(Mandatory = $true, ParameterSetName = 'Online')]
-        [SecureString]
+        [securestring]
         $Password,
         [Parameter(Mandatory = $true, ParameterSetName = 'Network')]
-        [String]
+        [string]
         $Domain,
         [Parameter(Mandatory = $false, ParameterSetName = 'Network')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Online')]
-        [Switch]
+        [switch]
         $PassThru
     )
 

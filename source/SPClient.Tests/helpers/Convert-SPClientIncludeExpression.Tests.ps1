@@ -16,7 +16,7 @@ Describe 'Convert-SPClientIncludeExpression' {
         }
         $result = Convert-SPClientIncludeExpression @param
         $result | Should Not Be $null
-        $result | Write-Host
+        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
     }
 
     It 'Converts "Include(RootFolder.Name)"' {
@@ -27,7 +27,7 @@ Describe 'Convert-SPClientIncludeExpression' {
         }
         $result = Convert-SPClientIncludeExpression @param
         $result | Should Not Be $null
-        $result | Write-Host
+        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
     }
 
     It 'Converts "Include(RootFolder.Files.Include(Id, Title))"' {
@@ -38,7 +38,7 @@ Describe 'Convert-SPClientIncludeExpression' {
         } 
         $result = Convert-SPClientIncludeExpression @param
         $result | Should Not Be $null
-        $result | Write-Host
+        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
     }
 
 }

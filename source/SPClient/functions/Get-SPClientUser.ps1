@@ -37,9 +37,9 @@ function Get-SPClientUser {
   Indicates the SharePoint web object.
   If not specified, uses the default web.
 .PARAMETER Identity
+  Indicates the SharePoint user id to get.
+.PARAMETER Name
   Indicates the SharePoint user login name to get.
-    - SharePoint Server: domain\username
-    - SharePoint Online: username@domain
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -48,18 +48,24 @@ function Get-SPClientUser {
     param (
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.Web]
         $Web = $SPClient.ClientContext.Web,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
-        [String]
+        [int]
         $Identity,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
+        [string]
+        $Name,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [String]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [string]
         $Retrievals
     )
 
@@ -79,7 +85,15 @@ function Get-SPClientUser {
             Write-Output @(,$users)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $user = $Web.EnsureUser($Identity)
+            $user = $Web.SiteUsers.GetById($Identity)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $user `
+                -Retrievals $Retrievals
+            Write-Output $user
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Name') {
+            $user = $Web.EnsureUser($Name)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $user `

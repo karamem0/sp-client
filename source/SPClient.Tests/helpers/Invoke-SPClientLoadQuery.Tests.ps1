@@ -7,10 +7,10 @@ Describe 'Invoke-SPClientLoadQuery' {
     BeforeEach {
         Add-SPClientType
         Connect-SPClientContext `
-            -Url $TestConfig.SharePointOnlineUrl `
+            -Url $TestConfig.LoginUrl `
             -Online `
-            -UserName $TestConfig.SharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $TestConfig.SharePointOnlinePassword -Force)
+            -UserName $TestConfig.LoginUserName `
+            -Password (ConvertTo-SecureString -AsPlainText $TestConfig.LoginPassword -Force)
     }
 
     It 'Loads ClientObject without retrievals' {

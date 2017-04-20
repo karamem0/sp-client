@@ -27,7 +27,7 @@ function Convert-SPClientMemberAccessExpression {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
-        [String]
+        [string]
         $InputString,
         [Parameter(Mandatory = $true)]
         [System.Linq.Expressions.Expression]

@@ -61,19 +61,19 @@ function Get-SPClientList {
         [Microsoft.SharePoint.Client.Web]
         $Web = $SPClient.ClientContext.Web,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
-        [Guid]
+        [guid]
         $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
-        [String]
+        [string]
         $Url,
         [Parameter(Mandatory = $true, ParameterSetName = 'Title')]
-        [String]
+        [string]
         $Title,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
-        [String]
+        [string]
         $Retrievals
     )
 

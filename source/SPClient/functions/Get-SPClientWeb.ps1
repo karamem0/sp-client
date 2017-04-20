@@ -55,23 +55,23 @@ function Get-SPClientWeb {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
-        [Guid]
+        [guid]
         $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
-        [String]
+        [string]
         $Url,
         [Parameter(Mandatory = $true, ParameterSetName = 'Default')]
-        [Switch]
+        [switch]
         $Default,
         [Parameter(Mandatory = $true, ParameterSetName = 'Root')]
-        [Switch]
+        [switch]
         $Root,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Root')]
-        [String]
+        [string]
         $Retrievals
     )
 

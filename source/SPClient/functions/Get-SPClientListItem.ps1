@@ -67,30 +67,30 @@ function Get-SPClientListItem {
         [Microsoft.SharePoint.Client.List]
         $List,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [String]
+        [string]
         $FolderUrl,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [ValidateSet('FilesOnly', 'Recursive', 'RecursiveAll')]
-        [String]
+        [string]
         $Scope,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [String]
+        [string]
         $ViewFields,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [String]
+        [string]
         $Query,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Int]
+        [int]
         $RowLimit,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Microsoft.SharePoint.Client.ListItemCollectionPosition]
         $Position,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
-        [Int]
+        [int]
         $Identity,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [String]
+        [string]
         $Retrievals
     )
 
@@ -98,25 +98,22 @@ function Get-SPClientListItem {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ($List -eq $null) {
-            throw "Cannot bind argument to parameter 'List' because it is null."
-        }
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             $caml = New-object Microsoft.SharePoint.Client.CamlQuery
-            if (-not [String]::IsNullOrEmpty($FolderUrl)) {
+            if (-not [string]::IsNullOrEmpty($FolderUrl)) {
                 $caml.FolderServerRelativeUrl = $FolderUrl
             }
             $xml = New-Object System.Xml.XmlDocument
             $xml.AppendChild($xml.CreateElement('View')) | Out-Null
-            if (-not [String]::IsNullOrEmpty($Scope)) {
+            if (-not [string]::IsNullOrEmpty($Scope)) {
                 $xml.DocumentElement.SetAttribute('Scope', $Scope)
             }
-            if (-not [String]::IsNullOrEmpty($ViewFields)) {
+            if (-not [string]::IsNullOrEmpty($ViewFields)) {
                 $fragment = $xml.CreateDocumentFragment()
                 $fragment.InnerXml = $ViewFields
                 $xml.DocumentElement.AppendChild($fragment) | Out-Null
             }
-            if (-not [String]::IsNullOrEmpty($Query)) {
+            if (-not [string]::IsNullOrEmpty($Query)) {
                 $fragment = $xml.CreateDocumentFragment()
                 $fragment.InnerXml = $Query
                 $xml.DocumentElement.AppendChild($fragment) | Out-Null

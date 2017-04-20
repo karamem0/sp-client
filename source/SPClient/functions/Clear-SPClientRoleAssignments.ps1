@@ -1,6 +1,6 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
-# Split-SPClientExpressionString.ps1
+# Clear-SPClientRoleAssignments.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,41 +22,41 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Split-SPClientExpressionString {
+function Clear-SPClientRoleAssignments {
+
+<#
+.SYNOPSIS
+  Clears all role assignments.
+.PARAMETER ClientContext
+  Indicates the SharePoint client context.
+  If not specified, uses the default context.
+.PARAMETER ClientObject
+  Indicates the SharePoint web, list or item.
+#>
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $true)]
-        [string]
-        $InputString,
-        [Parameter(Mandatory = $true)]
-        [string]
-        $Separator
+        [Parameter(Mandatory = $false)]
+        [Microsoft.SharePoint.Client.ClientContext]
+        $ClientContext = $SPClient.ClientContext,
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Microsoft.SharePoint.Client.SecurableObject]
+        $ClientObject
     )
 
     process {
-        $buffer = ''
-        $depth = 0
-        for ($index = 0; $index -lt $InputString.Length; $index += 1) {
-            if ($InputString[$index] -eq $Separator) {
-                if ($depth -eq 0) {
-                    Write-Output $buffer.Trim()
-                    $buffer = ''
-                    continue
-                }
-            }
-            if ($InputString[$index] -eq '(') {
-                $depth += 1
-            }
-            if ($InputString[$index] -eq ')') {
-                $depth -= 1
-            }
-            $buffer += $InputString[$index]
+        Invoke-SPClientLoadQuery `
+            -ClientContext $ClientContext `
+            -ClientObject $ClientObject `
+            -Retrievals 'RoleAssignments'
+        while ($ClientObject.RoleAssignments.Count -gt 0) {
+            $ClientObject.RoleAssignments[0].DeleteObject()
         }
-        if ($depth -ne 0) {
-            throw 'Cannot convert expression because braces is not closed.'
-        }
-        Write-Output $buffer.Trim()
+        Invoke-SPClientLoadQuery `
+            -ClientContext $ClientContext `
+            -ClientObject $ClientObject `
+            -Retrievals 'RoleAssignments.Include(Member,RoleDefinitionBindings)'
+        Write-Output $ClientObject
     }
 
 }

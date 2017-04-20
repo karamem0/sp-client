@@ -2,21 +2,30 @@
 
 PowerShell module for SharePoint client-side object model (CSOM).
 
-## Requirement
+[![Build status](https://img.shields.io/appveyor/ci/karamem0/SPClient.svg?style=flat-square)](https://ci.appveyor.com/project/karamem0/SPClient)
+[![License](https://img.shields.io/github/license/karamem0/SPClient.svg?style=flat-square)](https://github.com/karamem0/SPClient/blob/master/LICENSE)
+
+## Prerequisite
 Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=51679) or [SharePoint Server 2013 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=35585) in order to use this module.
 
 ## Cmdlets
 - Common
-  - Add-SPClientType
-  - Connect-SPClientContext
-  - Disconnect-SPClientContext
+  - `Add-SPClientType`
+  - `Connect-SPClientContext`
+  - `Disconnect-SPClientContext`
 - Data Retrievals
-  - Get-SPClientList
-  - Get-SPClientListItem
-  - Get-SPClientField
-  - Get-SPClientUser
-  - Get-SPClientView
-  - Get-SPClientWeb
+  - `Get-SPClientList`
+  - `Get-SPClientListItem`
+  - `Get-SPClientField`
+  - `Get-SPClientUser`
+  - `Get-SPClientView`
+  - `Get-SPClientWeb`
+- Role Assignments
+  - `Add-SPClientRoleAssignments`
+  - `Clear-SPClientRoleAssignments`
+  - `Disable-SPClientUniqueRoleAssignments`
+  - `Enable-SPClientUniqueRoleAssignments`
+  - `Remove-SPClientRoleAssignments`
 
 ## Getting started
 
