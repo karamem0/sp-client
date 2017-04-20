@@ -40,8 +40,8 @@ function Add-SPClientType {
 
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0, Mandatory = $false)]
-        [ValidateSet("15", "16")]
+        [Parameter(Mandatory = $false)]
+        [ValidateSet('15', '16')]
         [String]
         $Version
     )

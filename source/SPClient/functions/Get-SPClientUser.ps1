@@ -26,16 +26,16 @@ function Get-SPClientUser {
 
 <#
 .SYNOPSIS
-  Get SharePoint client user object.
+  Gets SharePoint client user object.
 .DESCRIPTION
-  If not specified 'Identitiy', returns site all users.
-  Otherwise, returns a web which matches the parameter.
+  If not specified 'Identitiy', returns site all users. Otherwise, returns a web
+  which matches the parameter.
 .PARAMETER ClientContext
   Indicates the SharePoint client context.
   If not specified, uses the default context.
 .PARAMETER Web
   Indicates the SharePoint web object.
-  If not specified, uses the root web of default context.
+  If not specified, uses the default web.
 .PARAMETER Identity
   Indicates the SharePoint user login name to get.
     - SharePoint Server: domain\username
@@ -44,18 +44,21 @@ function Get-SPClientUser {
   Indicates the data retrieval expression.
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Position = 0, Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Microsoft.SharePoint.Client.Web]
         $Web = $SPClient.ClientContext.Web,
-        [Parameter(Position = 2, Mandatory = $false)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [String]
         $Identity,
-        [Parameter(Position = 3, Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [String]
         $Retrievals
     )
@@ -67,14 +70,15 @@ function Get-SPClientUser {
         if ($Web -eq $null) {
             throw "Cannot bind argument to parameter 'Web' because it is null."
         }
-        if ([String]::IsNullOrEmpty($Identity)) {
+        if ($PSCmdlet.ParameterSetName -eq 'All') {
             $users = $Web.SiteUsers
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $users `
                 -Retrievals $Retrievals
-            Write-Output $users
-        } else {
+            Write-Output @(,$users)
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Identity') {
             $user = $Web.EnsureUser($Identity)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `

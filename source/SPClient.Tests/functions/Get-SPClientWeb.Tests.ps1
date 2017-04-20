@@ -1,60 +1,87 @@
 ﻿#Requires -Version 3.0
 
-$testProjectDir = [String](Resolve-Path -Path ($MyInvocation.MyCommand.Path + '\..\..\'))
-$targetProjectDir = $testProjectDir.Replace('.Tests\', '\')
-
-Get-ChildItem -Path $targetProjectDir -Recurse `
-    | Where-Object { -not $_.FullName.Contains('.Tests.') } `
-    | Where-Object Extension -eq '.ps1' `
-    | ForEach-Object { . $_.FullName }
-
-$testConfig = [Xml](Get-Content "${testProjectDir}\TestConfiguration.xml")
-
-$Script:SPClient = @{}
+. "${PSScriptRoot}\..\TestInitialize.ps1"
 
 Describe 'Get-SPClientWeb' {
-	Context 'Gets a web without parameter' {
+
+    BeforeEach {
         Add-SPClientType
         Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
+            -Url $TestConfig.SharePointOnlineUrl `
             -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Get-SPClientWeb
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-        }
-        It 'Web url is valid' {
-            $result.ServerRelativeUrl | Should Be '/'
-        }
-        $result | ForEach-Object { Write-Host $_.Title } 
-	}
-	Context 'Gets a web by url' {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Get-SPClientWeb -Url '/'
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-        }
-        It 'Web url is valid' {
-            $result.ServerRelativeUrl | Should Be '/'
-        }
-        $result | ForEach-Object { Write-Host $_.Title } 
-	}
-	Context 'Fails when the specified web could not be found' {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-            $result = { Get-SPClientWeb -Url '/NotFound' }
-        It 'Error thrown' {
-            $result | Should Throw
-        }
+            -UserName $TestConfig.SharePointOnlineUserName `
+            -Password (ConvertTo-SecureString -String $TestConfig.SharePointOnlinePassword -AsPlainText -Force)
     }
+
+    It 'Gets all webs' {
+        $result = Get-SPClientWeb
+        $result | Should Not Be $null
+        $result | ForEach-Object { Write-Host $_.Title } 
+    }
+
+    It 'Gets a web by id' {
+        $param = @{
+            Identity = $TestConfig.SharePointWebId
+        }
+        $result = Get-SPClientWeb @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Web'
+        $result.Id | Should Be $param.Identity
+        $result | ForEach-Object { Write-Host $_.Title } 
+    }
+
+    It 'Gets a web by url' {
+        $param = @{
+            Url = $TestConfig.SharePointWebUrl
+        }
+        $result = Get-SPClientWeb @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Web'
+        $result.ServerRelativeUrl | Should Be $param.Url
+        $result | ForEach-Object { Write-Host $_.Title } 
+    }
+
+    It 'Gets the default web' {
+        $param = @{
+            Default = $true
+        }
+        $result = Get-SPClientWeb @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Web'
+        $result | ForEach-Object { Write-Host $_.Title } 
+    }
+
+    It 'Gets the root web' {
+        $param = @{
+            Root = $true
+        }
+        $result = Get-SPClientWeb @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Web'
+        $result.ServerRelativeUrl | Should Be '/'
+        $result | ForEach-Object { Write-Host $_.Title } 
+    }
+
+    It 'Throws an error when the web could not be found by id' {
+        $throw = {
+            $param = @{
+                Identity = [Guid]::Empty
+            }
+            $result = Get-SPClientWeb @param
+            $result | ForEach-Object { Write-Host $_.Title } 
+        }
+        $throw | Should Throw
+    }
+
+    It 'Throws an error when the web could not be found by url' {
+        $throw = {
+            $param = @{
+                Url = '/NotFound'
+            }
+            $result = Get-SPClientWeb @param
+            $result | ForEach-Object { Write-Host $_.Title } 
+        }
+        $throw | Should Throw
+    }
+
 }

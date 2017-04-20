@@ -26,10 +26,10 @@ function Get-SPClientWeb {
 
 <#
 .SYNOPSIS
-  Get SharePoint client web object.
+  Gets SharePoint client web object.
 .DESCRIPTION
-  If not specified 'Identity' and 'Url', returns the root web.
-  Otherwise, returns a web which matches the parameter.
+  If not specified 'Identity', 'Url', 'Default', and 'Root', returns the default
+  web and its descendants. Otherwise, returns a web which matches the parameter.
 .PARAMETER ClientContext
   Indicates the SharePoint client context.
   If not specified, uses the default context.
@@ -37,22 +37,40 @@ function Get-SPClientWeb {
   Indicates the SharePoint web GUID to get.
 .PARAMETER Url
   Indicates the SharePoint web relative url to get.
+.PARAMETER Default
+  If specified, returns the default web of the client context.
+.PARAMETER Root
+  If specified, returns the root web.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Position = 0, Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Root')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Position = 1, Mandatory = $false, ParameterSetName = "IdentitySet")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Guid]
         $Identity,
-        [Parameter(Position = 2, Mandatory = $true, ParameterSetName = "UrlSet")]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
         [String]
         $Url,
-        [Parameter(Position = 3, Mandatory = $false)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Default')]
+        [Switch]
+        $Default,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Root')]
+        [Switch]
+        $Root,
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Root')]
         [String]
         $Retrievals
     )
@@ -61,21 +79,76 @@ function Get-SPClientWeb {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ($PSCmdlet.ParameterSetName -eq 'IdentitySet') {
-            if ($Identity -eq $null) {
-                $web = $ClientContext.Site.RootWeb
-            } else {
-                $web = $ClientContext.Site.OpenWebById($Identity)
-            }
+        if ($PSCmdlet.ParameterSetName -eq 'All') {
+            $web = $ClientContext.Web
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $web `
+                -Retrievals $Retrievals
+            Write-Output $web
+            $stack = New-Object System.Collections.Stack
+            do {
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $web.Webs `
+                    -Retrievals $Retrievals
+                while ($web.Webs.Count -gt 0) {
+                    $item = @{
+                        Webs = $web.Webs
+                        Index = 0
+                    }
+                    $stack.Push($item)
+                    $web = $web.Webs[$item.Index]
+                    Write-Output $web
+                    Invoke-SPClientLoadQuery `
+                        -ClientContext $ClientContext `
+                        -ClientObject $web.Webs `
+                        -Retrievals $Retrievals
+                }
+                while ($stack.Count -gt 0) {
+                    $item = $stack.Pop()
+                    $item.Index += 1
+                    if ($item.Index -lt $item.Webs.Count) {
+                        $stack.Push($item)
+                        $web = $item.Webs[$item.Index]
+                        Write-Output $web
+                        break
+                    }
+                }
+            } while ($stack.Count -gt 0)
         }
-        if ($PSCmdlet.ParameterSetName -eq 'UrlSet') {
+        if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+            $web = $ClientContext.Site.OpenWebById($Identity)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $web `
+                -Retrievals $Retrievals
+            Write-Output $web
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Url') {
             $web = $ClientContext.Site.OpenWeb($Url)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $web `
+                -Retrievals $Retrievals
+            Write-Output $web
         }
-        Invoke-SPClientLoadQuery `
-            -ClientContext $ClientContext `
-            -ClientObject $web `
-            -Retrievals $Retrievals
-        Write-Output $web
+        if ($PSCmdlet.ParameterSetName -eq 'Default') {
+            $web = $ClientContext.Web
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $web `
+                -Retrievals $Retrievals
+            Write-Output $web
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Root') {
+            $web = $ClientContext.Site.RootWeb
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $web `
+                -Retrievals $Retrievals
+            Write-Output $web
+        }
     }
 
 }

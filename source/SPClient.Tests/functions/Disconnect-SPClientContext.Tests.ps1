@@ -1,28 +1,27 @@
 ﻿#Requires -Version 3.0
 
-$testProjectDir = [String](Resolve-Path -Path ($MyInvocation.MyCommand.Path + '\..\..\'))
-$targetProjectDir = $testProjectDir.Replace('.Tests\', '\')
-
-Get-ChildItem -Path $targetProjectDir -Recurse `
-    | Where-Object { -not $_.FullName.Contains('.Tests.') } `
-    | Where-Object Extension -eq '.ps1' `
-    | ForEach-Object { . $_.FullName }
-
-$testConfig = [Xml](Get-Content "${testProjectDir}\TestConfiguration.xml")
-
-$Script:SPClient = @{}
+. "${PSScriptRoot}\..\TestInitialize.ps1"
 
 Describe 'Disconnect-SPClientContext' {
-	Context 'Disconnects context' {
+
+    BeforeEach {
         Add-SPClientType
         Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
+            -Url $TestConfig.SharePointOnlineUrl `
             -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        Disconnect-SPClientContext
-        It 'Return value is null' {
-            $result | Should Be $null
-        }
+            -UserName $TestConfig.SharePointOnlineUserName `
+            -Password (ConvertTo-SecureString -String $TestConfig.SharePointOnlinePassword -AsPlainText -Force)
     }
+
+    It 'Disconnects the context' {
+        $result = Disconnect-SPClientContext
+        $result | Should Be $null
+    }
+
+    It 'Throws an error when context is null' {
+        $SPClient.ClientContext = $null
+        $throw = { Disconnect-SPClientContext }
+        $throw | Should Throw "Cannot bind argument to parameter 'ClientContext' because it is null."
+    }
+
 }

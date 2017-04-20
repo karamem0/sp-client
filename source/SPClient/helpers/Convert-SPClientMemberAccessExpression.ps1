@@ -26,10 +26,10 @@ function Convert-SPClientMemberAccessExpression {
 
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0, Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [String]
         $InputString,
-        [Parameter(Position = 1, Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.Linq.Expressions.Expression]
         $Expression
     )
@@ -37,30 +37,17 @@ function Convert-SPClientMemberAccessExpression {
     process {
         $expr = $Expression
         $type = $Expression.Type
-        $buffer = ''
-        for ($index = 0; $index -lt $InputString.Length; $index += 1) {
-            if ($InputString[$index] -eq '.') {
-                $buffer = $buffer.Trim()
-                $prop = $type.GetProperty($buffer)
+        Split-SPClientExpressionString -InputString $InputString -Separator '.' | ForEach-Object {
+            if (Test-GenericSubclassOf -InputType $type -TestType 'Microsoft.SharePoint.Client.ClientObjectCollection`1') {
+                $expr = Convert-SPClientIncludeExpression -InputString $_ -Expression $expr
+            } else {
+                $prop = $type.GetProperty($_)
                 if ($prop -eq $null) {
-                    throw "Cannot convert expression because '${type}' has no member named '${buffer}'."
+                    throw "Cannot convert expression because '${type}' has no member named '${_}'."
                 }
                 $expr = [System.Linq.Expressions.Expression]::Property($expr, $prop)
                 $type = $prop.PropertyType
-                $buffer = ''
-                continue
             }
-            $buffer += $InputString[$index]
-        }
-        if (Test-GenericSubclassOf -InputType $type -TestType 'Microsoft.SharePoint.Client.ClientObjectCollection`1') {
-            $expr = Convert-SPClientIncludeExpression -InputString $buffer -Expression $expr
-        } else {
-            $buffer = $buffer.Trim()
-            $prop = $type.GetProperty($buffer)
-            if ($prop -eq $null) {
-                throw "Cannot convert expression because '${type}' has no member named '${buffer}'."
-            }
-            $expr = [System.Linq.Expressions.Expression]::Property($expr, $prop)
         }
         Write-Output $expr
     }

@@ -1,6 +1,6 @@
-﻿#Requires -Version 3.0
+#Requires -Version 3.0
 
-# Disconnect-SPClientContext.ps1
+# Split-SPClientExpressionString.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,28 +22,41 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Disconnect-SPClientContext {
-
-<#
-.SYNOPSIS
-  Disposes SharePoint client context.
-.PARAMETER ClientContext
-  Indicates the SharePoint client context to disconnect.
-#>
+function Split-SPClientExpressionString {
 
     [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $false)]
-        [Microsoft.SharePoint.Client.ClientContext]
-        $ClientContext = $SPClient.ClientContext
+        [Parameter(Mandatory = $true)]
+        [String]
+        $InputString,
+        [Parameter(Mandatory = $true)]
+        [String]
+        $Separator
     )
 
     process {
-        if ($ClientContext -eq $null) {
-            throw "Cannot bind argument to parameter 'ClientContext' because it is null."
+        $buffer = ''
+        $depth = 0
+        for ($index = 0; $index -lt $InputString.Length; $index += 1) {
+            if ($InputString[$index] -eq $Separator) {
+                if ($depth -eq 0) {
+                    Write-Output $buffer.Trim()
+                    $buffer = ''
+                    continue
+                }
+            }
+            if ($InputString[$index] -eq '(') {
+                $depth += 1
+            }
+            if ($InputString[$index] -eq ')') {
+                $depth -= 1
+            }
+            $buffer += $InputString[$index]
         }
-        $ClientContext.Dispose()
-        $ClientContext = $null
+        if ($depth -ne 0) {
+            throw 'Cannot convert expression because braces is not closed.'
+        }
+        Write-Output $buffer.Trim()
     }
 
 }

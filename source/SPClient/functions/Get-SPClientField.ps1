@@ -26,10 +26,10 @@ function Get-SPClientField {
 
 <#
 .SYNOPSIS
-  Get SharePoint client field object.
+  Gets SharePoint client field object.
 .DESCRIPTION
-  If not specified 'Identity' and 'Title', returns all fields.
-  Otherwise, returns a field which matches the parameter.
+  If not specified 'Identity' and 'Title', returns all fields. Otherwise,
+  returns a field which matches the parameter.
 .PARAMETER ClientContext
   Indicates the SharePoint client context.
   If not specified, uses the default context.
@@ -43,21 +43,27 @@ function Get-SPClientField {
   Indicates the data retrieval expression.
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Position = 0, Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Title')]
         [Microsoft.SharePoint.Client.List]
         $List,
-        [Parameter(Position = 2, Mandatory = $false, ParameterSetName = 'IdentitySet')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Guid]
         $Identity,
-        [Parameter(Position = 3, Mandatory = $true, ParameterSetName = 'TitleSet')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Title')]
         [String]
         $Title,
-        [Parameter(Position = 4, Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
         [String]
         $Retrievals
     )
@@ -69,24 +75,23 @@ function Get-SPClientField {
         if ($List -eq $null) {
             throw "Cannot bind argument to parameter 'List' because it is null."
         }
-        if ($PSCmdlet.ParameterSetName -eq 'IdentitySet') {
-            if ($Identity -eq $null) {
-                $fields = $List.Fields
-                Invoke-SPClientLoadQuery `
-                    -ClientContext $ClientContext `
-                    -ClientObject $fields `
-                    -Retrievals $Retrievals
-                Write-Output $fields
-            } else {
-                $field = $List.Fields.GetById($Identity)
-                Invoke-SPClientLoadQuery `
-                    -ClientContext $ClientContext `
-                    -ClientObject $field `
-                    -Retrievals $Retrievals
-                Write-Output $field
-            }
+        if ($PSCmdlet.ParameterSetName -eq 'All') {
+            $fields = $List.Fields
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $fields `
+                -Retrievals $Retrievals
+            Write-Output @(,$fields)
         }
-        if ($PSCmdlet.ParameterSetName -eq 'TitleSet') {
+        if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+            $field = $List.Fields.GetById($Identity)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $field `
+                -Retrievals $Retrievals
+            Write-Output $field
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Title') {
             $field = $List.Fields.GetByInternalNameOrTitle($Title)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `

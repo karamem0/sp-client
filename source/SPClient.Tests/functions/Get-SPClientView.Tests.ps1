@@ -1,67 +1,83 @@
 ﻿#Requires -Version 3.0
 
-$testProjectDir = [String](Resolve-Path -Path ($MyInvocation.MyCommand.Path + '\..\..\'))
-$targetProjectDir = $testProjectDir.Replace('.Tests\', '\')
-
-Get-ChildItem -Path $targetProjectDir -Recurse `
-    | Where-Object { -not $_.FullName.Contains('.Tests.') } `
-    | Where-Object Extension -eq '.ps1' `
-    | ForEach-Object { . $_.FullName }
-
-$testConfig = [Xml](Get-Content "${testProjectDir}\TestConfiguration.xml")
-
-$Script:SPClient = @{}
+. "${PSScriptRoot}\..\TestInitialize.ps1"
 
 Describe 'Get-SPClientView' {
-	Context 'Gets views without parameter' {
+
+    BeforeEach {
         Add-SPClientType
         Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
+            -Url $TestConfig.SharePointOnlineUrl `
             -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $list = Get-SPClientList -Url '/SitePages'
-        $result = Get-SPClientView -List $list
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-            $result.Count | Should Not Be 0
-        }
-        $result | ForEach-Object { Write-Host $_.Title } 
-	}
-	Context 'Gets a view by title' {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $list = Get-SPClientList -Url '/SitePages'
-        $result = Get-SPClientView -List $list -Title 'All Pages'
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-            $result.Count | Should Be 1
-        }
-        It 'View title is valid' {
-            $result.Title | Should Be 'All Pages'
-        }
-        $result | ForEach-Object { Write-Host $_.Title } 
-	}
-	Context 'Gets the default view' {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $list = Get-SPClientList -Url '/SitePages'
-        $result = Get-SPClientView -List $list -Default
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-            $result.Count | Should Be 1
-        }
-        It 'View title is valid' {
-            $result.DefaultView  | Should Be $true
-        }
-        $result | ForEach-Object { Write-Host $_.Title } 
+            -UserName $TestConfig.SharePointOnlineUserName `
+            -Password (ConvertTo-SecureString -String $TestConfig.SharePointOnlinePassword -AsPlainText -Force)
     }
+
+    It 'Gets all views' {
+        $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+        $result = $list | Get-SPClientView
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.ViewCollection'
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Gets a view by id' {
+        $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+        $param = @{
+            Identity = $TestConfig.SharePointViewId
+        }
+        $result = $list | Get-SPClientView @param 
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.View'
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Gets a view by title' {
+        $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+        $param = @{
+            Title = $TestConfig.SharePointViewTitle
+        }
+        $result = $list | Get-SPClientView @param 
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.View'
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Gets the default view' {
+        $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+        $param = @{
+            Default = $true
+        }
+        $result = $list | Get-SPClientView @param 
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.View'
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Throws an error when the view could not be found by id' {
+        $throw = {
+            $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+            $param = @{
+                Identity = [Guid]::Empty
+            }
+            $result = $list | Get-SPClientView @param 
+            $result | Should Not Be $null
+            $result | ForEach-Object { Write-Host $_.Title }
+        }
+        $throw | Should Throw
+    }
+
+    It 'Throws an error when the view could not be found by title' {
+        $throw = {
+            $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+            $param = @{
+                Title = 'Not Found'
+            }
+            $result = $list | Get-SPClientView @param 
+            $result | Should Not Be $null
+            $result | ForEach-Object { Write-Host $_.Title }
+        }
+        $throw | Should Throw
+    }
+
 }

@@ -12,7 +12,7 @@
 # RootModule = 'Module.psd1'
 
 # Version number of this module.
-ModuleVersion = '0.2'
+ModuleVersion = '0.3'
 
 # ID used to uniquely identify this module
 GUID = '70f6c652-6c79-4b8b-b4a9-79635ea6ae9c'
@@ -67,13 +67,14 @@ NestedModules = @('SPClient.psm1')
 
 # Functions to export from this module
 FunctionsToExport = @(
-    'Add-SPClientType',
-    'Connect-SPClientContext',
-    'Disconnect-SPClientContext',
-    'Get-SPClientField',
-    'Get-SPClientList',
-    'Get-SPClientUser',
-    'Get-SPClientView',
+    'Add-SPClientType'
+    'Connect-SPClientContext'
+    'Disconnect-SPClientContext'
+    'Get-SPClientField'
+    'Get-SPClientList'
+    'Get-SPClientListItem'
+    'Get-SPClientUser'
+    'Get-SPClientView'
     'Get-SPClientWeb'
 )
 
@@ -108,4 +109,3 @@ PrivateData = @{
 # DefaultCommandPrefix = ''
 
 }
-

@@ -1,67 +1,84 @@
 ﻿#Requires -Version 3.0
 
-$testProjectDir = [String](Resolve-Path -Path ($MyInvocation.MyCommand.Path + '\..\..\'))
-$targetProjectDir = $testProjectDir.Replace('.Tests\', '\')
-
-Get-ChildItem -Path $targetProjectDir -Recurse `
-    | Where-Object { -not $_.FullName.Contains('.Tests.') } `
-    | Where-Object Extension -eq '.ps1' `
-    | ForEach-Object { . $_.FullName }
-
-$testConfig = [Xml](Get-Content "${testProjectDir}\TestConfiguration.xml")
-
-$Script:SPClient = @{}
+. "${PSScriptRoot}\..\TestInitialize.ps1"
 
 Describe 'Get-SPClientField' {
-	Context 'Gets fields without parameter' {
+
+    BeforeEach {
         Add-SPClientType
         Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
+            -Url $TestConfig.SharePointOnlineUrl `
             -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $list = Get-SPClientList -Url '/SitePages'
-        $result = Get-SPClientField -List $list
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-            $result.Count | Should Not Be 0
+            -UserName $TestConfig.SharePointOnlineUserName `
+            -Password (ConvertTo-SecureString -String $TestConfig.SharePointOnlinePassword -AsPlainText -Force)
+    }
+
+    It 'Returns all fields' {
+        $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+        $result = $list | Get-SPClientField
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.FieldCollection'
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Returns a field by id' {
+        $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+        $param = @{
+            Identity = $TestConfig.SharePointFieldId
         }
-        $result | ForEach-Object { Write-Host $_.Title } 
-	}
-	Context 'Gets a field by title' {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $list = Get-SPClientList -Url '/SitePages'
-        $result = Get-SPClientField -List $list -Title 'Checked Out To'
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-            $result.Count | Should Be 1
+        $result = $list | Get-SPClientField @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Field'
+        $result.Id | Should Be $param.Identity
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Returns a field by title' {
+        $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+        $param = @{
+            Title = $TestConfig.SharePointFieldTitle
         }
-        It 'View title is valid' {
-            $result.Title | Should Be 'Checked Out To'
+        $result = $list | Get-SPClientField @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Field'
+        $result.Title | Should Be $param.Title
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Returns a field by internal name' {
+        $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+        $param = @{
+            Title = $TestConfig.SharePointFieldInternalName
         }
-        $result | ForEach-Object { Write-Host $_.Title } 
-	}
-	Context 'Gets a field by internal name' {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $list = Get-SPClientList -Url '/SitePages'
-        $result = Get-SPClientField -List $list -Title 'CheckoutUser'
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-            $result.Count | Should Be 1
+        $result = $list | Get-SPClientField @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Field'
+        $result.InternalName | Should Be $param.Title
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Throws an error when the field could not be found by id' {
+        $throw = {
+            $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+            $param = @{
+                Identity = [Guid]::Empty
+            }
+            $result = $list | Get-SPClientField @param
+            $result | ForEach-Object { Write-Host $_.Title }
         }
-        It 'View title is valid' {
-            $result.Title | Should Be 'Checked Out To'
+        $throw | Should Throw
+    }
+
+    It 'Throws an error when the field could not be found by title' {
+        $throw = {
+            $list = Get-SPClientList -Title $TestConfig.SharePointListTitle
+            $param = @{
+                Title = 'Not Found'
+            }
+            $result = $list | Get-SPClientField @param
+            $result | ForEach-Object { Write-Host $_.Title }
         }
-        $result | ForEach-Object { Write-Host $_.Title } 
-	}
+        $throw | Should Throw
+    }
+
 }

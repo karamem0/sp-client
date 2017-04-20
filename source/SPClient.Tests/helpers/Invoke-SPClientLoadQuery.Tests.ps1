@@ -1,74 +1,54 @@
 ﻿#Requires -Version 3.0
 
-$testProjectDir = [String](Resolve-Path -Path ($MyInvocation.MyCommand.Path + '\..\..\'))
-$targetProjectDir = $testProjectDir.Replace('.Tests\', '\')
-
-Get-ChildItem -Path $targetProjectDir -Recurse `
-    | Where-Object { -not $_.FullName.Contains('.Tests.') } `
-    | Where-Object Extension -eq '.ps1' `
-    | ForEach-Object { . $_.FullName }
-
-$testConfig = [Xml](Get-Content "${testProjectDir}\TestConfiguration.xml")
-
-$Script:SPClient = @{}
+. "${PSScriptRoot}\..\TestInitialize.ps1"
 
 Describe 'Invoke-SPClientLoadQuery' {
-    Context 'Loads Microsoft.SharePoint.Client.ClientObject without retrievals' {
+
+    BeforeEach {
         Add-SPClientType
-        $clientContext = Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
+        Connect-SPClientContext `
+            -Url $TestConfig.SharePointOnlineUrl `
             -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Invoke-SPClientLoadQuery `
-            -ClientContext $clientContext `
-            -ClientObject $clientContext.Web
-        It 'Return value is null' {
-            $result | Should Be $null
-        }
+            -UserName $TestConfig.SharePointOnlineUserName `
+            -Password (ConvertTo-SecureString -AsPlainText $TestConfig.SharePointOnlinePassword -Force)
     }
-    Context 'Loads Microsoft.SharePoint.Client.ClientObject with retrievals' {
-        Add-SPClientType
-        $clientContext = Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Invoke-SPClientLoadQuery `
-            -ClientContext $clientContext `
-            -ClientObject $clientContext.Web `
-            -Retrievals 'Id, RootFolder.ServerRelativeUrl'
-        It 'Return value is null' {
-            $result | Should Be $null
+
+    It 'Loads ClientObject without retrievals' {
+        $param = @{
+            ClientContext = $SPClient.ClientContext
+            ClientObject = $SPClient.ClientContext.Web
         }
+        $result = Invoke-SPClientLoadQuery @param
+        $result | Should Be $null
     }
-    Context 'Loads Microsoft.SharePoint.Client.ClientObjectCollection without retrievals' {
-        Add-SPClientType
-        $clientContext = Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Invoke-SPClientLoadQuery `
-            -ClientContext $clientContext `
-            -ClientObject $clientContext.Web.Lists
-        It 'Return value is null' {
-            $result | Should Be $null
+
+    It 'Loads ClientObject with retrievals' {
+        $param = @{
+            ClientContext = $SPClient.ClientContext
+            ClientObject = $SPClient.ClientContext.Web
+            Retrievals = 'Id, RootFolder.ServerRelativeUrl'
         }
+        $result = Invoke-SPClientLoadQuery @param
+        $result | Should Be $null
     }
-    Context 'Loads Microsoft.SharePoint.Client.ClientObjectCollection with retrievals' {
-        Add-SPClientType
-        $clientContext = Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Invoke-SPClientLoadQuery `
-            -ClientContext $clientContext `
-            -ClientObject $clientContext.Web.Lists `
-            -Retrievals 'Include(RootFolder.ServerRelativeUrl)'
-        It 'Return value is null' {
-            $result | Should Be $null
+
+    It 'Loads ClientObjectCollection without retrievals' {
+        $param = @{
+            ClientContext = $SPClient.ClientContext
+            ClientObject = $SPClient.ClientContext.Web.Lists
         }
+        $result = Invoke-SPClientLoadQuery @param
+        $result | Should Be $null
     }
+
+    It 'Loads ClientObjectCollection with retrievals' {
+        $param = @{
+            ClientContext = $SPClient.ClientContext
+            ClientObject = $SPClient.ClientContext.Web.Lists
+            Retrievals = 'Include(RootFolder.ServerRelativeUrl)'
+        }
+        $result = Invoke-SPClientLoadQuery @param
+        $result | Should Be $null
+    }
+
 }

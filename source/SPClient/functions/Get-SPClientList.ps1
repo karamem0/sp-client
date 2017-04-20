@@ -26,44 +26,53 @@ function Get-SPClientList {
 
 <#
 .SYNOPSIS
-  Get SharePoint client list object.
+  Gets SharePoint client list object.
 .DESCRIPTION
-  If not specified 'Identity', 'Url' and 'Title', returns all lists.
-  Otherwise, returns a list which matches the parameter.
+  If not specified 'Identity', 'Url' and 'Title', returns all lists. Otherwise,
+  returns a list which matches the parameter.
 .PARAMETER ClientContext
   Indicates the SharePoint client context.
   If not specified, uses the default context.
 .PARAMETER Web
   Indicates the SharePoint web object.
-  If not specified, uses the root web of default context.
+  If not specified, uses the default web.
 .PARAMETER Identity
   Indicates the SharePoint list GUID to get.
 .PARAMETER Url
   Indicates the SharePoint list relative url to get.
 .PARAMETER Title
-  Indicates the SharePoint list title to get.
+  Indicates the SharePoint list title or internal name to get.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Position = 0, Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Position = 1, Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Title')]
         [Microsoft.SharePoint.Client.Web]
         $Web = $SPClient.ClientContext.Web,
-        [Parameter(Position = 2, Mandatory = $false, ParameterSetName = 'IdentitySet')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Guid]
         $Identity,
-        [Parameter(Position = 3, Mandatory = $true, ParameterSetName = 'UrlSet')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
         [String]
         $Url,
-        [Parameter(Position = 4, Mandatory = $true, ParameterSetName = 'TitleSet')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Title')]
         [String]
         $Title,
-        [Parameter(Position = 5, Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
         [String]
         $Retrievals
     )
@@ -75,24 +84,23 @@ function Get-SPClientList {
         if ($Web -eq $null) {
             throw "Cannot bind argument to parameter 'Web' because it is null."
         }
-        if ($PSCmdlet.ParameterSetName -eq 'IdentitySet') {
-            if ($Identity -eq $null) {
-                $lists = $Web.Lists
-                Invoke-SPClientLoadQuery `
-                    -ClientContext $ClientContext `
-                    -ClientObject $lists `
-                    -Retrievals $Retrievals
-                Write-Output $lists
-            } else {
-                $list = $Web.Lists.GetById($Identity)
-                Invoke-SPClientLoadQuery `
-                    -ClientContext $ClientContext `
-                    -ClientObject $list `
-                    -Retrievals $Retrievals
-                Write-Output $list
-            }
+        if ($PSCmdlet.ParameterSetName -eq 'All') {
+            $lists = $Web.Lists
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $lists `
+                -Retrievals $Retrievals
+            Write-Output @(,$lists)
         }
-        if ($PSCmdlet.ParameterSetName -eq 'UrlSet') {
+        if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+            $list = $Web.Lists.GetById($Identity)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $list `
+                -Retrievals $Retrievals
+            Write-Output $list
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Url') {
             $list = $Web.GetList($Url)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
@@ -100,12 +108,28 @@ function Get-SPClientList {
                 -Retrievals $Retrievals
             Write-Output $list
         }
-        if ($PSCmdlet.ParameterSetName -eq 'TitleSet') {
-            $list = $Web.Lists.GetByTitle($Title)
-            Invoke-SPClientLoadQuery `
-                -ClientContext $ClientContext `
-                -ClientObject $list `
-                -Retrievals $Retrievals
+        if ($PSCmdlet.ParameterSetName -eq 'Title') {
+            try {
+                $list = $Web.Lists.GetByTitle($Title)
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $list `
+                    -Retrievals $Retrievals
+            } catch {
+                $lists = $Web.Lists
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $lists `
+                    -Retrievals 'Include(RootFolder.Name)'
+                $list = $lists | Where-Object { $_.RootFolder.Name -eq $Title }
+                if ($list -eq $null) {
+                    throw $_
+                }
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $list `
+                    -Retrievals $Retrievals
+            }
             Write-Output $list
         }
     }

@@ -26,10 +26,10 @@ function Test-GenericSubclassOf {
 
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0, Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [Type]
         $InputType,
-        [Parameter(Position = 1, Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [Type]
         $TestType
     )

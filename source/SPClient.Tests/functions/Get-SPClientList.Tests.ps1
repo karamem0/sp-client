@@ -1,64 +1,110 @@
 ﻿#Requires -Version 3.0
 
-$testProjectDir = [String](Resolve-Path -Path ($MyInvocation.MyCommand.Path + '\..\..\'))
-$targetProjectDir = $testProjectDir.Replace('.Tests\', '\')
-
-Get-ChildItem -Path $targetProjectDir -Recurse `
-    | Where-Object { -not $_.FullName.Contains('.Tests.') } `
-    | Where-Object Extension -eq '.ps1' `
-    | ForEach-Object { . $_.FullName }
-
-$testConfig = [Xml](Get-Content "${testProjectDir}\TestConfiguration.xml")
-
-$Script:SPClient = @{}
+. "${PSScriptRoot}\..\TestInitialize.ps1"
 
 Describe 'Get-SPClientList' {
-	Context 'Gets lists without parameter' {
+    
+    BeforeEach {
         Add-SPClientType
         Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
+            -Url $TestConfig.SharePointOnlineUrl `
             -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Get-SPClientList
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-            $result.Count | Should Not Be 0
-        }
-        $result | ForEach-Object { Write-Host $_.Title } 
-	}
-	Context 'Gets a list by url' {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Get-SPClientList -Url '/SitePages'
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-            $result.Count | Should Be 1
-        }
-        It 'List title is valid' {
-            $result.Title | Should Be 'Site Pages'
-        }
-        $result | ForEach-Object { Write-Host $_.Title } 
-	}
-	Context 'Gets a list by title' {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $testConfig.configuration.sharePointOnlineUrl `
-            -Online `
-            -UserName $testConfig.configuration.sharePointOnlineUserName `
-            -Password (ConvertTo-SecureString -AsPlainText $testConfig.configuration.sharePointOnlinePassword -Force)
-        $result = Get-SPClientList -Title 'Site Pages'
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-            $result.Count | Should Be 1
-        }
-        It 'List title is valid' {
-            $result.Title | Should Be 'Site Pages'
-        }
-        $result | ForEach-Object { Write-Host $_.Title } 
+            -UserName $TestConfig.SharePointOnlineUserName `
+            -Password (ConvertTo-SecureString -String $TestConfig.SharePointOnlinePassword -AsPlainText -Force)
     }
+
+    It 'Returns all lists' {
+        $web = Get-SPClientWeb -Default
+        $result = $web | Get-SPClientList
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.ListCollection'
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Returns a list by id' {
+        $web = Get-SPClientWeb -Default
+        $param = @{
+            Identity = $TestConfig.SharePointListId
+        }
+        $result = $web | Get-SPClientList @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.List'
+        $result.Id | Should Be $param.Identity
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Returns a list by url' {
+        $web = Get-SPClientWeb -Default
+        $param = @{
+            Url = $web.ServerRelativeUrl.TrimEnd('/') + '/' + $TestConfig.SharePointListInternalName
+            Retrievals = 'Title,RootFolder.ServerRelativeUrl'
+        }
+        $result = $web | Get-SPClientList @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.List'
+        $result.RootFolder.ServerRelativeUrl | Should Be $param.Url   
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Returns a list by title' {
+        $web = Get-SPClientWeb -Default
+        $param = @{
+            Title = $TestConfig.SharePointListTitle
+        }
+        $result = $web | Get-SPClientList @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.List'
+        $result.Title | Should Be $param.Title
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Returns a list by internal name' {
+        $web = Get-SPClientWeb -Default
+        $param = @{
+            Title = $TestConfig.SharePointListInternalName
+            Retrievals = 'Title,RootFolder.ServerRelativeUrl'
+        }
+        $result = $web | Get-SPClientList @param
+        $result | Should Not Be $null
+        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.List'
+        $result.RootFolder.ServerRelativeUrl | Should Match "$($param.Title)$"   
+        $result | ForEach-Object { Write-Host $_.Title }
+    }
+
+    It 'Throws an error when the list could not be found by id' {
+        $throw = {
+            $web = Get-SPClientWeb -Default
+            $param = @{
+                Identity = [Guid]::Empty
+            }
+            $result = $web | Get-SPClientList @param
+            $result | ForEach-Object { Write-Host $_.Title }
+        }
+        $throw | Should Throw
+    }
+
+    It 'Throws an error when the list could not be found by url' {
+        $throw = {
+            $web = Get-SPClientWeb -Default
+            $param = @{
+                Url = $web.ServerRelativeUrl.TrimEnd('/') + '/NotFound'
+            }
+            $result = $web | Get-SPClientList @param
+            $result | ForEach-Object { Write-Host $_.Title }
+        }
+        $throw | Should Throw
+    }
+
+    It 'Throws an error when the list could not be found by title' {
+        $throw = {
+            $web = Get-SPClientWeb -Default
+            $param = @{
+                Title = 'Not Found'
+            }
+            $result = $web | Get-SPClientList @param
+            $result | ForEach-Object { Write-Host $_.Title }
+        }
+        $throw | Should Throw
+    }
+
 }

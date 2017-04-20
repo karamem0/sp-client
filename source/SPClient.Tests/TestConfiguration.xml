@@ -1,10 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-    <sharePointServerUrl>http://localhost</sharePointServerUrl>
-    <sharePointServerUserName>administrator</sharePointServerUserName>
-    <sharePointServerPassword>password</sharePointServerPassword>
-    <sharePointServerDomain>domain.local</sharePointServerDomain>
-    <sharePointOnlineUrl>https://tenantname.sharepoint.com</sharePointOnlineUrl>
-    <sharePointOnlineUserName>admin@tenantname.onmicrosoft.com</sharePointOnlineUserName>
-    <sharePointOnlinePassword>password</sharePointOnlinePassword>
-</configuration>
+<TestConfiguration>
+    <SharePointServerUrl>http://localhost</SharePointServerUrl>
+    <SharePointServerUserName>administrator</SharePointServerUserName>
+    <SharePointServerPassword>password</SharePointServerPassword>
+    <SharePointServerDomain>domain.local</SharePointServerDomain>
+    <SharePointOnlineUrl>https://tenant.sharepoint.com</SharePointOnlineUrl>
+    <SharePointOnlineUserName>administrator@tenant.onmicrosoft.com</SharePointOnlineUserName>
+    <SharePointOnlinePassword>password</SharePointOnlinePassword>
+    <SharePointWebId>00000000-0000-0000-0000-000000000000</SharePointWebId>
+    <SharePointWebUrl>/WebUrl</SharePointWebUrl>
+    <SharePointListId>00000000-0000-0000-0000-000000000000</SharePointListId>
+    <SharePointListTitle>ListTitle</SharePointListTitle>
+    <SharePointListInternalName>ListName</SharePointListInternalName>
+    <SharePointViewId>00000000-0000-0000-0000-000000000000</SharePointViewId>
+    <SharePointViewTitle>ViewTitle</SharePointViewTitle>
+    <SharePointFieldId>00000000-0000-0000-0000-000000000000</SharePointFieldId>
+    <SharePointFieldTitle>FieldTitle</SharePointFieldTitle>
+    <SharePointFieldInternalName>FieldName</SharePointFieldInternalName>
+</TestConfiguration>

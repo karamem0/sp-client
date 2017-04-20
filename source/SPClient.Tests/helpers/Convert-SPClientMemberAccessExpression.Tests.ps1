@@ -1,52 +1,44 @@
 ﻿#Requires -Version 3.0
 
-$testProjectDir = [String](Resolve-Path -Path ($MyInvocation.MyCommand.Path + '\..\..\'))
-$targetProjectDir = $testProjectDir.Replace('.Tests\', '\')
-
-Get-ChildItem -Path $targetProjectDir -Recurse `
-    | Where-Object { -not $_.FullName.Contains('.Tests.') } `
-    | Where-Object Extension -eq '.ps1' `
-    | ForEach-Object { . $_.FullName }
-
-$testConfig = [Xml](Get-Content "${testProjectDir}\TestConfiguration.xml")
-
-$Script:SPClient = @{}
+. "${PSScriptRoot}\..\TestInitialize.ps1"
 
 Describe 'Convert-SPClientMemberAccessExpression' {
-	Context 'Converts "Title"' {
+
+    BeforeEach {
         Add-SPClientType
-        $type = [Microsoft.SharePoint.Client.List]
-        $expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
-        $result = Convert-SPClientMemberAccessExpression -InputString 'Title' -Expression $expression
-        It 'Return value is not null' {
-            $result | Should Not Be $null
-        }
-        It 'Return value is valid' {
-            $result.ToString() | Should Be 'List.Title'
-        }
     }
-	Context 'Converts "RootFolder.Name"' {
-        Add-SPClientType
+
+    It 'Converts "Title"' {
         $type = [Microsoft.SharePoint.Client.List]
-        $expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
-        $result = Convert-SPClientMemberAccessExpression -InputString 'RootFolder.Name' -Expression $expression
-        It 'Return value is not null' {
-            $result | Should Not Be $null
+        $param = @{
+            InputString = 'Title'
+            Expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
         }
-        It 'Return value is valid' {
-            $result.ToString() | Should Be 'List.RootFolder.Name'
-        }
+        $result = Convert-SPClientMemberAccessExpression @param
+        $result | Should Not Be $null
+        $result | Write-Host
     }
-	Context 'Converts "Folder.Include(Title)"' {
-        Add-SPClientType
+
+    It 'Converts "RootFolder.Name"' {
         $type = [Microsoft.SharePoint.Client.List]
-        $expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
-        $result = Convert-SPClientMemberAccessExpression -InputString 'Fields.Include(Title)' -Expression $expression
-        It 'Return value is not null' {
-            $result | Should Not Be $null
+        $param = @{
+            InputString = 'RootFolder.Name'
+            Expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
         }
-        It 'Return value is valid' {
-            $result.ToString() | Should Be 'List.Fields.Include(new [] {Field => Convert(Field.Title)})'
-        }
+        $result = Convert-SPClientMemberAccessExpression @param
+        $result | Should Not Be $null
+        $result | Write-Host
     }
+
+    It 'Converts "Fields.Include(Title)"' {
+        $type = [Microsoft.SharePoint.Client.List]
+        $param = @{
+            InputString = 'Fields.Include(Title)'
+            Expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
+        }
+        $result = Convert-SPClientMemberAccessExpression @param
+        $result | Should Not Be $null
+        $result | Write-Host
+    }
+
 }

@@ -26,13 +26,13 @@ function Invoke-SPClientLoadQuery {
 
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0, Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Position = 1, Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [Microsoft.SharePoint.Client.ClientObject]
         $ClientObject,
-        [Parameter(Position = 2, Mandatory = $false)]
+        [Parameter(Mandatory = $false)]
         [String]
         $Retrievals
     )
@@ -43,47 +43,31 @@ function Invoke-SPClientLoadQuery {
         $exprType = [Type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($funcType) }
         $listType = [Type]'System.Collections.Generic.List`1' | ForEach-Object { $_.MakeGenericType($exprType) }
         $exprList = New-Object $listType
-        $loadMethod = $ClientContext.GetType().GetMethod('Load').MakeGenericMethod($objType)
         if (-not [String]::IsNullOrEmpty($Retrievals)) {
             if (Test-GenericSubclassOf -InputType $objType -TestType 'Microsoft.SharePoint.Client.ClientObjectCollection`1') {
+                if ((-not $Retrievals.StartsWith('Include(')) -or
+                    (-not $Retrievals.EndsWith(')'))) {
+                    $Retrievals = 'Include(' + $Retrievals + ')'
+                }
                 $paramExpr = [System.Linq.Expressions.Expression]::Parameter($objType, $objType.Name)
                 $propExpr = Convert-SPClientIncludeExpression -InputString $Retrievals -Expression $paramExpr
                 $lambdaExpr = [System.Linq.Expressions.Expression]::Lambda($funcType, $propExpr, $paramExpr)
-                $exprList.Add($lambdaExpr) | Out-Null
+                $exprList.Add($lambdaExpr)
             } else {
+                if (($Retrievals.StartsWith('Include(')) -and
+                    ($Retrievals.EndsWith(')'))) {
+                    $Retrievals = $Retrievals.Substring(8, $Retrievals.Length - 9)
+                }
                 $paramExpr = [System.Linq.Expressions.Expression]::Parameter($objType, $objType.Name)
-                $buffer = ''
-                $depth = 0
-                for ($index = 0; $index -lt $Retrievals.Length; $index += 1) {
-                    if ($Retrievals[$index] -eq ',') {
-                        if ($depth -eq 0) {
-                            $propExpr = Convert-SPClientMemberAccessExpression -InputString $buffer.Trim() -Expression $paramExpr
-                            $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [Object])
-                            $lambdaExpr = [System.Linq.Expressions.Expression]::Lambda($funcType, $castExpr, $paramExpr)
-                            $exprList.Add($lambdaExpr) | Out-Null
-                            $buffer = ''
-                            continue
-                        }
-                    }
-                    if ($Retrievals[$index] -eq '.') {
-                        if ($Retrievals.Substring($index + 1).StartsWith('Include(')) {
-                            $depth += 1
-                        }
-                    }
-                    if ($Retrievals[$index] -eq ')') {
-                        $depth -= 1
-                    }
-                    $buffer += $Retrievals[$index]
+                Split-SPClientExpressionString -InputString $Retrievals -Separator ',' | ForEach-Object {
+                    $propExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $paramExpr
+                    $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [Object])
+                    $lambdaExpr = [System.Linq.Expressions.Expression]::Lambda($funcType, $castExpr, $paramExpr)
+                    $exprList.Add($lambdaExpr)
                 }
-                if ($depth -ne 0) {
-                    throw 'Cannot convert expression because braces is not closed.'
-                }
-                $propExpr = Convert-SPClientMemberAccessExpression -InputString $buffer.Trim() -Expression $paramExpr
-                $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [Object])
-                $lambdaExpr = [System.Linq.Expressions.Expression]::Lambda($funcType, $propExpr, $paramExpr)
-                $exprList.Add($lambdaExpr) | Out-Null
             }
         }
+        $loadMethod = $ClientContext.GetType().GetMethod('Load').MakeGenericMethod($objType)
         $loadMethod.Invoke($ClientContext, @($ClientObject, $exprList.ToArray())) | Out-Null
         $ClientContext.ExecuteQuery()
     }

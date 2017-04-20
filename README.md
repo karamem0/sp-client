@@ -6,14 +6,17 @@ PowerShell module for SharePoint client-side object model (CSOM).
 Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=51679) or [SharePoint Server 2013 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=35585) in order to use this module.
 
 ## Cmdlets
-- Add-SPClientType
-- Connect-SPClientContext
-- Disconnect-SPClientContext
-- Get-SPClientList
-- Get-SPClientField
-- Get-SPClientUser
-- Get-SPClientView
-- Get-SPClientWeb
+- Common
+  - Add-SPClientType
+  - Connect-SPClientContext
+  - Disconnect-SPClientContext
+- Data Retrievals
+  - Get-SPClientList
+  - Get-SPClientListItem
+  - Get-SPClientField
+  - Get-SPClientUser
+  - Get-SPClientView
+  - Get-SPClientWeb
 
 ## Getting started
 
@@ -28,7 +31,7 @@ Add-Type -Path 'C:\Program Files\Common Files\Microsoft Shared\Web Server Extens
 $userName = 'administrator'
 $password = 'password'
 $domain = 'domain.local'
-$password = ConvertTo-SecureString -AsPlainText $password -Force
+$password = ConvertTo-SecureString -String $password -AsPlainText -Force
 $credentials = New-Object System.Net.NetworkCredential($userName, $password, $domain)
 
 # Create context
@@ -64,12 +67,11 @@ Add-SPClientType
 Connect-SPClientContext -Network `
     -Url 'http://localhost' `
     -UserName 'administrator' `
-    -Password (ConvertTo-SecureString -AsPlainText 'password' -Force) `
-    -Domain 'domain.local' `
-    | Out-Null
+    -Password (ConvertTo-SecureString -String 'password' -AsPlainText -Force) `
+    -Domain 'domain.local'
 
 # Get web title
-Get-SPClientWeb `
+Get-SPClientWeb -Default `
     | %{ Write-Host $_.Title }
 
 # Get all lists 'ServerRelativeUrl'

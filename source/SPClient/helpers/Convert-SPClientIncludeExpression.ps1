@@ -26,10 +26,10 @@ function Convert-SPClientIncludeExpression {
 
     [CmdletBinding()]
     param (
-        [Parameter(Position = 0, Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [String]
         $InputString,
-        [Parameter(Position = 1, Mandatory = $true)]
+        [Parameter(Mandatory = $true)]
         [System.Linq.Expressions.Expression]
         $Expression
     )
@@ -41,36 +41,12 @@ function Convert-SPClientIncludeExpression {
         if (-not $InputString.EndsWith(')')) {
             throw "Cannot convert expression because 'InputString' parameter does not end with ')'."
         }
-        $buffer = ''
-        $depth = 0
-        $properties = New-Object System.Collections.ArrayList
-        for ($index = 8; $index -lt $InputString.Length - 1; $index += 1) {
-            if ($InputString[$index] -eq ',') {
-                if ($depth -eq 0) {
-                    $properties.Add($buffer.Trim()) | Out-Null
-                    $buffer = ''
-                    continue
-                }
-            }
-            if ($InputString[$index] -eq '.') {
-                if ($InputString.Substring($index + 1).StartsWith('Include(')) {
-                    $depth += 1
-                }
-            }
-            if ($InputString[$index] -eq ')') {
-                $depth -= 1
-            }
-            $buffer += $InputString[$index]
-        }
-        if ($depth -ne 0) {
-            throw 'Cannot convert expression because braces is not closed.'
-        }
-        $properties.Add($buffer) | Out-Null
+        $InputString = $InputString.Substring(8, $InputString.Length - 9)
         $itemType = $Expression.Type.BaseType.GenericTypeArguments[0]
         $funcType = [Type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($itemType, [Object]) }
         $exprType = [Type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($funcType) }
         $paramExpr = [System.Linq.Expressions.Expression]::Parameter($itemType, $itemType.Name)
-        $lambdaExprArray = $properties | ForEach-Object {
+        $lambdaExprArray = Split-SPClientExpressionString -InputString $InputString -Separator ',' | ForEach-Object {
             $propExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $paramExpr
             $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [Object])
             $lambdaExpr = [System.Linq.Expressions.Expression]::Lambda($funcType, $castExpr, $paramExpr)
