@@ -5,7 +5,7 @@ PowerShell module for SharePoint client-side object model (CSOM).
 [![Build status](https://img.shields.io/appveyor/ci/karamem0/SPClient.svg?style=flat-square)](https://ci.appveyor.com/project/karamem0/SPClient)
 [![License](https://img.shields.io/github/license/karamem0/SPClient.svg?style=flat-square)](https://github.com/karamem0/SPClient/blob/master/LICENSE)
 
-## Prerequisite
+## Prerequisites
 Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=51679) or [SharePoint Server 2013 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=35585) in order to use this module.
 
 ## Cmdlets
@@ -13,13 +13,21 @@ Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com
   - `Add-SPClientType`
   - `Connect-SPClientContext`
   - `Disconnect-SPClientContext`
-- Data Retrievals
-  - `Get-SPClientList`
-  - `Get-SPClientListItem`
-  - `Get-SPClientField`
-  - `Get-SPClientUser`
-  - `Get-SPClientView`
+- Contents
   - `Get-SPClientWeb`
+  - `New-SPClientWeb`
+  - `Remove-SPClientWeb`
+  - `Get-SPClientList`
+  - `New-SPClientList`
+  - `Remove-SPClientList`
+  - `Get-SPClientField`
+  - `Get-SPClientView`
+  - `Get-SPClientListItem`
+  - `New-SPClientListItem`
+  - `Remove-SPClientListItem`
+- Users and Groups
+  - `Get-SPClientGroup`
+  - `Get-SPClientUser`
 - Role Assignments
   - `Add-SPClientRoleAssignments`
   - `Clear-SPClientRoleAssignments`
