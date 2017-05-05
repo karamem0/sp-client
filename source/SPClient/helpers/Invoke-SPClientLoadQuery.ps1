@@ -38,37 +38,37 @@ function Invoke-SPClientLoadQuery {
     )
 
     process {
-        $objType = $ClientObject.GetType()
-        $funcType = [type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($objType, [object]) }
-        $exprType = [type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($funcType) }
-        $listType = [type]'System.Collections.Generic.List`1' | ForEach-Object { $_.MakeGenericType($exprType) }
-        $exprList = New-Object $listType
+        $ObjType = $ClientObject.GetType()
+        $FuncType = [type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($ObjType, [object]) }
+        $ExprType = [type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($FuncType) }
+        $ListType = [type]'System.Collections.Generic.List`1' | ForEach-Object { $_.MakeGenericType($ExprType) }
+        $ExprList = New-Object $ListType
         if (-not [string]::IsNullOrEmpty($Retrievals)) {
-            if (Test-GenericSubclassOf -InputType $objType -TestType 'Microsoft.SharePoint.Client.ClientObjectCollection`1') {
+            if (Test-GenericSubclassOf -InputType $ObjType -TestType 'Microsoft.SharePoint.Client.ClientObjectCollection`1') {
                 if ((-not $Retrievals.StartsWith('Include(')) -or
                     (-not $Retrievals.EndsWith(')'))) {
                     $Retrievals = 'Include(' + $Retrievals + ')'
                 }
-                $paramExpr = [System.Linq.Expressions.Expression]::Parameter($objType, $objType.Name)
-                $propExpr = Convert-SPClientIncludeExpression -InputString $Retrievals -Expression $paramExpr
-                $lambdaExpr = [System.Linq.Expressions.Expression]::Lambda($funcType, $propExpr, $paramExpr)
-                $exprList.Add($lambdaExpr)
+                $ParamExpr = [System.Linq.Expressions.Expression]::Parameter($ObjType, $ObjType.Name)
+                $PropExpr = Convert-SPClientIncludeExpression -InputString $Retrievals -Expression $ParamExpr
+                $LambdaExpr = [System.Linq.Expressions.Expression]::Lambda($FuncType, $PropExpr, $ParamExpr)
+                $ExprList.Add($LambdaExpr)
             } else {
                 if (($Retrievals.StartsWith('Include(')) -and
                     ($Retrievals.EndsWith(')'))) {
                     $Retrievals = $Retrievals.Substring(8, $Retrievals.Length - 9)
                 }
-                $paramExpr = [System.Linq.Expressions.Expression]::Parameter($objType, $objType.Name)
+                $ParamExpr = [System.Linq.Expressions.Expression]::Parameter($ObjType, $ObjType.Name)
                 Split-SPClientExpressionString -InputString $Retrievals -Separator ',' | ForEach-Object {
-                    $propExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $paramExpr
-                    $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [object])
-                    $lambdaExpr = [System.Linq.Expressions.Expression]::Lambda($funcType, $castExpr, $paramExpr)
-                    $exprList.Add($lambdaExpr)
+                    $PropExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $ParamExpr
+                    $CastExpr = [System.Linq.Expressions.Expression]::Convert($PropExpr, [object])
+                    $LambdaExpr = [System.Linq.Expressions.Expression]::Lambda($FuncType, $CastExpr, $ParamExpr)
+                    $ExprList.Add($LambdaExpr)
                 }
             }
         }
-        $loadMethod = $ClientContext.GetType().GetMethod('Load').MakeGenericMethod($objType)
-        $loadMethod.Invoke($ClientContext, @($ClientObject, $exprList.ToArray())) | Out-Null
+        $LoadMethod = $ClientContext.GetType().GetMethod('Load').MakeGenericMethod($ObjType)
+        $LoadMethod.Invoke($ClientContext, @($ClientObject, $ExprList.ToArray())) | Out-Null
         $ClientContext.ExecuteQuery()
     }
 

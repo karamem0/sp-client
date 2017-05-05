@@ -1,44 +1,37 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\TestInitialize.ps1"
 
 Describe 'Convert-SPClientMemberAccessExpression' {
 
-    BeforeEach {
-        Add-SPClientType
-    }
-
     It 'Converts "Title"' {
-        $type = [Microsoft.SharePoint.Client.List]
-        $param = @{
+        $Type = [Microsoft.SharePoint.Client.List]
+        $Params = @{
             InputString = 'Title'
-            Expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
+            Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
         }
-        $result = Convert-SPClientMemberAccessExpression @param
-        $result | Should Not Be $null
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
+        $Result = Convert-SPClientMemberAccessExpression @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
     It 'Converts "RootFolder.Name"' {
-        $type = [Microsoft.SharePoint.Client.List]
-        $param = @{
+        $Type = [Microsoft.SharePoint.Client.List]
+        $Params = @{
             InputString = 'RootFolder.Name'
-            Expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
+            Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
         }
-        $result = Convert-SPClientMemberAccessExpression @param
-        $result | Should Not Be $null
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
+        $Result = Convert-SPClientMemberAccessExpression @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
     It 'Converts "Fields.Include(Title)"' {
-        $type = [Microsoft.SharePoint.Client.List]
-        $param = @{
+        $Type = [Microsoft.SharePoint.Client.List]
+        $Params = @{
             InputString = 'Fields.Include(Title)'
-            Expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
+            Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
         }
-        $result = Convert-SPClientMemberAccessExpression @param
-        $result | Should Not Be $null
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
+        $Result = Convert-SPClientMemberAccessExpression @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
 }

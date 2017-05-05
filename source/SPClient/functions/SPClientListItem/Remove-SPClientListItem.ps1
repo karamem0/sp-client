@@ -26,29 +26,55 @@ function Remove-SPClientListItem {
 
 <#
 .SYNOPSIS
-  Deletes the list item.
+  Deletes a list item.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER ListItem
+.PARAMETER ClientObject
   Indicates the list item to delete.
+.PARAMETER ParentObject
+  Indicates the list which the list item is contained.
+.PARAMETER Identity
+  Indicates the list item ID.
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
     param (
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.ListItem]
-        $Item
+        $ClientObject,
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Microsoft.SharePoint.Client.List]
+        $ParentObject,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Alias('Id')]
+        [int]
+        $Identity
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $Item.DeleteObject()
+        if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
+            if (-not $ClientObject.IsPropertyAvailable('Id')) {
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject
+            }
+        } else {
+            if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+                $ClientObject = $ParentObject.GetItemById($Identity)
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject
+            }
+        }
+        $ClientObject.DeleteObject()
         $ClientContext.ExecuteQuery()
     }
 

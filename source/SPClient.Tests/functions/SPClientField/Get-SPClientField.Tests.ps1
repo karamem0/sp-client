@@ -1,84 +1,85 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
 Describe 'Get-SPClientField' {
 
-    BeforeEach {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $TestConfig.LoginUrl `
-            -Online `
-            -UserName $TestConfig.LoginUserName `
-            -Password (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
-    }
-
     It 'Returns all fields' {
-        $list = Get-SPClientList -Title $TestConfig.ListTitle
-        $result = $list | Get-SPClientField
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.FieldCollection'
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+        $Params = @{
+            ParentObject = $List
+        }
+        $Result = Get-SPClientField @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Field'
     }
 
     It 'Returns a field by id' {
-        $list = Get-SPClientList -Title $TestConfig.ListTitle
-        $param = @{
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+        $Params = @{
+            ParentObject = $List
             Identity = $TestConfig.FieldId
         }
-        $result = $list | Get-SPClientField @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Field'
-        $result.Id | Should Be $param.Identity
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+        $Result = Get-SPClientField @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Field'
+        $Result.Id | Should Be $Params.Identity
     }
 
     It 'Returns a field by title' {
-        $list = Get-SPClientList -Title $TestConfig.ListTitle
-        $param = @{
-            Title = $TestConfig.FieldTitle
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+        $Params = @{
+            ParentObject = $List
+            Name = $TestConfig.FieldTitle
         }
-        $result = $list | Get-SPClientField @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Field'
-        $result.Title | Should Be $param.Title
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+        $Result = Get-SPClientField @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Field'
+        $Result.Title | Should Be $Params.Name
     }
 
     It 'Returns a field by internal name' {
-        $list = Get-SPClientList -Title $TestConfig.ListTitle
-        $param = @{
-            Title = $TestConfig.FieldInternalName
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+        $Params = @{
+            ParentObject = $List
+            Name = $TestConfig.FieldName
         }
-        $result = $list | Get-SPClientField @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Field'
-        $result.InternalName | Should Be $param.Title
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+        $Result = Get-SPClientField @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Field'
+        $Result.InternalName | Should Be $Params.Name
     }
 
     It 'Throws an error when the field could not be found by id' {
-        $throw = {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $param = @{
+        $Throw = {
+            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Params = @{
+                ParentObject = $List
                 Identity = [guid]::Empty
             }
-            $result = $list | Get-SPClientField @param
-            $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+            $Result = Get-SPClientField @Params
+            $Result | Should Not BeNullOrEmpty
         }
-        $throw | Should Throw
+        $Throw | Should Throw
     }
 
-    It 'Throws an error when the field could not be found by title' {
-        $throw = {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $param = @{
-                Title = 'Not Found'
+    It 'Throws an error when the field could not be found by name' {
+        $Throw = {
+            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Params = @{
+                ParentObject = $List
+                Name = 'Test Field 0'
             }
-            $result = $list | Get-SPClientField @param
-            $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+            $Result = Get-SPClientField @Params
+            $Result | Should Not BeNullOrEmpty
         }
-        $throw | Should Throw
+        $Throw | Should Throw
     }
 
 }

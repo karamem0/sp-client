@@ -28,17 +28,19 @@ function Get-SPClientView {
 .SYNOPSIS
   Lists all views or retrieve the specified view.
 .DESCRIPTION
-  If not specified 'Identity', 'Title', and 'Default', returns all views.
+  If not specified 'Identity', 'Name', and 'Default', returns all views.
   Otherwise, returns a view which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER List
-  Indicates the list which the fields are contained.
+.PARAMETER ParentObject
+  Indicates the list which the views are contained.
 .PARAMETER Identity
-  Indicates the view GUID to get.
-.PARAMETER Title
-  Indicates the view title to get.
+  Indicates the view GUID.
+.PARAMETER Url
+  Indicates the list url.
+.PARAMETER Name
+  Indicates the view title.
 .PARAMETER Default
   If specified, returns the default view.
 .PARAMETER Retrievals
@@ -49,28 +51,36 @@ function Get-SPClientView {
     param (
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Default')]
         [Microsoft.SharePoint.Client.List]
-        $List,
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Alias('Id')]
         [guid]
         $Identity,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
         [string]
-        $Title,
+        $Url,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
+        [Alias('Title')]
+        [string]
+        $Name,
         [Parameter(Mandatory = $true, ParameterSetName = 'Default')]
         [switch]
         $Default,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
         [string]
         $Retrievals
@@ -80,37 +90,48 @@ function Get-SPClientView {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
+        $ClientObjectCollection = $ParentObject.Views
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $views = $List.Views
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $views `
+                -ClientObject $ClientObjectCollection `
                 -Retrievals $Retrievals
-            Write-Output @(,$views)
+            Write-Output @(, $ClientObjectCollection)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $view = $List.Views.GetById($Identity)
+            $ClientObject = $ClientObjectCollection.GetById($Identity)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $view `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $view
+            Write-Output $ClientObject
         }
-        if ($PSCmdlet.ParameterSetName -eq 'Title') {
-            $view = $List.Views.GetByTitle($Title)
+        if ($PSCmdlet.ParameterSetName -eq 'Url') {
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $view `
+                -ClientObject $ClientObjectCollection `
                 -Retrievals $Retrievals
-            Write-Output $view
+            $ClientObject = $ClientObjectCollection | Where-Object { $_.ServerRelativeUrl -eq $Url }
+            if ($ClientObject -eq $null) {
+                throw 'The specified view is invalid.'
+            }
+            Write-Output $ClientObject
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Name') {
+            $ClientObject = $ClientObjectCollection.GetByTitle($Name)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $ClientObject `
+                -Retrievals $Retrievals
+            Write-Output $ClientObject
         }
         if ($PSCmdlet.ParameterSetName -eq 'Default') {
-            $view = $List.DefaultView
+            $ClientObject = $ParentObject.DefaultView
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $view `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $view
+            Write-Output $ClientObject
         }
     }
 

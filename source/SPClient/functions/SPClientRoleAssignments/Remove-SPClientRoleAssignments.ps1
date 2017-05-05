@@ -61,22 +61,22 @@ function Remove-SPClientRoleAssignments {
     )
 
     process {
-        $roleAssignment = $ClientObject.RoleAssignments.GetByPrincipal($Member)
+        $RoleAssignment = $ClientObject.RoleAssignments.GetByPrincipal($Member)
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $roleAssignment.DeleteObject()
+            $RoleAssignment.DeleteObject()
         }
         if ($PSCmdlet.ParameterSetName -eq 'Roles') {
-            $roleDefinitionBindings = $roleAssignment.RoleDefinitionBindings
+            $RoleDefinitionBindings = $RoleAssignment.RoleDefinitionBindings
             $Roles | ForEach-Object {
                 if ($_ -is 'Microsoft.SharePoint.Client.RoleType') {
-                    $roleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByType($_)
-                    $roleDefinitionBindings.Remove($roleDefinition)
+                    $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByType($_)
+                    $RoleDefinitionBindings.Remove($RoleDefinition)
                 } else {
-                    $roleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByName($_.ToString())
-                    $roleDefinitionBindings.Remove($roleDefinition)
+                    $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByName($_.ToString())
+                    $RoleDefinitionBindings.Remove($RoleDefinition)
                 }
             }
-            $roleAssignment.Update()
+            $RoleAssignment.Update()
         }
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `

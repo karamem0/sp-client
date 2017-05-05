@@ -36,11 +36,11 @@ function Test-GenericSubclassOf {
 
     process {
         while ($InputType -ne $null -and $InputType -ne [object]) {
-            $type = $InputType
-            if ($type.IsGenericType) {
-                $type = $type.GetGenericTypeDefinition()
+            $Type = $InputType
+            if ($Type.IsGenericType) {
+                $Type = $Type.GetGenericTypeDefinition()
             }
-            if ($type -eq $TestType) {
+            if ($Type -eq $TestType) {
                 Write-Output $true
                 return
             }

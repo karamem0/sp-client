@@ -1,88 +1,57 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
 Describe 'Clear-SPClientRoleAssignments' {
 
     BeforeEach {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $TestConfig.LoginUrl `
-            -Online `
-            -UserName $TestConfig.LoginUserName `
-            -Password (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
-    }
-
-    It 'Clears web role assignments' {
         try {
-            $web = Get-SPClientWeb -Url $TestConfig.WebUrl
-            $web | Enable-SPClientUniqueRoleAssignments
-            $result = $web | Clear-SPClientRoleAssignments
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $web = Get-SPClientWeb -Url $TestConfig.WebUrl
-            $web | Disable-SPClientUniqueRoleAssignments
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = New-Object Microsoft.SharePoint.Client.ListCreationInformation
+            $List.Title = 'TestList0'
+            $List.TemplateType = 100
+            $List = $Web.Lists.Add($List)
+            $List.Update()
+            $SPClient.ClientContext.Load($List)
+            $SPClient.ClientContext.ExecuteQuery()
+        } catch {
+            Write-Host " [BeforeEach] $($_)" -ForegroundColor Yellow 
         }
     }
 
-    It 'Clears list role assignments' {
+    AfterEach {
         try {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $result = $list | Clear-SPClientRoleAssignments
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('TestList0')
+            $List.DeleteObject()
+            $SPClient.ClientContext.ExecuteQuery()
+        } catch {
+            Write-Host " [AfterEach] $($_)" -ForegroundColor Yellow 
         }
     }
 
-    It 'Clears item role assignments' {
-        try {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $item = ($list | Get-SPClientListItem -RowLimit 1)[0]
-            $item | Enable-SPClientUniqueRoleAssignments
-            $result = $item | Clear-SPClientRoleAssignments
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $item = ($list | Get-SPClientListItem -RowLimit 1)[0]
-            $item | Disable-SPClientUniqueRoleAssignments
+    It 'Clears role assignments' {
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+        $List.BreakRoleInheritance($false, $false)
+        $Params = @{
+            ClientObject = $List
         }
+        $Result = Clear-SPClientRoleAssignments @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
     It 'Throws an error when has not unique role assignments' {
-        try {
-            $throw = {
-                $list = Get-SPClientList -Title $TestConfig.ListTitle
-                $list | Disable-SPClientUniqueRoleAssignments
-                $result = $list | Clear-SPClientRoleAssignments
-                $result.RoleAssignments | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                    $_.RoleDefinitionBindings | ForEach-Object {
-                        Write-Host "$(' ' * 3)$($_.Name)"
-                    }
-                }
+        $Throw = {
+            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+            $Params = @{
+                ClientObject = $List
             }
-            $throw | Should Throw 'This operation is not allowed on an object that inherits permissions.'
-        } finally { }
+            $Result = Clear-SPClientRoleAssignments @Params
+            $Result | Should Not BeNullOrEmpty
+        }
+        $Throw | Should Throw 'This operation is not allowed on an object that inherits permissions.'
     }
 
 }

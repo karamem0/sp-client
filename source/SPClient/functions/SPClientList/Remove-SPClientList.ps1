@@ -26,29 +26,94 @@ function Remove-SPClientList {
 
 <#
 .SYNOPSIS
-  Deletes the list.
+  Deletes a list.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER List
+.PARAMETER ClientObject
   Indicates the list to delete.
+.PARAMETER ParentObject
+  Indicates the web which the list is contained.
+.PARAMETER Identity
+  Indicates the list GUID.
+.PARAMETER Url
+  Indicates the list relative url.
+.PARAMETER Name
+  Indicates the list title or internal name.
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
     param (
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.List]
-        $List
+        $ClientObject,
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Microsoft.SharePoint.Client.Web]
+        $ParentObject,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Alias('Id')]
+        [guid]
+        $Identity,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
+        [string]
+        $Url,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
+        [Alias('Title')]
+        [string]
+        $Name
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $List.DeleteObject()
+        if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
+            if (-not $ClientObject.IsPropertyAvailable('Id')) {
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject
+            }
+        } else {
+            $ClientObjectCollection = $ParentObject.Lists
+            if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+                $ClientObject = $ClientObjectCollection.GetById($Identity)
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject
+            }
+            if ($PSCmdlet.ParameterSetName -eq 'Url') {
+                $ClientObject = $ParentObject.GetList($Url)
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject
+            }
+            if ($PSCmdlet.ParameterSetName -eq 'Name') {
+                try {
+                    $ClientObject = $ClientObjectCollection.GetByTitle($Name)
+                    Invoke-SPClientLoadQuery `
+                        -ClientContext $ClientContext `
+                        -ClientObject $ClientObject
+                } catch {
+                    Invoke-SPClientLoadQuery `
+                        -ClientContext $ClientContext `
+                        -ClientObject $ClientObjectCollection `
+                        -Retrievals 'Include(RootFolder.Name)'
+                    $ClientObject = $ClientObjectCollection | Where-Object { $_.RootFolder.Name -eq $Name }
+                    if ($ClientObject -eq $null) {
+                        throw $_
+                    }
+                }
+            }
+        }
+        $ClientObject.DeleteObject()
         $ClientContext.ExecuteQuery()
     }
 

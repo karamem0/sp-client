@@ -1,58 +1,65 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
 Describe 'Get-SPClientGroup' {
-        
-    BeforeEach {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $TestConfig.LoginUrl `
-            -Online `
-            -UserName $TestConfig.LoginUserName `
-            -Password (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
-    }
 
     It 'Returns all groups' {
-        $web = Get-SPClientWeb -Default
-        $result = $web | Get-SPClientGroup
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.GroupCollection'
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.LoginName)" }
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $Params = @{
+            ParentObject = $Web
+        }
+        $Result = Get-SPClientGroup @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Group'
     }
 
     It 'Returns a SharePoint group by id' {
-        $web = Get-SPClientWeb -Default -Retrievals 'SiteGroups'
-        $param = @{
-            Identity = $web.SiteGroups[0].Id
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $Params = @{
+            ParentObject = $Web
+            Identity = $TestConfig.GroupId
         }
-        $result = $web | Get-SPClientGroup @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Group'
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.LoginName)" }
+        $Result = Get-SPClientGroup @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Group'
     }
 
-    It 'Returns a SharePoint group by login name' {
-        $web = Get-SPClientWeb -Default
-        $param = @{
-            Name = $TestConfig.SharePointGroupName
+    It 'Returns a SharePoint group by name' {
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $Params = @{
+            ParentObject = $Web
+            Name = $TestConfig.GroupName
         }
-        $result = $web | Get-SPClientGroup @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Group'
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.LoginName)" }
+        $Result = Get-SPClientGroup @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Group'
     }
 
     It 'Throws an error when the group could not be found by id' {
-        $throw = {
-            $web = Get-SPClientWeb -Default
-            $param = @{
-                Identity = 'Not Found'
+        $Throw = {
+            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Params = @{
+                ParentObject = $Web
+                Identity = -1
             }
-            $result = $web | Get-SPClientGroup @param
-            $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.LoginName)" }
+            $Result = Get-SPClientGroup @Params
+            $Result | Should Not BeNullOrEmpty
         }
-        $throw | Should Throw
+        $Throw | Should Throw
+    }
+
+    It 'Throws an error when the group could not be found by name' {
+        $Throw = {
+            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Params = @{
+                ParentObject = $Web
+                Name = 'TestGroup0'
+            }
+            $Result = Get-SPClientGroup @Params
+            $Result | Should Not BeNullOrEmpty
+        }
+        $Throw | Should Throw
     }
 
 }

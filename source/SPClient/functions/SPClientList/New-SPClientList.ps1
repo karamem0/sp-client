@@ -30,21 +30,26 @@ function New-SPClientList {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER Web
+.PARAMETER ParentObject
   Indicates the web which a list to be created.
-  If not specified, uses the default web.
+.PARAMETER Name
+  Indicates the internal name.
 .PARAMETER Title
   Indicates the title.
-.PARAMETER Description
+  If not specified, uses the internal name.
+.PARAMETER Descriptiond
   Indicates the description.
-.PARAMETER Url
-  Indicates the url.
-  If not specified, uses the title.
 .PARAMETER Template
   Indicates the template ID.
   If not specified, uses 100 (Generic List).
-.PARAMETER QuickLaunch
-  If specified, the list is displayed on the quick launch.
+.PARAMETER EnableAttachments
+  Indicates a value whether attachments are enabled for the list.
+.PARAMETER EnableFolderCreation
+  Indicates a value whether new folders can be added to the list.
+.PARAMETER EnableVersioning
+  Indicates a value whether historical versions can be created in the list.
+.PARAMETER OnQuickLaunch
+  Indicates a value whether the list is displayed on the quick launch.
 #>
 
     [CmdletBinding()]
@@ -52,43 +57,60 @@ function New-SPClientList {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
-        $Web = $SPClient.ClientContext.Web,
+        $ParentObject,
         [Parameter(Mandatory = $true)]
+        [string]
+        $Name,
+        [Parameter(Mandatory = $false)]
         [string]
         $Title,
         [Parameter(Mandatory = $false)]
         [string]
         $Description,
         [Parameter(Mandatory = $false)]
-        [string]
-        $Url,
-        [Parameter(Mandatory = $false)]
         [int]
         $Template = 100,
         [Parameter(Mandatory = $false)]
-        [switch]
-        $QuickLaunch
+        [bool]
+        $EnableAttachments,
+        [Parameter(Mandatory = $false)]
+        [bool]
+        $EnableFolderCreation,
+        [Parameter(Mandatory = $false)]
+        [bool]
+        $EnableVersioning,
+        [Parameter(Mandatory = $false)]
+        [bool]
+        $NoCrawl,
+        [Parameter(Mandatory = $false)]
+        [bool]
+        $OnQuickLaunch
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ($Web -eq $null) {
-            throw "Cannot bind argument to parameter 'Web' because it is null."
+        if ([string]::IsNullOrEmpty($Title)) {
+            $Title = $Name
         }
-        $creation = New-Object Microsoft.SharePoint.Client.ListCreationInformation
-        $creation.Title = $Title
-        $creation.Description = $Description
-        $creation.TemplateType = $Template
-        $object = $Web.Lists.Add($creation)
-        $object.OnQuickLaunch = $QuickLaunch
+        $Creation = New-Object Microsoft.SharePoint.Client.ListCreationInformation
+        $Creation.Title = $Name
+        $Creation.Description = $Description
+        $Creation.TemplateType = $Template
+        $ClientObject = $ParentObject.Lists.Add($Creation)
+        $ClientObject.EnableAttachments = $EnableAttachments
+        $ClientObject.EnableFolderCreation = $EnableFolderCreation
+        $ClientObject.EnableVersioning = $EnableVersioning
+        $ClientObject.NoCrawl = $NoCrawl
+        $ClientObject.OnQuickLaunch = $OnQuickLaunch
+        $ClientObject.Title = $Title
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
-            -ClientObject $object
-        Write-Output $object
+            -ClientObject $ClientObject
+        Write-Output $ClientObject
     }
 
 }

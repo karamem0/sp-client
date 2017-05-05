@@ -28,18 +28,19 @@ function Get-SPClientUser {
 .SYNOPSIS
   Lists all site user or retrieve the specified site user.
 .DESCRIPTION
-  If not specified 'Identitiy', returns site all users. Otherwise, returns a web
-  which matches the parameter.
+  If not specified 'Identitiy' and 'Name', returns site all users. Otherwise,
+  returns a user which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER Web
-  Indicates the web which the groups are contained.
-  If not specified, uses the default web.
+.PARAMETER ParentObject
+  Indicates the web which the users are contained.
 .PARAMETER Identity
-  Indicates the user id to get.
+  Indicates the user id.
 .PARAMETER Name
-  Indicates the user login name to get.
+  Indicates the user login name.
+.PARAMETER Email
+  Indicates the user email.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -49,22 +50,29 @@ function Get-SPClientUser {
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Email')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Email')]
         [Microsoft.SharePoint.Client.Web]
-        $Web = $SPClient.ClientContext.Web,
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [int]
         $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
+        [Alias('Title')]
         [string]
         $Name,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Email')]
+        [string]
+        $Email,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Email')]
         [string]
         $Retrievals
     )
@@ -73,32 +81,37 @@ function Get-SPClientUser {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ($Web -eq $null) {
-            throw "Cannot bind argument to parameter 'Web' because it is null."
-        }
+        $ClientObjectCollection = $ParentObject.SiteUsers
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $users = $Web.SiteUsers
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $users `
+                -ClientObject $ClientObjectCollection `
                 -Retrievals $Retrievals
-            Write-Output @(,$users)
+            Write-Output @(, $ClientObjectCollection)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $user = $Web.SiteUsers.GetById($Identity)
+            $ClientObject = $ClientObjectCollection.GetById($Identity)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $user `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $user
+            Write-Output $ClientObject
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
-            $user = $Web.EnsureUser($Name)
+            $ClientObject = $ClientObjectCollection.GetByLoginName($Name)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $user `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $user
+            Write-Output $ClientObject
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Email') {
+            $ClientObject = $ClientObjectCollection.GetByEmail($Email)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $ClientObject `
+                -Retrievals $Retrievals
+            Write-Output $ClientObject
         }
     }
 

@@ -44,7 +44,7 @@ function New-SPClientListItem {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
-        $List,
+        $ParentObject,
         [Parameter(Mandatory = $false)]
         [hashtable]
         $FieldValues
@@ -54,16 +54,16 @@ function New-SPClientListItem {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $creation = New-Object Microsoft.SharePoint.Client.ListItemCreationInformation
-        $object = $List.AddItem($creation)
+        $Creation = New-Object Microsoft.SharePoint.Client.ListItemCreationInformation
+        $ClientObject = $ParentObject.AddItem($Creation)
         if ($FieldValues -ne $null) {
-            $FieldValues.GetEnumerator() | Foreach-Object { $object[$_.Name] = $_.Value }
+            $FieldValues.GetEnumerator() | Foreach-Object { $ClientObject[$_.Name] = $_.Value }
         }
-        $object.Update()
+        $ClientObject.Update()
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
-            -ClientObject $object
-        Write-Output $object
+            -ClientObject $ClientObject
+        Write-Output $ClientObject
     }
 
 }

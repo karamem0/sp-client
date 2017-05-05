@@ -30,10 +30,10 @@ function Get-SPClientListItem {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER List
+.PARAMETER ParentObject
   Indicates the list which the list items are contained.
 .PARAMETER FolderUrl
-  Indicates the folder relative url to get.
+  Indicates the folder relative url.
 .PARAMETER Scope
   Indicates the scope of retrievals.
     - FilesOnly: Only the files of a specific folder. 
@@ -45,13 +45,13 @@ function Get-SPClientListItem {
 .PARAMETER Query
   Indicates the XML representation of query.
 .PARAMETER RowLimit
-  Indicates the number of items to get.
+  Indicates the number of items.
   This parameter is used for item pagination.
 .PARAMETER Position
-  Indicates the starting position to get.
+  Indicates the starting position.
   This parameter is used for item pagination.
 .PARAMETER Identity
-  Indicates the list item ID to get.
+  Indicates the list item ID.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -65,7 +65,7 @@ function Get-SPClientListItem {
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Microsoft.SharePoint.Client.List]
-        $List,
+        $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [string]
         $FolderUrl,
@@ -86,6 +86,7 @@ function Get-SPClientListItem {
         [Microsoft.SharePoint.Client.ListItemCollectionPosition]
         $Position,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Alias('Id')]
         [int]
         $Identity,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
@@ -99,48 +100,48 @@ function Get-SPClientListItem {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $caml = New-object Microsoft.SharePoint.Client.CamlQuery
-            if (-not [string]::IsNullOrEmpty($FolderUrl)) {
-                $caml.FolderServerRelativeUrl = $FolderUrl
+            $Caml = New-object Microsoft.SharePoint.Client.CamlQuery
+            if ($MyInvocation.BoundParameters.ContainsKey('FolderUrl')) {
+                $Caml.FolderServerRelativeUrl = $FolderUrl
             }
-            $xml = New-Object System.Xml.XmlDocument
-            $xml.AppendChild($xml.CreateElement('View')) | Out-Null
-            if (-not [string]::IsNullOrEmpty($Scope)) {
-                $xml.DocumentElement.SetAttribute('Scope', $Scope)
+            $XmlDocument = New-Object System.Xml.XmlDocument
+            $ViewElement = $XmlDocument.AppendChild($XmlDocument.CreateElement('View'))
+            if ($MyInvocation.BoundParameters.ContainsKey('Scope')) {
+                $ViewElement.SetAttribute('Scope', $Scope)
             }
-            if (-not [string]::IsNullOrEmpty($ViewFields)) {
-                $fragment = $xml.CreateDocumentFragment()
-                $fragment.InnerXml = $ViewFields
-                $xml.DocumentElement.AppendChild($fragment) | Out-Null
+            if ($MyInvocation.BoundParameters.ContainsKey('ViewFields')) {
+                $Fragment = $XmlDocument.CreateDocumentFragment()
+                $Fragment.InnerXml = $ViewFields
+                $ViewElement.AppendChild($Fragment) | Out-Null
             }
-            if (-not [string]::IsNullOrEmpty($Query)) {
-                $fragment = $xml.CreateDocumentFragment()
-                $fragment.InnerXml = $Query
-                $xml.DocumentElement.AppendChild($fragment) | Out-Null
+            if ($MyInvocation.BoundParameters.ContainsKey('Query')) {
+                $Fragment = $XmlDocument.CreateDocumentFragment()
+                $Fragment.InnerXml = $Query
+                $ViewElement.AppendChild($Fragment) | Out-Null
             }
-            if (-not ($RowLimit -eq $null)) {
-                $fragment = $xml.CreateDocumentFragment()
-                $fragment.InnerXml = "<RowLimit>${RowLimit}</RowLimit>"
-                $xml.DocumentElement.AppendChild($fragment) | Out-Null
+            if ($MyInvocation.BoundParameters.ContainsKey('RowLimit')) {
+                $Fragment = $XmlDocument.CreateElement('RowLimit')
+                $Fragment.InnerText = $RowLimit
+                $ViewElement.AppendChild($Fragment) | Out-Null
             }
-            if (-not ($Position -eq $null)) {
-                $caml.ListItemCollectionPosition = $Position
+            if ($MyInvocation.BoundParameters.ContainsKey('Position')) {
+                $Caml.ListItemCollectionPosition = $Position
             }
-            $caml.ViewXml = $xml.InnerXml
-            $items = $List.GetItems($caml)
+            $Caml.ViewXml = $XmlDocument.InnerXml
+            $ClientObjectCollection = $ParentObject.GetItems($Caml)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $items `
+                -ClientObject $ClientObjectCollection `
                 -Retrievals $Retrievals
-            Write-Output @(,$items)
+            Write-Output @(, $ClientObjectCollection)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $item = $List.GetItemById($Identity)
+            $ClientObject = $ParentObject.GetItemById($Identity)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $item `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $item
+            Write-Output $ClientObject
         }
     }
 

@@ -1,69 +1,63 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
 Describe 'Get-SPClientUser' {
         
-    BeforeEach {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $TestConfig.LoginUrl `
-            -Online `
-            -UserName $TestConfig.LoginUserName `
-            -Password (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
-    }
-
     It 'Returns all users' {
-        $web = Get-SPClientWeb -Default
-        $result = $web | Get-SPClientUser
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.UserCollection'
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.LoginName)" }
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $Params = @{
+            ParentObject = $Web
+        }
+        $Result = Get-SPClientUser @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.User'
     }
 
     It 'Returns a user by id' {
-        $web = Get-SPClientWeb -Default -Retrievals 'SiteUsers'
-        $param = @{
-            Identity = $web.SiteUsers[0].Id
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $Params = @{
+            ParentObject = $Web
+            Identity = $TestConfig.UserId
         }
-        $result = $web | Get-SPClientUser @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.User'
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.LoginName)" }
+        $Result = Get-SPClientUser @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.User'
     }
 
-    It 'Returns a domain user by login name' {
-        $web = Get-SPClientWeb -Default
-        $param = @{
-            Name = $TestConfig.DomainUserName
+    It 'Returns a user by name' {
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $Params = @{
+            ParentObject = $Web
+            Name = $TestConfig.UserName
         }
-        $result = $web | Get-SPClientUser @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.User'
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.LoginName)" }
+        $Result = Get-SPClientUser @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.User'
     }
 
-    It 'Returns a domain group by login name' {
-        $web = Get-SPClientWeb -Default
-        $param = @{
-            Name = $TestConfig.DomainGroupName
+    It 'Returns a user by email' {
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $Params = @{
+            ParentObject = $Web
+            Email = $TestConfig.UserEmail
         }
-        $result = $web | Get-SPClientUser @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.User'
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.LoginName)" }
+        $Result = Get-SPClientUser @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.User'
     }
 
-    It 'Throws an error when the user could not be found by login name' {
-        $throw = {
-            $web = Get-SPClientWeb -Default
-            $param = @{
-                Identity = 'Not Found'
+    It 'Throws an error when the user could not be found by name' {
+        $Throw = {
+            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Params = @{
+                ParentObject = $Web
+                Identity = 'TestUser0'
             }
-            $result = $web | Get-SPClientUser @param
-            $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.LoginName)" }
+            $Result = Get-SPClientUser @Params
+            $Result | Should Not BeNullOrEmpty
         }
-        $throw | Should Throw
+        $Throw | Should Throw
     }
 
 }

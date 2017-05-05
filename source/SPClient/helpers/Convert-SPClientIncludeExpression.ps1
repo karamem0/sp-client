@@ -36,28 +36,28 @@ function Convert-SPClientIncludeExpression {
 
     process {
         if (-not $InputString.StartsWith('Include(')) {
-            throw "Cannot convert expression because 'InputString' parameter does not start with 'Include(  '."
+            throw "Cannot convert expression because 'InputString' parameter does not start with 'Include('."
         }
         if (-not $InputString.EndsWith(')')) {
             throw "Cannot convert expression because 'InputString' parameter does not end with ')'."
         }
         $InputString = $InputString.Substring(8, $InputString.Length - 9)
-        $itemType = $Expression.Type.BaseType.GenericTypeArguments[0]
-        $funcType = [type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($itemType, [object]) }
-        $exprType = [type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($funcType) }
-        $paramExpr = [System.Linq.Expressions.Expression]::Parameter($itemType, $itemType.Name)
-        $lambdaExprArray = Split-SPClientExpressionString -InputString $InputString -Separator ',' | ForEach-Object {
-            $propExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $paramExpr
-            $castExpr = [System.Linq.Expressions.Expression]::Convert($propExpr, [object])
-            $lambdaExpr = [System.Linq.Expressions.Expression]::Lambda($funcType, $castExpr, $paramExpr)
-            Write-Output $lambdaExpr
+        $ItemType = $Expression.Type.BaseType.GenericTypeArguments[0]
+        $FuncType = [type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($ItemType, [object]) }
+        $ExprType = [type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($FuncType) }
+        $ParamExpr = [System.Linq.Expressions.Expression]::Parameter($ItemType, $ItemType.Name)
+        $LambdaExprArray = Split-SPClientExpressionString -InputString $InputString -Separator ',' | ForEach-Object {
+            $PropExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $ParamExpr
+            $CastExpr = [System.Linq.Expressions.Expression]::Convert($PropExpr, [object])
+            $LambdaExpr = [System.Linq.Expressions.Expression]::Lambda($FuncType, $CastExpr, $ParamExpr)
+            Write-Output $LambdaExpr
         }
-        $arrayExpr = [System.Linq.Expressions.Expression]::NewArrayInit($exprType, [System.Linq.Expressions.Expression[]]$lambdaExprArray)
-        $includeExpr = [System.Linq.Expressions.Expression]::Call( `
-            [Microsoft.SharePoint.Client.ClientObjectQueryableExtension].GetMethod('Include').MakeGenericMethod($itemType), `
-            [System.Linq.Expressions.Expression[]]@($Expression, $arrayExpr)
+        $ArrayExpr = [System.Linq.Expressions.Expression]::NewArrayInit($ExprType, [System.Linq.Expressions.Expression[]]$LambdaExprArray)
+        $IncludeExpr = [System.Linq.Expressions.Expression]::Call( `
+            [Microsoft.SharePoint.Client.ClientObjectQueryableExtension].GetMethod('Include').MakeGenericMethod($ItemType), `
+            [System.Linq.Expressions.Expression[]]@($Expression, $ArrayExpr)
         )
-        Write-Output $includeExpr
+        Write-Output $IncludeExpr
     }
 
 }

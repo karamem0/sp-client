@@ -35,28 +35,28 @@ function Split-SPClientExpressionString {
     )
 
     process {
-        $buffer = ''
-        $depth = 0
-        for ($index = 0; $index -lt $InputString.Length; $index += 1) {
-            if ($InputString[$index] -eq $Separator) {
-                if ($depth -eq 0) {
-                    Write-Output $buffer.Trim()
-                    $buffer = ''
+        $Buffer = ''
+        $Depth = 0
+        for ($Index = 0; $Index -lt $InputString.Length; $Index += 1) {
+            if ($InputString[$Index] -eq $Separator) {
+                if ($Depth -eq 0) {
+                    Write-Output $Buffer.Trim()
+                    $Buffer = ''
                     continue
                 }
             }
-            if ($InputString[$index] -eq '(') {
-                $depth += 1
+            if ($InputString[$Index] -eq '(') {
+                $Depth += 1
             }
-            if ($InputString[$index] -eq ')') {
-                $depth -= 1
+            if ($InputString[$Index] -eq ')') {
+                $Depth -= 1
             }
-            $buffer += $InputString[$index]
+            $Buffer += $InputString[$Index]
         }
-        if ($depth -ne 0) {
+        if ($Depth -ne 0) {
             throw 'Cannot convert expression because braces is not closed.'
         }
-        Write-Output $buffer.Trim()
+        Write-Output $Buffer.Trim()
     }
 
 }

@@ -53,27 +53,32 @@ function Add-SPClientType {
 
     process {
         if ($PSCmdlet.ParameterSetName -eq 'Version') {
-            $path = Join-Path $Env:CommonProgramFiles 'Microsoft Shared\Web Server Extensions'
-            if (-not (Test-Path $path)) {
+            $Path = $Env:CommonProgramFiles
+            if (-not [System.Environment]::Is64BitProcess -and
+                -not [string]::IsNullOrEmpty($Env:CommonProgramW6432)) {
+                $Path = $Env:CommonProgramW6432
+            }
+            $Path = Join-Path -Path $Path -ChildPath 'Microsoft Shared\Web Server Extensions'
+            if (-not (Test-Path -Path $Path)) {
                 throw 'Cannot find SharePoint Client Component assemblies.'
             }
-            if (-not (Get-ChildItem $path)) {
+            if (-not (Get-ChildItem -Path $Path)) {
                 throw 'Cannot find SharePoint Client Component assemblies.'
             }
             if ([string]::IsNullOrEmpty($Version)) {
-                $Version = [string](Get-ChildItem $path | Sort-Object -Descending)[0]
+                $Version = [string](Get-ChildItem -Path $Path | Sort-Object -Descending)[0]
             }
-            $path = Join-Path $path $Version
-            $path = Join-Path $path 'ISAPI'
+            $Path = Join-Path -Path $Path $Version
+            $Path = Join-Path -Path $Path 'ISAPI'
         }
         if ($PSCmdlet.ParameterSetName -eq 'LiteralPath') {
-            if (-not (Test-Path $LiteralPath)) {
+            if (-not (Test-Path -Path $LiteralPath)) {
                 throw 'Cannot find SharePoint Client Component assemblies.'
             }
-            $path = $LiteralPath
+            $Path = $LiteralPath
         }
-        Add-Type -Path (Join-Path $path 'Microsoft.SharePoint.Client.dll')
-        Add-Type -Path (Join-Path $path 'Microsoft.SharePoint.Client.Runtime.dll')
+        Add-Type -Path (Join-Path -Path $Path -ChildPath 'Microsoft.SharePoint.Client.dll')
+        Add-Type -Path (Join-Path -Path $Path -ChildPath 'Microsoft.SharePoint.Client.Runtime.dll')
     }
 
 }

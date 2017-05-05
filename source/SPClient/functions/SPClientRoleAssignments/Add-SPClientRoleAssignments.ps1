@@ -55,17 +55,17 @@ function Add-SPClientRoleAssignments {
     )
 
     process {
-        $roleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($ClientContext)
+        $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($ClientContext)
         $Roles | ForEach-Object {
             if ($_ -is 'Microsoft.SharePoint.Client.RoleType') {
-                $roleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByType($_)
-                $roleDefinitionBindings.Add($roleDefinition)
+                $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByType($_)
+                $RoleDefinitionBindings.Add($RoleDefinition)
             } else {
-                $roleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByName($_.ToString())
-                $roleDefinitionBindings.Add($roleDefinition)
+                $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByName($_.ToString())
+                $RoleDefinitionBindings.Add($RoleDefinition)
             }
         }
-        $ClientObject.RoleAssignments.Add($Member, $roleDefinitionBindings) | Out-Null
+        $ClientObject.RoleAssignments.Add($Member, $RoleDefinitionBindings) | Out-Null
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `

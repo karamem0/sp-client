@@ -1,44 +1,37 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\TestInitialize.ps1"
 
 Describe 'Convert-SPClientIncludeExpression' {
 
-    BeforeEach {
-        Add-SPClientType
-    }
-
     It 'Converts "Include(Id, Title)"' {
-        $type = [Microsoft.SharePoint.Client.ListCollection]
-        $param = @{
+        $Type = [Microsoft.SharePoint.Client.ListCollection]
+        $Params = @{
             InputString = 'Include(Id, Title)'
-            Expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
+            Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
         }
-        $result = Convert-SPClientIncludeExpression @param
-        $result | Should Not Be $null
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
+        $Result = Convert-SPClientIncludeExpression @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
     It 'Converts "Include(RootFolder.Name)"' {
-        $type = [Microsoft.SharePoint.Client.ListCollection]
-        $param = @{
+        $Type = [Microsoft.SharePoint.Client.ListCollection]
+        $Params = @{
             InputString = 'Include(RootFolder.Name)'
-            Expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
+            Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
         }
-        $result = Convert-SPClientIncludeExpression @param
-        $result | Should Not Be $null
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
+        $Result = Convert-SPClientIncludeExpression @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
     It 'Converts "Include(RootFolder.Files.Include(Id, Title))"' {
-        $type = [Microsoft.SharePoint.Client.ListCollection]
-        $param = @{
+        $Type = [Microsoft.SharePoint.Client.ListCollection]
+        $Params = @{
             InputString = 'Include(RootFolder.Files.Include(Name, Title))'
-            Expression = [System.Linq.Expressions.Expression]::Parameter($type, $type.Name)
+            Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
         } 
-        $result = Convert-SPClientIncludeExpression @param
-        $result | Should Not Be $null
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_)" }
+        $Result = Convert-SPClientIncludeExpression @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
 }

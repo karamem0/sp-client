@@ -34,9 +34,9 @@ function Get-SPClientWeb {
   Indicates the client context.
   If not specified, uses the default context.
 .PARAMETER Identity
-  Indicates the web GUID to get.
+  Indicates the web GUID.
 .PARAMETER Url
-  Indicates the web relative url to get.
+  Indicates the web relative url.
 .PARAMETER Default
   If specified, returns the default web of the client context.
 .PARAMETER Root
@@ -55,6 +55,7 @@ function Get-SPClientWeb {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Alias('Id')]
         [guid]
         $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
@@ -80,74 +81,79 @@ function Get-SPClientWeb {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $web = $ClientContext.Web
+            $ClientObject = $ClientContext.Web
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $web `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $web
-            $stack = New-Object System.Collections.Stack
+            Write-Output $ClientObject
+            $Stack = New-Object System.Collections.Stack
             do {
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $web.Webs `
+                    -ClientObject $ClientObject.Webs `
                     -Retrievals $Retrievals
-                while ($web.Webs.Count -gt 0) {
-                    $item = @{
-                        Webs = $web.Webs
+                while ($ClientObject.Webs.Count -gt 0) {
+                    $Item = @{
+                        Collection = $ClientObject.Webs
                         Index = 0
                     }
-                    $stack.Push($item)
-                    $web = $web.Webs[$item.Index]
-                    Write-Output $web
+                    $Stack.Push($Item)
+                    $ClientObject = $Item.Collection[$Item.Index]
+                    Write-Output $ClientObject
                     Invoke-SPClientLoadQuery `
                         -ClientContext $ClientContext `
-                        -ClientObject $web.Webs `
+                        -ClientObject $ClientObject.Webs `
                         -Retrievals $Retrievals
                 }
-                while ($stack.Count -gt 0) {
-                    $item = $stack.Pop()
-                    $item.Index += 1
-                    if ($item.Index -lt $item.Webs.Count) {
-                        $stack.Push($item)
-                        $web = $item.Webs[$item.Index]
-                        Write-Output $web
+                while ($Stack.Count -gt 0) {
+                    $Item = $Stack.Pop()
+                    $Item.Index += 1
+                    if ($Item.Index -lt $Item.Collection.Count) {
+                        $Stack.Push($Item)
+                        $ClientObject = $Item.Collection[$Item.Index]
+                        Write-Output $ClientObject
                         break
                     }
                 }
-            } while ($stack.Count -gt 0)
+            } while ($Stack.Count -gt 0)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $web = $ClientContext.Site.OpenWebById($Identity)
+            $ClientObject = $ClientContext.Site.OpenWebById($Identity)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $web `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $web
+            Write-Output $ClientObject
         }
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
-            $web = $ClientContext.Site.OpenWeb($Url)
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $ClientContext.Site.Path, `
+                'OpenWeb', `
+                [object[]]$Url)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod);
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $web `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $web
+            Write-Output $ClientObject
         }
         if ($PSCmdlet.ParameterSetName -eq 'Default') {
-            $web = $ClientContext.Web
+            $ClientObject = $ClientContext.Web
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $web `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $web
+            Write-Output $ClientObject
         }
         if ($PSCmdlet.ParameterSetName -eq 'Root') {
-            $web = $ClientContext.Site.RootWeb
+            $ClientObject = $ClientContext.Site.RootWeb
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $web `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $web
+            Write-Output $ClientObject
         }
     }
 

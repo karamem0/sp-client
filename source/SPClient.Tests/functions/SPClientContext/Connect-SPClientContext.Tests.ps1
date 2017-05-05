@@ -1,81 +1,67 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
 Describe 'Connect-SPClientContext' {
 
-    BeforeEach {
-        Add-SPClientType
-    }
-
     It 'Connects to the SharePoint Server using password' {
-        try {
-            $param = @{
-                Network = $true
-                Url = $TestConfig.LoginUrl
-                UserName = $TestConfig.LoginUserName
-                Password = (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
-                Domain = $TestConfig.LoginDomain
-                PassThru = $true
-            }
-            $result = Connect-SPClientContext @param
-            $result | Should Not Be $null
-            $result.Credentials.GetType() | Should Be 'System.Net.NetworkCredential' 
-            $result.Credentials.UserName | Should Be $TestConfig.LoginUserName
-            $result.Credentials.Domain | Should Be $TestConfig.LoginDomain
-        } finally { }
+        $Params = @{
+            Network = $true
+            Url = 'https://example.sharepoint.com'
+            UserName = 'administrator'
+            Password = 'P@$$w0rd' | ConvertTo-SecureString -AsPlainText -Force
+            Domain = 'example.com'
+            PassThru = $true
+        }
+        $Result = Connect-SPClientContext @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result.Credentials | Should BeOfType 'System.Net.NetworkCredential' 
+        $Result.Credentials.UserName | Should Be 'administrator'
+        $Result.Credentials.Domain | Should Be 'example.com'
     }
 
     It 'Connects to the SharePoint Server using credential' {
-        try {
-            $param = @{
-                Network = $true
-                Url = $TestConfig.LoginUrl
-                Credential = New-Object System.Management.Automation.PSCredential( `
-                    $TestConfig.LoginUserName, `
-                    (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
-                )
-                PassThru = $true
-            }
-            $result = Connect-SPClientContext @param
-            $result | Should Not Be $null
-            $result.Credentials.GetType() | Should Be 'System.Net.NetworkCredential' 
-            $result.Credentials.UserName | Should Be $TestConfig.LoginUserName
-        } finally { }
+        $UserName = 'administrator@example.onmicrosoft.com'
+        $Password = 'P@$$w0rd' | ConvertTo-SecureString -AsPlainText -Force
+        $Params = @{
+            Network = $true
+            Url = 'https://example.sharepoint.com'
+            Credential = New-Object System.Management.Automation.PSCredential($UserName, $Password)
+            PassThru = $true
+        }
+        $Result = Connect-SPClientContext @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result.Credentials | Should BeOfType 'System.Net.NetworkCredential' 
+        $Result.Credentials.UserName | Should Be 'administrator@example.onmicrosoft.com'
     }
 
     It 'Connects to the SharePoint Online using password' {
-        try {
-            $param = @{
-                Online = $true
-                Url = $TestConfig.LoginUrl
-                UserName = $TestConfig.LoginUserName
-                Password = (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
-                PassThru = $true
-            }
-            $result = Connect-SPClientContext @param
-            $result | Should Not Be $null
-            $result.Credentials.GetType() | Should Be 'Microsoft.SharePoint.Client.SharePointOnlineCredentials' 
-            $result.Credentials.UserName | Should Be $TestConfig.LoginUserName
-        } finally { }
+        $Params = @{
+            Online = $true
+            Url = 'https://example.sharepoint.com'
+            UserName = 'administrator@example.onmicrosoft.com'
+            Password = 'P@$$w0rd' | ConvertTo-SecureString -AsPlainText -Force
+            PassThru = $true
+        }
+        $Result = Connect-SPClientContext @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result.Credentials | Should BeOfType 'Microsoft.SharePoint.Client.SharePointOnlineCredentials' 
+        $Result.Credentials.UserName | Should Be 'administrator@example.onmicrosoft.com'
     }
 
     It 'Connects to the SharePoint Online using credential' {
-        try {
-            $param = @{
-                Online = $true
-                Url = $TestConfig.LoginUrl
-                Credential = New-Object System.Management.Automation.PSCredential( `
-                    $TestConfig.LoginUserName, `
-                    (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
-                )
-                PassThru = $true
-            }
-            $result = Connect-SPClientContext @param
-            $result | Should Not Be $null
-            $result.Credentials.GetType() | Should Be 'Microsoft.SharePoint.Client.SharePointOnlineCredentials' 
-            $result.Credentials.UserName | Should Be $TestConfig.LoginUserName
-        } finally { }
+        $UserName = 'administrator@example.onmicrosoft.com'
+        $Password = 'P@$$w0rd' | ConvertTo-SecureString -AsPlainText -Force
+        $Params = @{
+            Online = $true
+            Url = 'https://example.sharepoint.com'
+            Credential = New-Object System.Management.Automation.PSCredential($UserName, $Password)
+            PassThru = $true
+        }
+        $Result = Connect-SPClientContext @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result.Credentials | Should BeOfType 'Microsoft.SharePoint.Client.SharePointOnlineCredentials' 
+        $Result.Credentials.UserName | Should Be 'administrator@example.onmicrosoft.com'
     }
 
 }

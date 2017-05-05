@@ -1,6 +1,6 @@
-﻿#Requires -Version 3.0
+#Requires -Version 3.0
 
-# Clear-SPClientRoleAssignments.ps1
+# Resolve-SPClientUser.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,16 +22,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Clear-SPClientRoleAssignments {
+function Resolve-SPClientUser {
 
 <#
 .SYNOPSIS
-  Clears all role assignments.
+  Checks whether the specified login name belongs to a valid user.
 .PARAMETER ClientContext
-  Indicates the SharePoint client context.
+  Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER ClientObject
-  Indicates the SharePoint web, list or item.
+.PARAMETER ParentObject
+  Indicates the web which the user is contained.
+.PARAMETER Name
+  Indicates login name or e-mail address.
 #>
 
     [CmdletBinding()]
@@ -39,23 +41,23 @@ function Clear-SPClientRoleAssignments {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.SecurableObject]
-        $ClientObject
+        [Parameter(Mandatory = $true)]
+        [Microsoft.SharePoint.Client.Web]
+        $ParentObject,
+        [Parameter(Mandatory = $true)]
+        [string]
+        $Name
     )
 
     process {
-        Invoke-SPClientLoadQuery `
-            -ClientContext $ClientContext `
-            -ClientObject $ClientObject `
-            -Retrievals 'RoleAssignments'
-        while ($ClientObject.RoleAssignments.Count -gt 0) {
-            $ClientObject.RoleAssignments[0].DeleteObject()
+        if ($ClientContext -eq $null) {
+            throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
+        $ClientObject = $ParentObject.EnsureUser($Name)
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
-            -Retrievals 'RoleAssignments.Include(Member,RoleDefinitionBindings)'
+            -Retrievals $Retrievals
         Write-Output $ClientObject
     }
 

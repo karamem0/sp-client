@@ -28,17 +28,17 @@ function Get-SPClientField {
 .SYNOPSIS
   Lists all fields or retrieve the specified field.
 .DESCRIPTION
-  If not specified 'Identity' and 'Title', returns all fields. Otherwise,
+  If not specified 'Identity' and 'Name', returns all fields. Otherwise,
   returns a field which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER List
+.PARAMETER ParentObject
   Indicates the list which the fields are contained.
 .PARAMETER Identity
-  Indicates the field GUID to get.
-.PARAMETER Title
-  Indicates the field title or internal name to get.
+  Indicates the field GUID.
+.PARAMETER Name
+  Indicates the field title or internal name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -47,23 +47,25 @@ function Get-SPClientField {
     param (
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.List]
-        $List,
+        $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Alias('Id')]
         [guid]
         $Identity,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
+        [Alias('Title')]
         [string]
-        $Title,
+        $Name,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [string]
         $Retrievals
     )
@@ -72,29 +74,29 @@ function Get-SPClientField {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
+        $ClientObjectCollection = $ParentObject.Fields
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $fields = $List.Fields
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $fields `
+                -ClientObject $ClientObjectCollection `
                 -Retrievals $Retrievals
-            Write-Output @(,$fields)
+            Write-Output @(, $ClientObjectCollection)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $field = $List.Fields.GetById($Identity)
+            $ClientObject = $ClientObjectCollection.GetById($Identity)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $field `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $field
+            Write-Output $ClientObject
         }
-        if ($PSCmdlet.ParameterSetName -eq 'Title') {
-            $field = $List.Fields.GetByInternalNameOrTitle($Title)
+        if ($PSCmdlet.ParameterSetName -eq 'Name') {
+            $ClientObject = $ClientObjectCollection.GetByInternalNameOrTitle($Name)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $field `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $field
+            Write-Output $ClientObject
         }
     }
 

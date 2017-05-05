@@ -12,7 +12,7 @@
 # RootModule = 'Module.psd1'
 
 # Version number of this module.
-ModuleVersion = '0.5'
+ModuleVersion = '0.6'
 
 # ID used to uniquely identify this module
 GUID = '70f6c652-6c79-4b8b-b4a9-79635ea6ae9c'
@@ -67,17 +67,40 @@ NestedModules = @('SPClient.psm1')
 
 # Functions to export from this module
 FunctionsToExport = @(
-    '*-SPClientContext'
-    '*-SPClientField'
-    '*-SPClientGroup'
-    '*-SPClientList'
-    '*-SPClientListItem'
-    '*-SPClientRoleAssignments'
-    '*-SPClientType'
-    '*-SPClientUniqueRoleAssignments'
-    '*-SPClientUser'
-    '*-SPClientView'
-    '*-SPClientWeb'
+    'Connect-SPClientContext'
+    'Disconnect-SPClientContext'
+    'Convert-SPClientField'
+    'Get-SPClientField'
+    'New-SPClientFieldBoolean'
+    'New-SPClientFieldCalculated'
+    'New-SPClientFieldChoice'
+    'New-SPClientFieldCurrency'
+    'New-SPClientFieldDateTime'
+    'New-SPClientFieldLookup'
+    'New-SPClientFieldMultilineText'
+    'New-SPClientFieldNumber'
+    'New-SPClientFieldText'
+    'New-SPClientFieldUrl'
+    'Remove-SPClientField'
+    'Get-SPClientGroup'
+    'Get-SPClientList'
+    'New-SPClientList'
+    'Remove-SPClientList'
+    'Get-SPClientListItem'
+    'New-SPClientListItem'
+    'Remove-SPClientListItem'
+    'Add-SPClientRoleAssignments'
+    'Clear-SPClientRoleAssignments'
+    'Remove-SPClientRoleAssignments'
+    'Add-SPClientType'
+    'Enable-SPClientUniqueRoleAssignments'
+    'Disable-SPClientUniqueRoleAssignments'
+    'Get-SPClientUser'
+    'Resolve-SPClientUser'
+    'Get-SPClientView'
+    'Get-SPClientWeb'
+    'New-SPClientWeb'
+    'Remove-SPClientWeb'
 )
 
 # Cmdlets to export from this module

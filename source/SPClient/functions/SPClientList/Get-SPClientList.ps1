@@ -28,20 +28,19 @@ function Get-SPClientList {
 .SYNOPSIS
   Lists all lists or retrieve the specified list.
 .DESCRIPTION
-  If not specified 'Identity', 'Url' and 'Title', returns all lists. Otherwise,
+  If not specified 'Identity', 'Url' and 'Name', returns all lists. Otherwise,
   returns a list which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
-.PARAMETER Web
-  Indicates the web which the groups are contained.
+.PARAMETER ParentObject
+  Indicates the web which the lists are contained.
   If not specified, uses the default web.
 .PARAMETER Identity
-  Indicates the list GUID to get.
+  Indicates the list GUID.
 .PARAMETER Url
-  Indicates the list relative url to get.
-.PARAMETER Title
-  Indicates the list title or internal name to get.
+  Indicates the list url.
+.PARAMETER Name
+  Indicates the list title or internal name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -51,28 +50,30 @@ function Get-SPClientList {
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.Web]
-        $Web = $SPClient.ClientContext.Web,
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Alias('Id')]
         [guid]
         $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
         [string]
         $Url,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
+        [Alias('Title')]
         [string]
-        $Title,
+        $Name,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [string]
         $Retrievals
     )
@@ -81,56 +82,52 @@ function Get-SPClientList {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ($Web -eq $null) {
-            throw "Cannot bind argument to parameter 'Web' because it is null."
-        }
+        $ClientObjectCollection = $ParentObject.Lists
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $lists = $Web.Lists
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $lists `
+                -ClientObject $ClientObjectCollection `
                 -Retrievals $Retrievals
-            Write-Output @(,$lists)
+            Write-Output @(, $ClientObjectCollection)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $list = $Web.Lists.GetById($Identity)
+            $ClientObject = $ClientObjectCollection.GetById($Identity)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $list `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $list
+            Write-Output $ClientObject
         }
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
-            $list = $Web.GetList($Url)
+            $ClientObject = $ParentObject.GetList($Url)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $list `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $list
+            Write-Output $ClientObject
         }
-        if ($PSCmdlet.ParameterSetName -eq 'Title') {
+        if ($PSCmdlet.ParameterSetName -eq 'Name') {
             try {
-                $list = $Web.Lists.GetByTitle($Title)
+                $ClientObject = $ClientObjectCollection.GetByTitle($Name)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $list `
+                    -ClientObject $ClientObject `
                     -Retrievals $Retrievals
             } catch {
-                $lists = $Web.Lists
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $lists `
+                    -ClientObject $ClientObjectCollection `
                     -Retrievals 'Include(RootFolder.Name)'
-                $list = $lists | Where-Object { $_.RootFolder.Name -eq $Title }
-                if ($list -eq $null) {
+                $ClientObject = $ClientObjectCollection | Where-Object { $_.RootFolder.Name -eq $Name }
+                if ($ClientObject -eq $null) {
                     throw $_
                 }
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $list `
+                    -ClientObject $ClientObject `
                     -Retrievals $Retrievals
             }
-            Write-Output $list
+            Write-Output $ClientObject
         }
     }
 

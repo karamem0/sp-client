@@ -30,8 +30,8 @@ function New-SPClientWeb {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER Web
-  Indicates the parent web which a web to be created.
+.PARAMETER ParentObject
+  Indicates the web which a web to be created.
   If not specified, uses the default web.
 .PARAMETER Url
   Indicates the url.
@@ -56,7 +56,7 @@ function New-SPClientWeb {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
-        $Web = $SPClient.ClientContext.Web,
+        $ParentObject = $SPClient.ClientContext.Web,
         [Parameter(Mandatory = $true)]
         [string]
         $Url,
@@ -81,21 +81,21 @@ function New-SPClientWeb {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ($Web -eq $null) {
-            throw "Cannot bind argument to parameter 'Web' because it is null."
+        if ($ParentObject -eq $null) {
+            throw "Cannot bind argument to parameter 'ParentObject' because it is null."
         }
-        $creation = New-Object Microsoft.SharePoint.Client.WebCreationInformation
-        $creation.Url = $Url
-        $creation.Language = $Language
-        $creation.WebTemplate = $Template
-        $creation.Title = $Title
-        $creation.Description = $Description
-        $creation.UseSamePermissionsAsParentSite = -not $UniquePermissions
-        $object = $Web.Webs.Add($creation)
+        $Creation = New-Object Microsoft.SharePoint.Client.WebCreationInformation
+        $Creation.Url = $Url
+        $Creation.Language = $Language
+        $Creation.WebTemplate = $Template
+        $Creation.Title = $Title
+        $Creation.Description = $Description
+        $Creation.UseSamePermissionsAsParentSite = -not $UniquePermissions
+        $ClientObject = $ParentObject.Webs.Add($Creation)
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
-            -ClientObject $object
-        Write-Output $object
+            -ClientObject $ClientObject
+        Write-Output $ClientObject
     }
 
 }

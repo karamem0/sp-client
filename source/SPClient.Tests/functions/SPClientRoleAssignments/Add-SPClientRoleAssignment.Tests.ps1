@@ -1,233 +1,115 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
 Describe 'Add-SPClientRoleAssignments' {
 
     BeforeEach {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $TestConfig.LoginUrl `
-            -Online `
-            -UserName $TestConfig.LoginUserName `
-            -Password (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
-    }
-
-    It 'Adds a role assignment to the domain user by role name' {
         try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $param = @{
-                Member = $user
-                Roles = 'Full Control'
-            }
-            $result = $list | Add-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = New-Object Microsoft.SharePoint.Client.ListCreationInformation
+            $List.Title = 'TestList0'
+            $List.TemplateType = 100
+            $List = $Web.Lists.Add($List)
+            $List.Update()
+            $SPClient.ClientContext.Load($List)
+            $SPClient.ClientContext.ExecuteQuery()
+        } catch {
+            Write-Host " [BeforeEach] $($_)" -ForegroundColor Yellow 
         }
     }
 
-    It 'Adds a role assignment to the domain user by role type' {
+    AfterEach {
         try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $param = @{
-                Member = $user
-                Roles = [Microsoft.SharePoint.Client.RoleType]::Administrator
-            }
-            $result = $list | Add-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('TestList0')
+            $List.DeleteObject()
+            $SPClient.ClientContext.ExecuteQuery()
+        } catch {
+            Write-Host " [AfterEach] $($_)" -ForegroundColor Yellow 
         }
     }
 
-    It 'Adds a role assignment to the domain group by role name' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $param = @{
-                Member = $user
-                Roles = 'Full Control'
-            }
-            $result = $list | Add-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
+    It 'Adds a role assignment by role name' {
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+        $List.BreakRoleInheritance($false, $false)
+        $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+        $Params = @{
+            ClientObject = $List
+            Member = $Group
+            Roles = 'Full Control'
         }
+        $Result = Add-SPClientRoleAssignments @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
-    It 'Adds a role assignment to the domain group by role type' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $param = @{
-                Member = $user
-                Roles = [Microsoft.SharePoint.Client.RoleType]::Administrator
-            }
-            $result = $list | Add-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
+    It 'Adds a role assignment by role type' {
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+        $List.BreakRoleInheritance($false, $false)
+        $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+        $Params = @{
+            ClientObject = $List
+            Member = $Group
+            Roles = [Microsoft.SharePoint.Client.RoleType]::Administrator
         }
+        $Result = Add-SPClientRoleAssignments @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
-    It 'Adds a role assignment to the SharePoint group by role name' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $param = @{
-                Member = $user
-                Roles = 'Full Control'
-            }
-            $result = $list | Add-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
-        }
-    }
-
-    It 'Adds a role assignment to the SharePoint group by role type' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $param = @{
-                Member = $user
-                Roles = [Microsoft.SharePoint.Client.RoleType]::Administrator
-            }
-            $result = $list | Add-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.Member | ForEach-Object { Write-Host $_.LoginName }
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
-        }
-    }
-
-    It 'Adds role assignmenst by role name' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $param = @{
-                Member = $user
+    It 'Adds a role assignment by role name collection' {
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+        $List.BreakRoleInheritance($false, $false)
+        $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+        $Params = @{
+            ClientObject = $List
+            Member = $Group
                 Roles = @(
                     'Read'
                     'Contribute'
                     'Edit'
                     'Full Control'
                 )
-            }
-            $result = $list | Add-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
         }
+        $Result = Add-SPClientRoleAssignments @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
-    It 'Adds role assignmenst by role type' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $param = @{
-                Member = $user
+    It 'Adds a role assignment by role type collection' {
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+        $List.BreakRoleInheritance($false, $false)
+        $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+        $Params = @{
+            ClientObject = $List
+            Member = $Group
                 Roles = @(
                     [Microsoft.SharePoint.Client.RoleType]::Reader
                     [Microsoft.SharePoint.Client.RoleType]::Contributor
                     [Microsoft.SharePoint.Client.RoleType]::Editor
                     [Microsoft.SharePoint.Client.RoleType]::Administrator
                 )
-            }
-            $result = $list | Add-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
         }
+        $Result = Add-SPClientRoleAssignments @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
     It 'Throws an error when has not unique role assignments' {
-        try {
-            $throw = {
-                $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-                $list = Get-SPClientList -Title $TestConfig.ListTitle
-                $list | Disable-SPClientUniqueRoleAssignments
-                $param = @{
-                    Member = $user
-                    Roles = 'Full Control'
-                }
-                $result = $list | Add-SPClientRoleAssignments @param
-                $result.RoleAssignments | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                    $_.RoleDefinitionBindings | ForEach-Object {
-                        Write-Host "$(' ' * 3)$($_.Name)"
-                    }
-                }
+        $Throw = {
+            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+            $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+            $Params = @{
+                ClientObject = $List
+                Member = $Group
+                Roles = 'Full Control'
             }
-            $throw | Should Throw 'This operation is not allowed on an object that inherits permissions.'
-        } finally { }
+            $Result = Add-SPClientRoleAssignments @Params
+            $Result | Should Not BeNullOrEmpty
+        }
+        $Throw | Should Throw 'This operation is not allowed on an object that inherits permissions.'
     }
 
 }

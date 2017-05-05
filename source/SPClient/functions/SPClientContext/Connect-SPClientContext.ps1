@@ -28,19 +28,19 @@ function Connect-SPClientContext {
 .SYNOPSIS
   Connects to SharePoint site.
 .PARAMETER Url
-  Indicates the site url to connect.
+  Indicates the site url.
 .PARAMETER Network
   If specified, connects to SharePoint Server (On-premise).
 .PARAMETER Online
   If specified, connects to SharePoint Online.
 .PARAMETER UserName
-  Indicates the user name to login.
+  Indicates the user name.
 .PARAMETER Password
-  Indicates the password to login.
+  Indicates the password.
 .PARAMETER Domain
-  Indicates the domain to login.
+  Indicates the domain.
 .PARAMETER Credential
-  Indicates the credential to login.
+  Indicates the Credentialential.
 .PARAMETER PassThru
   If specified, returns a client context.
 #>
@@ -85,28 +85,26 @@ function Connect-SPClientContext {
     )
 
     process {
-        $clientContext = New-Object Microsoft.SharePoint.Client.ClientContext($Url)
+        $ClientContext = New-Object Microsoft.SharePoint.Client.ClientContext($Url)
         if ($PSCmdlet.ParameterSetName -eq 'NetworkPassword') {
-            $cred = New-Object System.Net.NetworkCredential($UserName, $Password, $Domain)
-            $clientContext.Credentials = $cred
+            $ClientContext.Credentials = New-Object System.Net.NetworkCredential($UserName, $Password, $Domain)
         }
         if ($PSCmdlet.ParameterSetName -eq 'NetworkCredential') {
-            $cred = $Credential.GetNetworkCredential()
-            $clientContext.Credentials = $cred
+            $ClientContext.Credentials = $Credential.GetNetworkCredential()
         }
         if ($PSCmdlet.ParameterSetName -eq 'OnlinePassword') {
-            $cred = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($UserName, $Password)
-            $clientContext.Credentials = $cred
+            $ClientContext.Credentials =
+                New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($UserName, $Password)
         }
         if ($PSCmdlet.ParameterSetName -eq 'OnlineCredential') {
-            $name = $Credential.UserName
-            $pass = $Credential.Password
-            $cred = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($name, $pass)
-            $clientContext.Credentials = $cred
+            $UserName = $Credential.UserName
+            $Password = $Credential.Password
+            $ClientContext.Credentials =
+                New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($UserName, $Password)
         }
-        $SPClient.ClientContext = $clientContext
-        if ($PassThru -eq $true) {
-            Write-Output $clientContext
+        $SPClient.ClientContext = $ClientContext
+        if ($PassThru) {
+            Write-Output $ClientContext
         }
     }
 

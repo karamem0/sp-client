@@ -1,164 +1,135 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
 Describe 'Remove-SPClientRoleAssignments' {
 
     BeforeEach {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $TestConfig.LoginUrl `
-            -Online `
-            -UserName $TestConfig.LoginUserName `
-            -Password (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
+        try {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = New-Object Microsoft.SharePoint.Client.ListCreationInformation
+            $List.Title = 'TestList0'
+            $List.TemplateType = 100
+            $List = $Web.Lists.Add($List)
+            $List.Update()
+            $SPClient.ClientContext.Load($List)
+            $SPClient.ClientContext.ExecuteQuery()
+        } catch {
+            Write-Host " [BeforeEach] $($_)" -ForegroundColor Yellow 
+        }
+    }
+
+    AfterEach {
+        try {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('TestList0')
+            $List.DeleteObject()
+            $SPClient.ClientContext.ExecuteQuery()
+        } catch {
+            Write-Host " [AfterEach] $($_)" -ForegroundColor Yellow 
+        }
     }
 
     It 'Removes a role assignment by role name' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $list | Add-SPClientRoleAssignments -Member $user -Roles 'Read', 'Contribute', 'Edit'
-            $param = @{
-                Member = $user
-                Roles = 'Read'
-            }
-            $result = $list | Remove-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+        $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+        $List.BreakRoleInheritance($false, $false)
+        $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
+        $RoleDefinition = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Full Control')
+        $RoleDefinitionBindings.Add($RoleDefinition)
+        $List.RoleAssignments.Add($Group, $RoleDefinitionBindings) | Out-Null
+        $Params = @{
+            ClientObject = $List
+            Member = $Group
+            Roles = 'Full Control'
         }
+        $Result = Remove-SPClientRoleAssignments @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
     It 'Removes a role assignment by role type' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $list | Add-SPClientRoleAssignments -Member $user -Roles 'Read', 'Contribute', 'Edit'
-            $param = @{
-                Member = $user
-                Roles = [Microsoft.SharePoint.Client.RoleType]::Reader
-            }
-            $result = $list | Remove-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+        $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+        $List.BreakRoleInheritance($false, $false)
+        $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
+        $RoleDefinition = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Full Control')
+        $RoleDefinitionBindings.Add($RoleDefinition)
+        $List.RoleAssignments.Add($Group, $RoleDefinitionBindings) | Out-Null
+        $Params = @{
+            ClientObject = $List
+            Member = $Group
+            Roles = [Microsoft.SharePoint.Client.RoleType]::Administrator
         }
+        $Result = Remove-SPClientRoleAssignments @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
     It 'Removes role assignments by role name' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $list | Add-SPClientRoleAssignments -Member $user -Roles 'Read', 'Contribute', 'Edit'
-            $param = @{
-                Member = $user
-                Roles = @(
-                    [Microsoft.SharePoint.Client.RoleType]::Reader
-                    [Microsoft.SharePoint.Client.RoleType]::Contributor
-                )
-            }
-            $result = $list | Remove-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+        $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+        $List.BreakRoleInheritance($false, $false)
+        $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
+        $RoleDefinition1 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Read')
+        $RoleDefinition2 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Contribute')
+        $RoleDefinition3 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Edit')
+        $RoleDefinitionBindings.Add($RoleDefinition1)
+        $RoleDefinitionBindings.Add($RoleDefinition2)
+        $RoleDefinitionBindings.Add($RoleDefinition3)
+        $List.RoleAssignments.Add($Group, $RoleDefinitionBindings) | Out-Null
+        $Params = @{
+            ClientObject = $List
+            Member = $Group
+            Roles = @(
+                'Read'
+                'Contribute'
+            )
         }
+        $Result = Remove-SPClientRoleAssignments @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
     It 'Removes role assignments by role type' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $list | Add-SPClientRoleAssignments -Member $user -Roles 'Read', 'Contribute', 'Edit'
-            $param = @{
-                Member = $user
-                Roles = @(
-                    'Read'
-                    'Contribute'
-                )
-            }
-            $result = $list | Remove-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
+        $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+        $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+        $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+        $List.BreakRoleInheritance($false, $false)
+        $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
+        $RoleDefinition1 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Read')
+        $RoleDefinition2 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Contribute')
+        $RoleDefinition3 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Edit')
+        $RoleDefinitionBindings.Add($RoleDefinition1)
+        $RoleDefinitionBindings.Add($RoleDefinition2)
+        $RoleDefinitionBindings.Add($RoleDefinition3)
+        $List.RoleAssignments.Add($Group, $RoleDefinitionBindings) | Out-Null
+        $Params = @{
+            ClientObject = $List
+            Member = $Group
+            Roles = @(
+                [Microsoft.SharePoint.Client.RoleType]::Reader
+                [Microsoft.SharePoint.Client.RoleType]::Contributor
+            )
         }
-    }
-
-    It 'Removes all role assignments' {
-        try {
-            $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Enable-SPClientUniqueRoleAssignments
-            $list | Add-SPClientRoleAssignments -Member $user -Roles 'Read', 'Contribute', 'Edit'
-            $param = @{
-                Member = $user
-                All = $true
-            }
-            $result = $list | Remove-SPClientRoleAssignments @param
-            $result | Should Not Be $null
-            $result.RoleAssignments | ForEach-Object {
-                Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                $_.RoleDefinitionBindings | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Name)"
-                }
-            }
-        } finally {
-            $list = Get-SPClientList -Title $TestConfig.ListTitle
-            $list | Disable-SPClientUniqueRoleAssignments
-        }
+        $Result = Remove-SPClientRoleAssignments @Params
+        $Result | Should Not BeNullOrEmpty
     }
 
     It 'Throws an error when has not unique role assignments' {
-        try {
-            $throw = {
-                $user = Get-SPClientUser -Name $TestConfig.DomainUserName
-                $list = Get-SPClientList -Title $TestConfig.ListTitle
-                $list | Disable-SPClientUniqueRoleAssignments
-                $param = @{
-                    Member = $user
-                    Roles = 'Full Control'
-                }
-                $result = $list | Remove-SPClientRoleAssignments @param
-                $result.RoleAssignments | ForEach-Object {
-                    Write-Host "$(' ' * 3)$($_.Member.LoginName)"
-                    $_.RoleDefinitionBindings | ForEach-Object {
-                        Write-Host "$(' ' * 3)$($_.Name)"
-                    }
-                }
+        $Throw = {
+            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+            $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+            $Params = @{
+                ClientObject = $List
+                Member = $Group
+                Roles = 'Full Control'
             }
-            $throw | Should Throw 'This operation is not allowed on an object that inherits permissions.'
-        } finally { }
+            $Result = Remove-SPClientRoleAssignments @Params
+            $Result | Should Not BeNullOrEmpty
+        }
+        $Throw | Should Throw 'This operation is not allowed on an object that inherits permissions.'
     }
 
 }

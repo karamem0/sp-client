@@ -28,18 +28,17 @@ function Get-SPClientGroup {
 .SYNOPSIS
   Lists all site groups or retrieve the specified site group.
 .DESCRIPTION
-  If not specified 'Identitiy', returns site all groups. Otherwise, returns a web
-  which matches the parameter.
+  If not specified 'Identitiy' and 'Name', returns site all groups. Otherwise,
+  returns a group which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER Web
+.PARAMETER ParentObject
   Indicates the web which the groups are contained.
-  If not specified, uses the default web.
 .PARAMETER Identity
-  Indicates the group id to get.
+  Indicates the group id.
 .PARAMETER Name
-  Indicates the group login name to get.
+  Indicates the group name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -51,15 +50,17 @@ function Get-SPClientGroup {
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.Web]
-        $Web = $SPClient.ClientContext.Web,
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Alias('Id')]
         [int]
         $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
+        [Alias('Title')]
         [string]
         $Name,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
@@ -73,32 +74,29 @@ function Get-SPClientGroup {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ($Web -eq $null) {
-            throw "Cannot bind argument to parameter 'Web' because it is null."
-        }
+        $ClientObjectCollection = $ParentObject.SiteGroups
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $groups = $Web.SiteGroups
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $groups `
+                -ClientObject $ClientObjectCollection `
                 -Retrievals $Retrievals
-            Write-Output @(,$groups)
+            Write-Output @(, $ClientObjectCollection)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $group = $Web.SiteGroups.GetById($Identity)
+            $ClientObject = $ClientObjectCollection.GetById($Identity)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $group `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $group
+            Write-Output $ClientObject
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
-            $group = $Web.SiteGroups.GetByName($Name)
+            $ClientObject = $ClientObjectCollection.GetByName($Name)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $group `
+                -ClientObject $ClientObject `
                 -Retrievals $Retrievals
-            Write-Output $group
+            Write-Output $ClientObject
         }
     }
 

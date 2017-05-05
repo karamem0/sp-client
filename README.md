@@ -5,30 +5,54 @@ PowerShell module for SharePoint client-side object model (CSOM).
 [![Build status](https://img.shields.io/appveyor/ci/karamem0/SPClient.svg?style=flat-square)](https://ci.appveyor.com/project/karamem0/SPClient)
 [![License](https://img.shields.io/github/license/karamem0/SPClient.svg?style=flat-square)](https://github.com/karamem0/SPClient/blob/master/LICENSE)
 
+## Features
+
+- Automatically called `ClientContext.Load()` method. You do not have to consider call timing, you  will be released from "`ClientContext.Load()` Hell".
+- String-based (in other words, JSOM-liked) data retrieval expression.
+
 ## Prerequisites
+
 Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=51679) or [SharePoint Server 2013 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=35585) in order to use this module.
 
 ## Cmdlets
+
 - Common
   - `Add-SPClientType`
   - `Connect-SPClientContext`
   - `Disconnect-SPClientContext`
-- Contents
+- Web
   - `Get-SPClientWeb`
   - `New-SPClientWeb`
   - `Remove-SPClientWeb`
+- List
   - `Get-SPClientList`
   - `New-SPClientList`
   - `Remove-SPClientList`
+- Field
+  - `Convert-SPClientField`
   - `Get-SPClientField`
+  - `New-SPClientFieldBoolean`
+  - `New-SPClientFieldCalculated`
+  - `New-SPClientFieldChoice`
+  - `New-SPClientFieldCurrency`
+  - `New-SPClientFieldDateTime`
+  - `New-SPClientFieldLookup`
+  - `New-SPClientFieldMultilineText`
+  - `New-SPClientFieldNumber`
+  - `New-SPClientFieldText`
+  - `New-SPClientFieldUrl`
+  - `Remove-SPClientField`
+- View
   - `Get-SPClientView`
+- List Item
   - `Get-SPClientListItem`
   - `New-SPClientListItem`
   - `Remove-SPClientListItem`
-- Users and Groups
+- User and Group
   - `Get-SPClientGroup`
   - `Get-SPClientUser`
-- Role Assignments
+  - `Resolve-SPClientUser`
+- Role Assignment
   - `Add-SPClientRoleAssignments`
   - `Clear-SPClientRoleAssignments`
   - `Disable-SPClientUniqueRoleAssignments`
@@ -88,11 +112,10 @@ Connect-SPClientContext -Network `
     -Domain 'domain.local'
 
 # Get web title
-Get-SPClientWeb -Default `
-    | %{ Write-Host $_.Title }
+Get-SPClientWeb -Default |
+    %{ Write-Host $_.Title }
 
 # Get all lists 'ServerRelativeUrl'
-# You can use JSOM like retrieval expression
-Get-SPClientList -Retrievals 'Include(RootFolder.ServerRelativeUrl)' `
-    | %{ Write-Host $_.RootFolder.ServerRelativeUrl }
+Get-SPClientWeb -Default | Get-SPClientList -Retrievals 'Include(RootFolder.ServerRelativeUrl) |
+    %{ Write-Host $_.RootFolder.ServerRelativeUrl }
 ```

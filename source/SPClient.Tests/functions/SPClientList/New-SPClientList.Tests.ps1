@@ -1,59 +1,64 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
 Describe 'New-SPClientList' {
 
-    BeforeEach {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $TestConfig.LoginUrl `
-            -Online `
-            -UserName $TestConfig.LoginUserName `
-            -Password (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
+    AfterEach {
+        try {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('TestList0')
+            $List.DeleteObject()
+            $SPClient.ClientContext.ExecuteQuery()
+        } catch {
+            Write-Host " [AfterEach] $($_)" -ForegroundColor Yellow 
+        }
     }
 
     It 'Creates a new list with mandatory parameters' {
-        try {
-            $web = Get-SPClientWeb -Url $TestConfig.WebUrl
-            $param = @{
-                Title = 'Title of NewList1'
-            }
-            $result = $web | New-SPClientList @param
-            $result | Should Not Be $null
-            $result.GetType() | Should Be 'Microsoft.SharePoint.Client.List'
-            $result.Title | Should Be 'Title of NewList1'
-            $result.BaseTemplate | Should Be 100
-            $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
-        } finally {
-            $web = Get-SPClientWeb -Url $TestConfig.WebUrl
-            $list = $web | Get-SPClientList -Title 'Title of NewList1'
-            $list | Remove-SPClientList
+        $Web = Get-SPClientWeb -Url $TestConfig.WebUrl
+        $Params = @{
+            ParentObject = $Web
+            Name = 'TestList0'
         }
+        $Result = New-SPClientList @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.List'
+        $Result.Title | Should Be 'TestList0'
+        $Result.Description | Should BeNullOrEmpty
+        $Result.BaseTemplate | Should Be 100
+        $Result.EnableAttachments | Should Be $false
+        $Result.EnableFolderCreation | Should Be $false
+        $Result.EnableVersioning | Should Be $false
+        $Result.NoCrawl | Should Be $false
+        $Result.OnQuickLaunch | Should Be $false
     }
 
     It 'Creates a new list with all parameters' {
-        try {
-            $web = Get-SPClientWeb -Url $TestConfig.WebUrl
-            $param = @{
-                Title = 'Title of NewList1'
-                Description = 'Description of NewList1'
-                Url = 'NewList1'
-                Template = 107
-                QuickLaunch = $true
-            }
-            $result = $web | New-SPClientList @param
-            $result | Should Not Be $null
-            $result.GetType() | Should Be 'Microsoft.SharePoint.Client.List'
-            $result.Title | Should Be 'Title of NewList1'
-            $result.BaseTemplate | Should Be 107
-            $result.OnQuickLaunch | Should Be $true
-            $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
-        } finally {
-            $web = Get-SPClientWeb -Url $TestConfig.WebUrl
-            $list = $web | Get-SPClientList -Title 'Title of NewList1'
-            $list | Remove-SPClientList
+        $Web = Get-SPClientWeb -Url $TestConfig.WebUrl
+        $Params = @{ 
+            ParentObject = $Web
+            Name = 'TestList0'
+            Title = 'Test List 0'
+            Description = 'Test List 0'
+            Template = 107
+            EnableAttachments = $true
+            EnableFolderCreation = $true
+            EnableVersioning = $true
+            NoCrawl = $true
+            OnQuickLaunch = $true
         }
+        $Result = New-SPClientList @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.List'
+        $Result.Title | Should Be 'Test List 0'
+        $Result.Description | Should Be 'Test List 0'
+        $Result.BaseTemplate | Should Be 107
+        $Result.EnableAttachments | Should Be $true
+        $Result.EnableFolderCreation | Should Be $true
+        $Result.EnableVersioning | Should Be $true
+        $Result.NoCrawl | Should Be $true
+        $Result.OnQuickLaunch | Should Be $true
     }
 
 }

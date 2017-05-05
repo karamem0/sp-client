@@ -1,87 +1,74 @@
 ﻿#Requires -Version 3.0
 
-. "${PSScriptRoot}\..\..\TestInitialize.ps1"
+. "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
 Describe 'Get-SPClientWeb' {
 
-    BeforeEach {
-        Add-SPClientType
-        Connect-SPClientContext `
-            -Url $TestConfig.LoginUrl `
-            -Online `
-            -UserName $TestConfig.LoginUserName `
-            -Password (ConvertTo-SecureString -String $TestConfig.LoginPassword -AsPlainText -Force)
-    }
-
     It 'Gets all webs' {
-        $result = Get-SPClientWeb
-        $result | Should Not Be $null
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+        $Result = Get-SPClientWeb
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
     }
 
     It 'Gets a web by id' {
-        $param = @{
+        $Params = @{
             Identity = $TestConfig.WebId
         }
-        $result = Get-SPClientWeb @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Web'
-        $result.Id | Should Be $param.Identity
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+        $Result = Get-SPClientWeb @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+        $Result.Id | Should Be $Params.Identity
     }
 
     It 'Gets a web by url' {
-        $param = @{
+        $Params = @{
             Url = $TestConfig.WebUrl
         }
-        $result = Get-SPClientWeb @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Web'
-        $result.ServerRelativeUrl | Should Be $param.Url
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+        $Result = Get-SPClientWeb @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+        $Result.ServerRelativeUrl | Should Be $Params.Url
     }
 
     It 'Gets the default web' {
-        $param = @{
+        $Params = @{
             Default = $true
         }
-        $result = Get-SPClientWeb @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Web'
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+        $Result = Get-SPClientWeb @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
     }
 
     It 'Gets the root web' {
-        $param = @{
+        $Params = @{
             Root = $true
         }
-        $result = Get-SPClientWeb @param
-        $result | Should Not Be $null
-        $result.GetType() | Should Be 'Microsoft.SharePoint.Client.Web'
-        $result.ServerRelativeUrl | Should Be '/'
-        $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+        $Result = Get-SPClientWeb @Params
+        $Result | Should Not BeNullOrEmpty
+        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+        $Result.ServerRelativeUrl | Should Be $TestConfig.SiteUrl
     }
 
     It 'Throws an error when the web could not be found by id' {
-        $throw = {
-            $param = @{
+        $Throw = {
+            $Params = @{
                 Identity = [guid]::Empty
             }
-            $result = Get-SPClientWeb @param
-            $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
         }
-        $throw | Should Throw
+        $Throw | Should Throw
     }
 
     It 'Throws an error when the web could not be found by url' {
-        $throw = {
-            $param = @{
-                Url = '/NotFound'
+        $Throw = {
+            $Params = @{
+                Url = '/TestWeb0'
             }
-            $result = Get-SPClientWeb @param
-            $result | ForEach-Object { Write-Host "$(' ' * 3)$($_.Title)" }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
         }
-        $throw | Should Throw
+        $Throw | Should Throw
     }
 
 }

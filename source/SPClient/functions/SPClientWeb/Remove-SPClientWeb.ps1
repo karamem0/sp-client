@@ -26,29 +26,74 @@ function Remove-SPClientWeb {
 
 <#
 .SYNOPSIS
-  Deletes the web.
+  Deletes a web.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER Web
+.PARAMETER ClientObject
   Indicates the web to delete.
+.PARAMETER ParentObject
+  Indicates the web which the web is contained.
+.PARAMETER Identity
+  Indicates the web GUID.
+.PARAMETER Url
+  Indicates the web relative url.
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
     param (
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.Web]
-        $Web
+        $ClientObject,
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
+        [Microsoft.SharePoint.Client.Web]
+        $ParentObject,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Alias('Id')]
+        [guid]
+        $Identity,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
+        [string]
+        $Url
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $Web.DeleteObject()
+        if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
+            if (-not $ClientObject.IsPropertyAvailable('Id')) {
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject
+            }
+            $ClientContext.ExecuteQuery()
+        } else {
+            if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+                $ClientObject = $ClientContext.Site.OpenWebById($Identity)
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject
+            }
+            if ($PSCmdlet.ParameterSetName -eq 'Url') {
+                $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                    $ClientContext, `
+                    $ClientContext.Site.Path, `
+                    'OpenWeb', `
+                    [object[]]$Url)
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod);
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject
+            }
+        }
+        $ClientObject.DeleteObject()
         $ClientContext.ExecuteQuery()
     }
 
