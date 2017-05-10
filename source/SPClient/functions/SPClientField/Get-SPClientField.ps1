@@ -50,12 +50,10 @@ function Get-SPClientField {
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentObject,
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
         $Identity,
@@ -63,9 +61,7 @@ function Get-SPClientField {
         [Alias('Title')]
         [string]
         $Name,
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
     )
@@ -89,6 +85,9 @@ function Get-SPClientField {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified field could not be found.'
+            }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
             $ClientObject = $ClientObjectCollection.GetByInternalNameOrTitle($Name)
@@ -97,6 +96,9 @@ function Get-SPClientField {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified field could not be found.'
+            }
         }
     }
 

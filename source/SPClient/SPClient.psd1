@@ -12,10 +12,10 @@
 # RootModule = 'Module.psd1'
 
 # Version number of this module.
-ModuleVersion = '0.6'
+ModuleVersion = '0.7'
 
 # ID used to uniquely identify this module
-GUID = '70f6c652-6c79-4b8b-b4a9-79635ea6ae9c'
+GUID = '70F6C652-6C79-4B8B-B4A9-79635EA6AE9C'
 
 # Author of this module
 Author = 'karamem0'
@@ -70,6 +70,9 @@ FunctionsToExport = @(
     'Connect-SPClientContext'
     'Disconnect-SPClientContext'
     'Convert-SPClientField'
+    'Get-SPClientContentType'
+    'New-SPClientContentType'
+    'Remove-SPClientContentType'
     'Get-SPClientField'
     'New-SPClientFieldBoolean'
     'New-SPClientFieldCalculated'
@@ -89,15 +92,16 @@ FunctionsToExport = @(
     'Get-SPClientListItem'
     'New-SPClientListItem'
     'Remove-SPClientListItem'
-    'Add-SPClientRoleAssignments'
+    'Grant-SPClientRoleAssignments'
     'Clear-SPClientRoleAssignments'
-    'Remove-SPClientRoleAssignments'
-    'Add-SPClientType'
+    'Revoke-SPClientRoleAssignments'
+    'Use-SPClientType'
     'Enable-SPClientUniqueRoleAssignments'
     'Disable-SPClientUniqueRoleAssignments'
     'Get-SPClientUser'
     'Resolve-SPClientUser'
     'Get-SPClientView'
+    'Remove-SPClientView'
     'Get-SPClientWeb'
     'New-SPClientWeb'
     'Remove-SPClientWeb'

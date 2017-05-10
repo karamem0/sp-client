@@ -50,9 +50,7 @@ function Get-SPClientGroup {
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $true)]
         [Microsoft.SharePoint.Client.Web]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
@@ -63,9 +61,7 @@ function Get-SPClientGroup {
         [Alias('Title')]
         [string]
         $Name,
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'name')]
+        [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
     )
@@ -89,6 +85,9 @@ function Get-SPClientGroup {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified group could not be found.'
+            }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
             $ClientObject = $ClientObjectCollection.GetByName($Name)
@@ -97,6 +96,9 @@ function Get-SPClientGroup {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified group could not be found.'
+            }
         }
     }
 

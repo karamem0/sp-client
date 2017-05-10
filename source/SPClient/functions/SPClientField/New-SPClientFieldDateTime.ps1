@@ -1,6 +1,6 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
-# New-SPClientFieldText.ps1
+# New-SPClientFieldDateTime.ps1
 #
 # Copyright (c) 2017 karamem0
 # 

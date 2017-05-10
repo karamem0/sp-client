@@ -38,8 +38,8 @@ function Get-SPClientView {
 .PARAMETER Identity
   Indicates the view GUID.
 .PARAMETER Url
-  Indicates the list url.
-.PARAMETER Name
+  Indicates the view url.
+.PARAMETER Title
   Indicates the view title.
 .PARAMETER Default
   If specified, returns the default view.
@@ -52,15 +52,11 @@ function Get-SPClientView {
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Default')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
@@ -70,18 +66,13 @@ function Get-SPClientView {
         [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
         [string]
         $Url,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
-        [Alias('Title')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Title')]
         [string]
-        $Name,
+        $Title,
         [Parameter(Mandatory = $true, ParameterSetName = 'Default')]
         [switch]
         $Default,
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
+        [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
     )
@@ -105,25 +96,35 @@ function Get-SPClientView {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified view could not be found.'
+            }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals $Retrievals
+                -Retrievals 'ServerRelativeUrl'
             $ClientObject = $ClientObjectCollection | Where-Object { $_.ServerRelativeUrl -eq $Url }
             if ($ClientObject -eq $null) {
-                throw 'The specified view is invalid.'
+                throw 'The specified view could not be found.'
             }
-            Write-Output $ClientObject
-        }
-        if ($PSCmdlet.ParameterSetName -eq 'Name') {
-            $ClientObject = $ClientObjectCollection.GetByTitle($Name)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Title') {
+            $ClientObject = $ClientObjectCollection.GetByTitle($Title)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $ClientObject `
+                -Retrievals $Retrievals
+            Write-Output $ClientObject
+            trap {
+                throw 'The specified view could not be found.'
+            }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Default') {
             $ClientObject = $ParentObject.DefaultView

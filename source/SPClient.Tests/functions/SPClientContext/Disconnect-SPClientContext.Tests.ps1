@@ -4,18 +4,26 @@
 
 Describe 'Disconnect-SPClientContext' {
 
-    It 'Disconnects the context' {
-        $Result = Disconnect-SPClientContext
-        $Result | Should BeNullOrEmpty
-    }
+    Context 'Success' {
 
-    It 'Throws an error when context is null' {
-        $SPClient.ClientContext = $null
-        $Throw = {
+        It 'Disconnects the context' {
             $Result = Disconnect-SPClientContext
             $Result | Should BeNullOrEmpty
         }
-        $Throw | Should Throw "Cannot bind argument to parameter 'ClientContext' because it is null."
+
+    }
+
+    Context 'Failure' {
+
+        It 'Throws an error when context is null' {
+            $SPClient.ClientContext = $null
+            $Throw = {
+                $Result = Disconnect-SPClientContext
+                $Result | Should BeNullOrEmpty
+            }
+            $Throw | Should Throw "Cannot bind argument to parameter 'ClientContext' because it is null."
+        }
+
     }
 
 }

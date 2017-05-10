@@ -1,4 +1,4 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
 # New-SPClientFieldUrl.ps1
 #
@@ -45,7 +45,7 @@ function New-SPClientFieldUrl {
 .PARAMETER DisplayFormat
   Indicates the display format.
     - Hyperlink
-    - Picture
+    - Image
 .PARAMETER AddToDefaultView
   If true, the field is add to default view.
 #>

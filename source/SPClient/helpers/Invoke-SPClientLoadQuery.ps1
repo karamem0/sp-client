@@ -39,14 +39,13 @@ function Invoke-SPClientLoadQuery {
 
     process {
         $ObjType = $ClientObject.GetType()
-        $FuncType = [type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($ObjType, [object]) }
-        $ExprType = [type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($FuncType) }
-        $ListType = [type]'System.Collections.Generic.List`1' | ForEach-Object { $_.MakeGenericType($ExprType) }
+        $FuncType = [type]'System.Func`2' | &{ process { $_.MakeGenericType($ObjType, [object]) } }
+        $ExprType = [type]'System.Linq.Expressions.Expression`1' | &{ process { $_.MakeGenericType($FuncType) } }
+        $ListType = [type]'System.Collections.Generic.List`1' | &{ process{ $_.MakeGenericType($ExprType) } }
         $ExprList = New-Object $ListType
         if (-not [string]::IsNullOrEmpty($Retrievals)) {
             if (Test-GenericSubclassOf -InputType $ObjType -TestType 'Microsoft.SharePoint.Client.ClientObjectCollection`1') {
-                if ((-not $Retrievals.StartsWith('Include(')) -or
-                    (-not $Retrievals.EndsWith(')'))) {
+                if (-not ($Retrievals.StartsWith('Include(') -and $Retrievals.EndsWith(')'))) {
                     $Retrievals = 'Include(' + $Retrievals + ')'
                 }
                 $ParamExpr = [System.Linq.Expressions.Expression]::Parameter($ObjType, $ObjType.Name)
@@ -54,8 +53,7 @@ function Invoke-SPClientLoadQuery {
                 $LambdaExpr = [System.Linq.Expressions.Expression]::Lambda($FuncType, $PropExpr, $ParamExpr)
                 $ExprList.Add($LambdaExpr)
             } else {
-                if (($Retrievals.StartsWith('Include(')) -and
-                    ($Retrievals.EndsWith(')'))) {
+                if ($Retrievals.StartsWith('Include(') -and $Retrievals.EndsWith(')')) {
                     $Retrievals = $Retrievals.Substring(8, $Retrievals.Length - 9)
                 }
                 $ParamExpr = [System.Linq.Expressions.Expression]::Parameter($ObjType, $ObjType.Name)

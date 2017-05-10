@@ -32,8 +32,6 @@ function Remove-SPClientWeb {
   If not specified, uses the default context.
 .PARAMETER ClientObject
   Indicates the web to delete.
-.PARAMETER ParentObject
-  Indicates the web which the web is contained.
 .PARAMETER Identity
   Indicates the web GUID.
 .PARAMETER Url
@@ -42,18 +40,12 @@ function Remove-SPClientWeb {
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'ClientObject')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.Web]
         $ClientObject,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
-        [Microsoft.SharePoint.Client.Web]
-        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -91,6 +83,9 @@ function Remove-SPClientWeb {
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject
+            }
+            trap {
+                throw 'The specified web could not be found.'
             }
         }
         $ClientObject.DeleteObject()

@@ -1,4 +1,4 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
 # Convert-SPClientField.ps1
 #
@@ -26,6 +26,7 @@ function Convert-SPClientField {
 
 <#
 .SYNOPSIS
+  Casts a specified field to its derived type.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.

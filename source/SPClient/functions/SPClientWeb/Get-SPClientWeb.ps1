@@ -67,11 +67,7 @@ function Get-SPClientWeb {
         [Parameter(Mandatory = $true, ParameterSetName = 'Root')]
         [switch]
         $Root,
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Root')]
+        [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
     )
@@ -125,6 +121,9 @@ function Get-SPClientWeb {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified web could not be found.'
+            }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
@@ -138,6 +137,9 @@ function Get-SPClientWeb {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified web could not be found.'
+            }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Default') {
             $ClientObject = $ClientContext.Web

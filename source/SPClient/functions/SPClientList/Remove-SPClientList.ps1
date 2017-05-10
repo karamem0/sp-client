@@ -44,10 +44,7 @@ function Remove-SPClientList {
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'ClientObject')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
@@ -88,12 +85,18 @@ function Remove-SPClientList {
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject
+                trap {
+                    throw 'The specified list could not be found.'
+                }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
                 $ClientObject = $ParentObject.GetList($Url)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject
+                trap {
+                    throw 'The specified list could not be found.'
+                }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Name') {
                 try {
@@ -108,7 +111,7 @@ function Remove-SPClientList {
                         -Retrievals 'Include(RootFolder.Name)'
                     $ClientObject = $ClientObjectCollection | Where-Object { $_.RootFolder.Name -eq $Name }
                     if ($ClientObject -eq $null) {
-                        throw $_
+                        throw 'The specified list could not be found.'
                     }
                 }
             }

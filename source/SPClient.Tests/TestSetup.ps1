@@ -60,6 +60,26 @@ $ClientContext.Load($Web4)
 
 $ClientContext.ExecuteQuery()
 
+$ContentType1 = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
+$ContentType1.Name = 'Test Content Type 1'
+$ContentType1 = $Web1.ContentTypes.Add($ContentType1)
+$ContentType1.Update($true)
+$ClientContext.Load($ContentType1)
+
+$ContentType2 = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
+$ContentType2.Name = 'Test Content Type 2'
+$ContentType2 = $Web1.ContentTypes.Add($ContentType2)
+$ContentType2.Update($true)
+$ClientContext.Load($ContentType2)
+
+$ContentType3 = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
+$ContentType3.Name = 'Test Content Type 3'
+$ContentType3 = $Web1.ContentTypes.Add($ContentType3)
+$ContentType3.Update($true)
+$ClientContext.Load($ContentType3)
+
+$ClientContext.ExecuteQuery()
+
 $List1 = New-Object Microsoft.SharePoint.Client.ListCreationInformation
 $List1.Title = 'TestList1'
 $List1.Description = ''
@@ -237,6 +257,8 @@ $TestConfig = @{
     WebId = $Web1.Id
     WebTitle = $Web1.Title
     WebUrl = $Web1.ServerRelativeUrl
+    ContentTypeId = $ContentType1.StringId
+    ContentTypeName = $ContentType1.Name
     ListId = $List1.Id
     ListTitle = $List1.Title
     ListUrl = $List1.RootFolder.ServerRelativeUrl
@@ -254,4 +276,6 @@ $TestConfig = @{
     GroupId = $Group1.Id
     GroupName = $Group1.LoginName
 }
-$TestConfig | ConvertTo-Json -Compress | Out-File "$($PSScriptRoot)\TestConfiguration.json"
+$TestConfig |
+    ConvertTo-Json -Compress |
+    Out-File "$($PSScriptRoot)\TestConfiguration.json"

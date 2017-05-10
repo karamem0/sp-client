@@ -1,4 +1,4 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
 # New-SPClientFieldCalculated.ps1
 #
@@ -42,6 +42,8 @@ function New-SPClientFieldCalculated {
   Indicates the description.
 .PARAMETER Fomula
   Indicates the formula.
+.PARAMETER FieldRefs
+  Indicates the collection of fields which used in formula.
 .PARAMETER OutputType
   Indicates the data type of the return value.
     - Text

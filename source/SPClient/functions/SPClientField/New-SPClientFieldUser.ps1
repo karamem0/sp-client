@@ -1,4 +1,4 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
 # New-SPClientFieldUser.ps1
 #
@@ -53,7 +53,7 @@ function New-SPClientFieldUser {
 .PARAMETER SelectionGroup
   Indicates the identifier of the SharePoint group whose members can be selected.
 .PARAMETER LookupField
-  Indicates the internal field name of the user lookup value.
+  Indicates the field internal name of the user lookup value.
 .PARAMETER AddToDefaultView
   If true, the field is add to default view.
 #>

@@ -37,17 +37,19 @@ function New-SPClientList {
 .PARAMETER Title
   Indicates the title.
   If not specified, uses the internal name.
-.PARAMETER Descriptiond
+.PARAMETER Description
   Indicates the description.
 .PARAMETER Template
   Indicates the template ID.
   If not specified, uses 100 (Generic List).
 .PARAMETER EnableAttachments
-  Indicates a value whether attachments are enabled for the list.
+  Indicates a value whether attachments are enabled.
 .PARAMETER EnableFolderCreation
-  Indicates a value whether new folders can be added to the list.
+  Indicates a value whether new folders can be added.
 .PARAMETER EnableVersioning
-  Indicates a value whether historical versions can be created in the list.
+  Indicates a value whether historical versions can be created.
+.PARAMETER NoCrawl
+  Indicates a value whether crawler must not crawl.
 .PARAMETER OnQuickLaunch
   Indicates a value whether the list is displayed on the quick launch.
 #>
@@ -65,7 +67,7 @@ function New-SPClientList {
         $Name,
         [Parameter(Mandatory = $false)]
         [string]
-        $Title,
+        $Title = $Name,
         [Parameter(Mandatory = $false)]
         [string]
         $Description,
@@ -93,20 +95,18 @@ function New-SPClientList {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        if ([string]::IsNullOrEmpty($Title)) {
-            $Title = $Name
-        }
         $Creation = New-Object Microsoft.SharePoint.Client.ListCreationInformation
         $Creation.Title = $Name
         $Creation.Description = $Description
         $Creation.TemplateType = $Template
         $ClientObject = $ParentObject.Lists.Add($Creation)
+        $ClientObject.Title = $Title
         $ClientObject.EnableAttachments = $EnableAttachments
         $ClientObject.EnableFolderCreation = $EnableFolderCreation
         $ClientObject.EnableVersioning = $EnableVersioning
         $ClientObject.NoCrawl = $NoCrawl
         $ClientObject.OnQuickLaunch = $OnQuickLaunch
-        $ClientObject.Title = $Title
+        $ClientObject.Update()
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject

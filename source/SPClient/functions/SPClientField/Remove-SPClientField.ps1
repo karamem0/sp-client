@@ -1,4 +1,4 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
 # Remove-SPClientField.ps1
 #
@@ -35,16 +35,14 @@ function Remove-SPClientField {
 .PARAMETER ParentObject
   Indicates the list which the field is contained.
 .PARAMETER Identity
-  Indicates the web GUID.
+  Indicates the field GUID.
 .PARAMETER Name
   Indicates the field title or internal name.
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'ClientObject')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
@@ -54,7 +52,7 @@ function Remove-SPClientField {
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.List]
         $ParentObject,
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
         $Identity,
@@ -80,15 +78,19 @@ function Remove-SPClientField {
                 $ClientObject = $ClientObjectCollection.GetById($Identity)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject `
-                    -Retrievals $Retrievals
+                    -ClientObject $ClientObject
+                trap {
+                    throw 'The specified field could not be found.'
+                }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Name') {
                 $ClientObject = $ClientObjectCollection.GetByInternalNameOrTitle($Name)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject `
-                    -Retrievals $Retrievals
+                    -ClientObject $ClientObject
+                trap {
+                    throw 'The specified field could not be found.'
+                }
             }
         }
         $Xml = [xml]$ClientObject.SchemaXml

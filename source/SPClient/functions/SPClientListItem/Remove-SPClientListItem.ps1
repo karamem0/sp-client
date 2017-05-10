@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Remove-SPClientList.ps1
+# Remove-SPClientListItem.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -40,8 +40,7 @@ function Remove-SPClientListItem {
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'ClientObject')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
@@ -72,6 +71,9 @@ function Remove-SPClientListItem {
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject
+                trap {
+                    throw 'The specified list item could not be found.'
+                }
             }
         }
         $ClientObject.DeleteObject()

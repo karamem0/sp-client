@@ -34,7 +34,6 @@ function Get-SPClientList {
   Indicates the client context.
 .PARAMETER ParentObject
   Indicates the web which the lists are contained.
-  If not specified, uses the default web.
 .PARAMETER Identity
   Indicates the list GUID.
 .PARAMETER Url
@@ -53,10 +52,7 @@ function Get-SPClientList {
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
@@ -70,10 +66,7 @@ function Get-SPClientList {
         [Alias('Title')]
         [string]
         $Name,
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
     )
@@ -97,6 +90,9 @@ function Get-SPClientList {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified list could not be found.'
+            }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
             $ClientObject = $ParentObject.GetList($Url)
@@ -105,6 +101,9 @@ function Get-SPClientList {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified list could not be found.'
+            }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
             try {
@@ -120,7 +119,7 @@ function Get-SPClientList {
                     -Retrievals 'Include(RootFolder.Name)'
                 $ClientObject = $ClientObjectCollection | Where-Object { $_.RootFolder.Name -eq $Name }
                 if ($ClientObject -eq $null) {
-                    throw $_
+                    throw 'The specified list could not be found.'
                 }
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `

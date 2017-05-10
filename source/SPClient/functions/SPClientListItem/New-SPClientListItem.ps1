@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# New-SPClientList.ps1
+# New-SPClientListItem.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -30,9 +30,8 @@ function New-SPClientListItem {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
-.PARAMETER List
+.PARAMETER ParentObject
   Indicates the list which a list item to be created.
-  If not specified, uses the default web.
 .PARAMETER FieldValues
   Indicates the field key/value collection.
 #>
@@ -56,8 +55,10 @@ function New-SPClientListItem {
         }
         $Creation = New-Object Microsoft.SharePoint.Client.ListItemCreationInformation
         $ClientObject = $ParentObject.AddItem($Creation)
-        if ($FieldValues -ne $null) {
-            $FieldValues.GetEnumerator() | Foreach-Object { $ClientObject[$_.Name] = $_.Value }
+        if ($MyInvocation.BoundParameters.ContainsKey('FieldValues')) {
+            $FieldValues.GetEnumerator() | ForEach-Object {
+                $ClientObject[$_.Name] = $_.Value
+            }
         }
         $ClientObject.Update()
         Invoke-SPClientLoadQuery `

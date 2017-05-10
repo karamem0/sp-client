@@ -1,4 +1,4 @@
-#Requires -Version 3.0
+﻿#Requires -Version 3.0
 
 # New-SPClientFieldChoice.ps1
 #
@@ -127,7 +127,7 @@ function New-SPClientFieldChoice {
         }
         if ($MyInvocation.BoundParameters.ContainsKey('Choices')) {
             $ChoicesElement = $XmlDocument.CreateElement('CHOICES')
-            $Choices | Foreach-Object {
+            $Choices | ForEach-Object {
                 $ChoiceElement = $XmlDocument.CreateElement('CHOICE')
                 $ChoiceElement.InnerText = $_
                 $ChoicesElement.AppendChild($ChoiceElement) | Out-Null

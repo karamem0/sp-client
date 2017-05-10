@@ -22,7 +22,7 @@ $WebUrls = @(
     '/TestWeb1/TestWeb2'
     '/TestWeb1'
 )
-$WebUrls | Foreach-Object {
+$WebUrls | ForEach-Object {
     try {
         $Web = $ClientContext.Site.OpenWeb($ClientContext.Site.ServerRelativeUrl + $_)
         $Web.DeleteObject()

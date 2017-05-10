@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Add-SPClientRoleAssignments.ps1
+# Revoke-SPClientRoleAssignments.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,25 +22,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Add-SPClientRoleAssignments {
+function Revoke-SPClientRoleAssignments {
 
 <#
 .SYNOPSIS
-  Adds role assignments to the specified object.
+  Revokes permission from the specified object.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses the default context.
 .PARAMETER ClientObject
   Indicates the web, list or item.
 .PARAMETER Member
-  Indicates the user or group to be added.
+  Indicates the user or group to be revoked permission.
 .PARAMETER Roles
-  Indicates the roles to be added.
+  Indicates the roles to be removed.
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Roles')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
@@ -49,23 +50,32 @@ function Add-SPClientRoleAssignments {
         [Parameter(Mandatory = $true)]
         [Microsoft.SharePoint.Client.Principal]
         $Member,
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'All')]
+        [switch]
+        $All,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Roles')]
         [object[]]
         $Roles
     )
 
     process {
-        $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($ClientContext)
-        $Roles | ForEach-Object {
-            if ($_ -is 'Microsoft.SharePoint.Client.RoleType') {
-                $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByType($_)
-                $RoleDefinitionBindings.Add($RoleDefinition)
-            } else {
-                $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByName($_.ToString())
-                $RoleDefinitionBindings.Add($RoleDefinition)
-            }
+        $RoleAssignment = $ClientObject.RoleAssignments.GetByPrincipal($Member)
+        if ($PSCmdlet.ParameterSetName -eq 'All') {
+            $RoleAssignment.DeleteObject()
         }
-        $ClientObject.RoleAssignments.Add($Member, $RoleDefinitionBindings) | Out-Null
+        if ($PSCmdlet.ParameterSetName -eq 'Roles') {
+            $RoleDefinitionBindings = $RoleAssignment.RoleDefinitionBindings
+            $Roles | ForEach-Object {
+                if ($_ -is 'Microsoft.SharePoint.Client.RoleType') {
+                    $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByType($_)
+                    $RoleDefinitionBindings.Remove($RoleDefinition)
+                } else {
+                    $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByName($_.ToString())
+                    $RoleDefinitionBindings.Remove($RoleDefinition)
+                }
+            }
+            $RoleAssignment.Update()
+        }
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `

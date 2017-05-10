@@ -26,7 +26,7 @@ function Get-SPClientUser {
 
 <#
 .SYNOPSIS
-  Lists all site user or retrieve the specified site user.
+  Lists all site users or retrieve the specified site user.
 .DESCRIPTION
   If not specified 'Identitiy' and 'Name', returns site all users. Otherwise,
   returns a user which matches the parameter.
@@ -53,10 +53,7 @@ function Get-SPClientUser {
         [Parameter(Mandatory = $false, ParameterSetName = 'Email')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Email')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
@@ -69,10 +66,7 @@ function Get-SPClientUser {
         [Parameter(Mandatory = $true, ParameterSetName = 'Email')]
         [string]
         $Email,
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Email')]
+        [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
     )
@@ -96,6 +90,9 @@ function Get-SPClientUser {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified user could not be found.'
+            }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
             $ClientObject = $ClientObjectCollection.GetByLoginName($Name)
@@ -104,6 +101,9 @@ function Get-SPClientUser {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified user could not be found.'
+            }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Email') {
             $ClientObject = $ClientObjectCollection.GetByEmail($Email)
@@ -112,6 +112,9 @@ function Get-SPClientUser {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified user could not be found.'
+            }
         }
     }
 

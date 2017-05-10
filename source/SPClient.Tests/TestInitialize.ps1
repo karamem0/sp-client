@@ -1,10 +1,10 @@
 ﻿#Requires -Version 3.0
 
-$PSScriptRoot.Replace('.Tests', '') `
-    | Get-ChildItem -Recurse `
-    | Where-Object { -not $_.FullName.Contains('.Tests.') } `
-    | Where-Object Extension -eq '.ps1' `
-    | ForEach-Object { . $_.FullName }
+$PSScriptRoot.Replace('.Tests', '') |
+    Get-ChildItem -Recurse |
+    Where-Object { -not $_.FullName.Contains('.Tests.') } |
+    Where-Object { $_.Extension -eq '.ps1' } |
+    ForEach-Object { . $_.FullName }
 
 if ([System.Environment]::Is64BitProcess) {
     Add-Type -Path "$($Env:CommonProgramFiles)\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.dll"

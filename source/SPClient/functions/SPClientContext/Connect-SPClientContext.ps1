@@ -27,12 +27,12 @@ function Connect-SPClientContext {
 <#
 .SYNOPSIS
   Connects to SharePoint site.
-.PARAMETER Url
-  Indicates the site url.
 .PARAMETER Network
   If specified, connects to SharePoint Server (On-premise).
 .PARAMETER Online
   If specified, connects to SharePoint Online.
+.PARAMETER Url
+  Indicates the site url.
 .PARAMETER UserName
   Indicates the user name.
 .PARAMETER Password
@@ -40,7 +40,7 @@ function Connect-SPClientContext {
 .PARAMETER Domain
   Indicates the domain.
 .PARAMETER Credential
-  Indicates the Credentialential.
+  Indicates the credential.
 .PARAMETER PassThru
   If specified, returns a client context.
 #>
@@ -55,10 +55,7 @@ function Connect-SPClientContext {
         [Parameter(Mandatory = $true, ParameterSetName = 'OnlineCredential')]
         [switch]
         $Online,
-        [Parameter(Mandatory = $true, ParameterSetName = 'NetworkPassword')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'NetworkCredential')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'OnlinePassword')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'OnlineCredential')]
+        [Parameter(Mandatory = $true)]
         [string]
         $Url,
         [Parameter(Mandatory = $true, ParameterSetName = 'NetworkPassword')]
@@ -76,10 +73,7 @@ function Connect-SPClientContext {
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'OnlineCredential')]
         [PSCredential]
         $Credential,
-        [Parameter(Mandatory = $false, ParameterSetName = 'NetworkPassword')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'NetworkCredential')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'OnlinePassword')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'OnlineCredential')]
+        [Parameter(Mandatory = $false)]
         [switch]
         $PassThru
     )

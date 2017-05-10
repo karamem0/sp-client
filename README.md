@@ -1,4 +1,4 @@
-# SPClient
+﻿# SPClient
 
 PowerShell module for SharePoint client-side object model (CSOM).
 
@@ -14,16 +14,27 @@ PowerShell module for SharePoint client-side object model (CSOM).
 
 Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=51679) or [SharePoint Server 2013 Client Components SDK](https://www.microsoft.com/en-us/download/details.aspx?id=35585) in order to use this module.
 
+## Installation
+SPClient is published to [PowerShell Gallery](https://www.powershellgallery.com/packages/SPClient). To install SPClient to your computer run the cmdlet below.
+
+```
+Install-Module -Name SPClient 
+```
+
 ## Cmdlets
 
 - Common
-  - `Add-SPClientType`
+  - `Use-SPClientType`
   - `Connect-SPClientContext`
   - `Disconnect-SPClientContext`
 - Web
   - `Get-SPClientWeb`
   - `New-SPClientWeb`
   - `Remove-SPClientWeb`
+- Content Type
+  - `Get-SPClientContentType`
+  - `New-SPClientContentType`
+  - `Remove-SPClientContentType`
 - List
   - `Get-SPClientList`
   - `New-SPClientList`
@@ -44,6 +55,8 @@ Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com
   - `Remove-SPClientField`
 - View
   - `Get-SPClientView`
+  - `New-SPClientView`
+  - `Remove-SPClientView`
 - List Item
   - `Get-SPClientListItem`
   - `New-SPClientListItem`
@@ -53,11 +66,11 @@ Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com
   - `Get-SPClientUser`
   - `Resolve-SPClientUser`
 - Role Assignment
-  - `Add-SPClientRoleAssignments`
+  - `Grant-SPClientRoleAssignments`
   - `Clear-SPClientRoleAssignments`
   - `Disable-SPClientUniqueRoleAssignments`
   - `Enable-SPClientUniqueRoleAssignments`
-  - `Remove-SPClientRoleAssignments`
+  - `Revoke-SPClientRoleAssignments`
 
 ## Getting started
 
@@ -102,7 +115,7 @@ If using SPClient module, it will be like below.
 
 ```
 # Load assemblies
-Add-SPClientType
+Use-SPClientType
 
 # Connect to SharePoint
 Connect-SPClientContext -Network `
@@ -116,6 +129,6 @@ Get-SPClientWeb -Default |
     %{ Write-Host $_.Title }
 
 # Get all lists 'ServerRelativeUrl'
-Get-SPClientWeb -Default | Get-SPClientList -Retrievals 'Include(RootFolder.ServerRelativeUrl) |
+Get-SPClientWeb -Default | Get-SPClientList -Retrievals 'Include(RootFolder.ServerRelativeUrl)' |
     %{ Write-Host $_.RootFolder.ServerRelativeUrl }
 ```

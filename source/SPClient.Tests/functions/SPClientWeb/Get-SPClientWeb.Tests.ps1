@@ -4,71 +4,79 @@
 
 Describe 'Get-SPClientWeb' {
 
-    It 'Gets all webs' {
-        $Result = Get-SPClientWeb
-        $Result | Should Not BeNullOrEmpty
-        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-    }
+    Context 'Success' {
 
-    It 'Gets a web by id' {
-        $Params = @{
-            Identity = $TestConfig.WebId
+        It 'Gets all webs' {
+            $Result = Get-SPClientWeb
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
         }
-        $Result = Get-SPClientWeb @Params
-        $Result | Should Not BeNullOrEmpty
-        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-        $Result.Id | Should Be $Params.Identity
-    }
 
-    It 'Gets a web by url' {
-        $Params = @{
-            Url = $TestConfig.WebUrl
-        }
-        $Result = Get-SPClientWeb @Params
-        $Result | Should Not BeNullOrEmpty
-        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-        $Result.ServerRelativeUrl | Should Be $Params.Url
-    }
-
-    It 'Gets the default web' {
-        $Params = @{
-            Default = $true
-        }
-        $Result = Get-SPClientWeb @Params
-        $Result | Should Not BeNullOrEmpty
-        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-    }
-
-    It 'Gets the root web' {
-        $Params = @{
-            Root = $true
-        }
-        $Result = Get-SPClientWeb @Params
-        $Result | Should Not BeNullOrEmpty
-        $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-        $Result.ServerRelativeUrl | Should Be $TestConfig.SiteUrl
-    }
-
-    It 'Throws an error when the web could not be found by id' {
-        $Throw = {
+        It 'Gets a web by id' {
             $Params = @{
-                Identity = [guid]::Empty
+                Identity = $TestConfig.WebId
             }
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.Id | Should Be $Params.Identity
         }
-        $Throw | Should Throw
-    }
 
-    It 'Throws an error when the web could not be found by url' {
-        $Throw = {
+        It 'Gets a web by url' {
             $Params = @{
-                Url = '/TestWeb0'
+                Url = $TestConfig.WebUrl
             }
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.ServerRelativeUrl | Should Be $Params.Url
         }
-        $Throw | Should Throw
+
+        It 'Gets the default web' {
+            $Params = @{
+                Default = $true
+            }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+        }
+
+        It 'Gets the root web' {
+            $Params = @{
+                Root = $true
+            }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.ServerRelativeUrl | Should Be $TestConfig.SiteUrl
+        }
+
+    }
+
+    Context 'Failure' {
+
+        It 'Throws an error when the web could not be found by id' {
+            $Throw = {
+                $Params = @{
+                    Identity = 'C89E2D46-4542-4A29-9FBC-01FFA1FBECDD'
+                }
+                $Result = Get-SPClientWeb @Params
+                $Result | Should Not BeNullOrEmpty
+            }
+            $Throw | Should Throw 'The specified web could not be found.'
+        }
+
+        It 'Throws an error when the web could not be found by url' {
+            $Throw = {
+                $Params = @{
+                    Url = '/TestWeb0'
+                }
+                $Result = Get-SPClientWeb @Params
+                $Result | Should Not BeNullOrEmpty
+            }
+            $Throw | Should Throw 'The specified web could not be found.'
+        }
+
     }
 
 }

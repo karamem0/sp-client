@@ -43,8 +43,8 @@ function Convert-SPClientIncludeExpression {
         }
         $InputString = $InputString.Substring(8, $InputString.Length - 9)
         $ItemType = $Expression.Type.BaseType.GenericTypeArguments[0]
-        $FuncType = [type]'System.Func`2' | ForEach-Object { $_.MakeGenericType($ItemType, [object]) }
-        $ExprType = [type]'System.Linq.Expressions.Expression`1' | ForEach-Object { $_.MakeGenericType($FuncType) }
+        $FuncType = [type]'System.Func`2' | &{ process { $_.MakeGenericType($ItemType, [object]) } }
+        $ExprType = [type]'System.Linq.Expressions.Expression`1' | &{ process { $_.MakeGenericType($FuncType) } }
         $ParamExpr = [System.Linq.Expressions.Expression]::Parameter($ItemType, $ItemType.Name)
         $LambdaExprArray = Split-SPClientExpressionString -InputString $InputString -Separator ',' | ForEach-Object {
             $PropExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $ParamExpr

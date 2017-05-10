@@ -41,7 +41,7 @@ function Get-SPClientListItem {
     - RecursiveAll: All files and all subfolders of all folders.
   If not specified, only the files and subfolders of a specific folder.
 .PARAMETER ViewFields
-  Indicates the XML representation of view fields.
+  Indicates the collection of view fields.
 .PARAMETER Query
   Indicates the XML representation of query.
 .PARAMETER RowLimit
@@ -62,8 +62,7 @@ function Get-SPClientListItem {
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
@@ -74,7 +73,7 @@ function Get-SPClientListItem {
         [string]
         $Scope,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [string]
+        [string[]]
         $ViewFields,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [string]
@@ -89,8 +88,7 @@ function Get-SPClientListItem {
         [Alias('Id')]
         [int]
         $Identity,
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
     )
@@ -110,19 +108,26 @@ function Get-SPClientListItem {
                 $ViewElement.SetAttribute('Scope', $Scope)
             }
             if ($MyInvocation.BoundParameters.ContainsKey('ViewFields')) {
-                $Fragment = $XmlDocument.CreateDocumentFragment()
-                $Fragment.InnerXml = $ViewFields
-                $ViewElement.AppendChild($Fragment) | Out-Null
+                $ViewFieldsElement = $XmlDocument.CreateElement('ViewFields')
+                $ViewElement.AppendChild($ViewFieldsElement) | Out-Null
+                $ViewFields | ForEach-Object {
+                    $FieldRefElement = $XmlDocument.CreateElement('FieldRef')
+                    $FieldRefElement.SetAttribute('Name', $_)
+                    $ViewFieldsElement.AppendChild($FieldRefElement) | Out-Null
+                }
             }
             if ($MyInvocation.BoundParameters.ContainsKey('Query')) {
-                $Fragment = $XmlDocument.CreateDocumentFragment()
-                $Fragment.InnerXml = $Query
-                $ViewElement.AppendChild($Fragment) | Out-Null
+                $QueryElement = $XmlDocument.CreateElement('Query')
+                $QueryElement.InnerXml = $Query
+                if ($QueryElement.FirstChild.Name -eq 'Query') {
+                    $QueryElement = $QueryElement.FirstChild
+                }
+                $ViewElement.AppendChild($QueryElement) | Out-Null
             }
             if ($MyInvocation.BoundParameters.ContainsKey('RowLimit')) {
-                $Fragment = $XmlDocument.CreateElement('RowLimit')
-                $Fragment.InnerText = $RowLimit
-                $ViewElement.AppendChild($Fragment) | Out-Null
+                $RowLimitElement = $XmlDocument.CreateElement('RowLimit')
+                $RowLimitElement.InnerText = $RowLimit
+                $ViewElement.AppendChild($RowLimitElement) | Out-Null
             }
             if ($MyInvocation.BoundParameters.ContainsKey('Position')) {
                 $Caml.ListItemCollectionPosition = $Position
@@ -142,6 +147,9 @@ function Get-SPClientListItem {
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
+            trap {
+                throw 'The specified list item could not be found.'
+            }
         }
     }
 

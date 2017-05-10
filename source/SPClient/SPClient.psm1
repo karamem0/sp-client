@@ -27,10 +27,10 @@ $Script:SPClient = @{}
 $SPClient.ModulePath = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $SPClient.ClientContext = $null
 
-Get-ChildItem -Path $SPClient.ModulePath -Recurse `
-    | Where-Object { -not $_.FullName.Contains('.Tests.') } `
-    | Where-Object Extension -eq '.ps1' `
-    | ForEach-Object { . $_.FullName }
+Get-ChildItem -Path $SPClient.ModulePath -Recurse |
+    Where-Object { -not $_.FullName.Contains('.Tests.') } |
+    Where-Object { $_.Extension -eq '.ps1' } |
+    ForEach-Object { . $_.FullName }
 
 Export-ModuleMember `
     -Cmdlet * `

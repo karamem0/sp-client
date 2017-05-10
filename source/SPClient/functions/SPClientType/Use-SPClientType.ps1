@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Add-SPClientType.ps1
+# Use-SPClientType.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Add-SPClientType {
+function Use-SPClientType {
 
 <#
 .SYNOPSIS
