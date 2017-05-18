@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Resolve-SPClientUser.ps1
+# New-SPClientGroup.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,16 +22,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Resolve-SPClientUser {
+function New-SPClientGroup {
 
 <#
 .SYNOPSIS
-  Checks whether the specified login name belongs to a valid user.
+  Creates a new group.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
 .PARAMETER Name
-  Indicates login name or e-mail address.
+  Indicates the group name.
+.PARAMETER Description
+  Indicates the description.
+.PARAMETER Owner
+  Indicates the owner.
+.PARAMETER Users
+  Indicates the collection of users to add to group.
+.PARAMETER Retrievals
+  Indicates the data retrieval expression.
 #>
 
     [CmdletBinding()]
@@ -40,23 +48,45 @@ function Resolve-SPClientUser {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true)]
+        [Alias('Title')]
         [string]
-        $Name
+        $Name,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Description,
+        [Parameter(Mandatory = $false)]
+        [Microsoft.SharePoint.Client.Principal]
+        $Owner,
+        [Parameter(Mandatory = $false)]
+        [Microsoft.SharePoint.Client.User[]]
+        $Users,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Retrievals
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObject = $ClientContext.Site.RootWeb.EnsureUser($Name)
+        $Creation = New-Object Microsoft.SharePoint.Client.GroupCreationInformation
+        $Creation.Title = $Name
+        $Creation.Description = $Description
+        $ClientObject = $ClientContext.Site.RootWeb.SiteGroups.Add($Creation)
+        if ($MyInvocation.BoundParameters.ContainsKey('Owner')) {
+            $ClientObject.Owner = $Owner
+        }
+        if ($MyInvocation.BoundParameters.ContainsKey('Users')) {
+            foreach ($User in $Users) {
+                $ClientObject.Users.AddUser($User) | Out-Null
+            }
+        }
+        $ClientObject.Update()
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
             -Retrievals $Retrievals
         Write-Output $ClientObject
-        trap {
-            throw 'The specified user could not be found.'
-        }
     }
 
 }

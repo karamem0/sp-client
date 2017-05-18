@@ -36,6 +36,16 @@ Describe 'Convert-SPClientMemberAccessExpression' {
             $Result | Should Not BeNullOrEmpty
         }
 
+        It 'Converts "*"' {
+            $Type = [Microsoft.SharePoint.Client.List]
+            $Params = @{
+                InputString = '*'
+                Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
+            }
+            $Result = Convert-SPClientMemberAccessExpression @Params
+            $Result | Should Not BeNullOrEmpty
+        }
+
     }
 
 }

@@ -7,19 +7,14 @@ Describe 'Get-SPClientGroup' {
     Context 'Success' {
 
         It 'Returns all groups' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $Params = @{
-                ParentObject = $Web
-            }
+            $Params = @{ }
             $Result = Get-SPClientGroup @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Group'
         }
 
         It 'Returns a SharePoint group by id' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $Params = @{
-                ParentObject = $Web
                 Identity = $TestConfig.GroupId
             }
             $Result = Get-SPClientGroup @Params
@@ -28,9 +23,7 @@ Describe 'Get-SPClientGroup' {
         }
 
         It 'Returns a SharePoint group by name' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $Params = @{
-                ParentObject = $Web
                 Name = $TestConfig.GroupName
             }
             $Result = Get-SPClientGroup @Params
@@ -44,9 +37,7 @@ Describe 'Get-SPClientGroup' {
 
         It 'Throws an error when the group could not be found by id' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
                 $Params = @{
-                    ParentObject = $Web
                     Identity = -1
                 }
                 $Result = Get-SPClientGroup @Params
@@ -57,10 +48,8 @@ Describe 'Get-SPClientGroup' {
 
         It 'Throws an error when the group could not be found by name' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
                 $Params = @{
-                    ParentObject = $Web
-                    Name = 'TestGroup0'
+                    Name = 'Test Group 0'
                 }
                 $Result = Get-SPClientGroup @Params
                 $Result | Should Not BeNullOrEmpty

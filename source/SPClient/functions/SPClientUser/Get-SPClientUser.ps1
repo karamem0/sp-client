@@ -28,19 +28,19 @@ function Get-SPClientUser {
 .SYNOPSIS
   Lists all site users or retrieve the specified site user.
 .DESCRIPTION
-  If not specified 'Identitiy' and 'Name', returns site all users. Otherwise,
-  returns a user which matches the parameter.
+  If not specified 'Identitiy', 'Name', 'Email' and 'Current', returns site
+  all users. Otherwise, returns a user which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
-.PARAMETER ParentObject
-  Indicates the web which the users are contained.
+  If not specified, uses default context.
 .PARAMETER Identity
   Indicates the user id.
 .PARAMETER Name
   Indicates the user login name.
 .PARAMETER Email
   Indicates the user email.
+.PARAMETER Current
+  If specified, returns current user.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -51,11 +51,9 @@ function Get-SPClientUser {
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Email')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Current')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.Web]
-        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [int]
         $Identity,
@@ -66,6 +64,9 @@ function Get-SPClientUser {
         [Parameter(Mandatory = $true, ParameterSetName = 'Email')]
         [string]
         $Email,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Current')]
+        [switch]
+        $Current,
         [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
@@ -75,7 +76,7 @@ function Get-SPClientUser {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObjectCollection = $ParentObject.SiteUsers
+        $ClientObjectCollection = $ClientContext.Site.RootWeb.SiteUsers
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
@@ -84,7 +85,12 @@ function Get-SPClientUser {
             Write-Output @(, $ClientObjectCollection)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $ClientObject = $ClientObjectCollection.GetById($Identity)
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $ClientObjectCollection.Path, `
+                'GetById', `
+                [object[]]$Identity)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod);
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -95,7 +101,12 @@ function Get-SPClientUser {
             }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
-            $ClientObject = $ClientObjectCollection.GetByLoginName($Name)
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $ClientObjectCollection.Path, `
+                'GetByLoginName', `
+                [object[]]$Name)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod);
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -106,7 +117,23 @@ function Get-SPClientUser {
             }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Email') {
-            $ClientObject = $ClientObjectCollection.GetByEmail($Email)
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $ClientObjectCollection.Path, `
+                'GetByEmail', `
+                [object[]]$Email)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod);
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $ClientObject `
+                -Retrievals $Retrievals
+            Write-Output $ClientObject
+            trap {
+                throw 'The specified user could not be found.'
+            }
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Current') {
+            $ClientObject = $ClientContext.Site.RootWeb.CurrentUser
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

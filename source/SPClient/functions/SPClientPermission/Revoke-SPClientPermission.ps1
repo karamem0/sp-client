@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Revoke-SPClientRoleAssignments.ps1
+# Revoke-SPClientPermission.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,14 +22,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Revoke-SPClientRoleAssignments {
+function Revoke-SPClientPermission {
 
 <#
 .SYNOPSIS
   Revokes permission from the specified object.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web, list or item.
 .PARAMETER Member
@@ -59,18 +59,22 @@ function Revoke-SPClientRoleAssignments {
     )
 
     process {
+        if ($ClientContext -eq $null) {
+            throw "Cannot bind argument to parameter 'ClientContext' because it is null."
+        }
         $RoleAssignment = $ClientObject.RoleAssignments.GetByPrincipal($Member)
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             $RoleAssignment.DeleteObject()
         }
         if ($PSCmdlet.ParameterSetName -eq 'Roles') {
             $RoleDefinitionBindings = $RoleAssignment.RoleDefinitionBindings
-            $Roles | ForEach-Object {
-                if ($_ -is 'Microsoft.SharePoint.Client.RoleType') {
-                    $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByType($_)
+            $RoleDefinitionCollection = $ClientContext.Site.RootWeb.RoleDefinitions
+            foreach ($Role in $Roles) {
+                if ($Role -is 'Microsoft.SharePoint.Client.RoleType') {
+                    $RoleDefinition = $RoleDefinitionCollection.GetByType($Role)
                     $RoleDefinitionBindings.Remove($RoleDefinition)
                 } else {
-                    $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByName($_.ToString())
+                    $RoleDefinition = $RoleDefinitionCollection.GetByName($Role.ToString())
                     $RoleDefinitionBindings.Remove($RoleDefinition)
                 }
             }

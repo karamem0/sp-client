@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Grant-SPClientRoleAssignments.ps1
+# Clear-SPClientPermission.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,20 +22,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Grant-SPClientRoleAssignments {
+function Clear-SPClientPermission {
 
 <#
 .SYNOPSIS
-  Grants permission to the specified object.
+  Clears all role assignments from the specified object.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web, list or item.
-.PARAMETER Member
-  Indicates the user or group to be granted permission.
-.PARAMETER Roles
-  Indicates the roles to be added.
 #>
 
     [CmdletBinding()]
@@ -45,27 +41,20 @@ function Grant-SPClientRoleAssignments {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.SecurableObject]
-        $ClientObject,
-        [Parameter(Mandatory = $true)]
-        [Microsoft.SharePoint.Client.Principal]
-        $Member,
-        [Parameter(Mandatory = $true)]
-        [object[]]
-        $Roles
+        $ClientObject
     )
 
     process {
-        $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($ClientContext)
-        $Roles | ForEach-Object {
-            if ($_ -is 'Microsoft.SharePoint.Client.RoleType') {
-                $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByType($_)
-                $RoleDefinitionBindings.Add($RoleDefinition)
-            } else {
-                $RoleDefinition = $ClientContext.Site.RootWeb.RoleDefinitions.GetByName($_.ToString())
-                $RoleDefinitionBindings.Add($RoleDefinition)
-            }
+        if ($ClientContext -eq $null) {
+            throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObject.RoleAssignments.Add($Member, $RoleDefinitionBindings) | Out-Null
+        Invoke-SPClientLoadQuery `
+            -ClientContext $ClientContext `
+            -ClientObject $ClientObject `
+            -Retrievals 'RoleAssignments'
+        while ($ClientObject.RoleAssignments.Count -gt 0) {
+            $ClientObject.RoleAssignments[0].DeleteObject()
+        }
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `

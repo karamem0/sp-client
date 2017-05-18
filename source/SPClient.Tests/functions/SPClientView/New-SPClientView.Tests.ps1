@@ -12,7 +12,7 @@ Describe 'New-SPClientView' {
                 $List = $Web.Lists.GetById($TestConfig.ListId)
                 $SPClient.ClientContext.Load($List.Views)
                 $SPClient.ClientContext.ExecuteQuery()
-                for ($index = $List.Views.Count - 1; $index -gt 0 ; $index--) {
+                for ($index = $List.Views.Count - 1; $index -ge 0; $index--) {
                     $View = $List.Views[$index]
                     $SPClient.ClientContext.Load($View)
                     $SPClient.ClientContext.ExecuteQuery()

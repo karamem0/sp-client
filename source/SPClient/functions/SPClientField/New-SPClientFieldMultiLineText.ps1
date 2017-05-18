@@ -29,7 +29,7 @@ function New-SPClientFieldMultiLineText {
   Creates a new field which user can enter multiple lines of text.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ParentObject
   Indicates the list which a field to be created.
 .PARAMETER Name
@@ -50,6 +50,8 @@ function New-SPClientFieldMultiLineText {
   Indicates the default value.
 .PARAMETER AddToDefaultView
   If true, the field is add to default view.
+.PARAMETER Retrievals
+  Indicates the data retrieval expression.
 #>
 
     [CmdletBinding()]
@@ -86,7 +88,10 @@ function New-SPClientFieldMultiLineText {
         $DefaultValue,
         [Parameter(Mandatory = $false)]
         [bool]
-        $AddToDefaultView
+        $AddToDefaultView,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Retrievals
     )
 
     process {
@@ -123,7 +128,8 @@ function New-SPClientFieldMultiLineText {
         $ClientObject = $ParentObject.Fields.AddFieldAsXml($XmlDocument.InnerXml, $AddToDefaultView, $AddFieldOptions)
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -ClientObject $ClientObject `
+            -Retrievals $Retrievals
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject

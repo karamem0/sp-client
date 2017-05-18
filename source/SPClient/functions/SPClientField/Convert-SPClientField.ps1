@@ -29,7 +29,7 @@ function Convert-SPClientField {
   Casts a specified field to its derived type.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the field.
 #>

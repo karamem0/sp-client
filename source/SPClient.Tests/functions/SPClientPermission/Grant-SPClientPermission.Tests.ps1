@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
-Describe 'Grant-SPClientRoleAssignments' {
+Describe 'Grant-SPClientPermission' {
 
     Context 'Success' {
 
@@ -32,39 +32,39 @@ Describe 'Grant-SPClientRoleAssignments' {
             }
         }
 
-        It 'Adds a role assignment by role name' {
+        It 'Grants a permission by role name' {
             $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
             $List.BreakRoleInheritance($false, $false)
-            $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
             $Params = @{
                 ClientObject = $List
                 Member = $Group
                 Roles = 'Full Control'
             }
-            $Result = Grant-SPClientRoleAssignments @Params
+            $Result = Grant-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
-        It 'Adds a role assignment by role type' {
+        It 'Grants a permission by role type' {
             $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
             $List.BreakRoleInheritance($false, $false)
-            $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
             $Params = @{
                 ClientObject = $List
                 Member = $Group
                 Roles = [Microsoft.SharePoint.Client.RoleType]::Administrator
             }
-            $Result = Grant-SPClientRoleAssignments @Params
+            $Result = Grant-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
-        It 'Adds a role assignment by role name collection' {
+        It 'Grants permissions by role name collection' {
             $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
             $List.BreakRoleInheritance($false, $false)
-            $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
             $Params = @{
                 ClientObject = $List
                 Member = $Group
@@ -75,15 +75,15 @@ Describe 'Grant-SPClientRoleAssignments' {
                         'Full Control'
                     )
             }
-            $Result = Grant-SPClientRoleAssignments @Params
+            $Result = Grant-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
-        It 'Adds a role assignment by role type collection' {
+        It 'Grants permissions by role type collection' {
             $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
             $List.BreakRoleInheritance($false, $false)
-            $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
             $Params = @{
                 ClientObject = $List
                 Member = $Group
@@ -94,7 +94,7 @@ Describe 'Grant-SPClientRoleAssignments' {
                         [Microsoft.SharePoint.Client.RoleType]::Administrator
                     )
             }
-            $Result = Grant-SPClientRoleAssignments @Params
+            $Result = Grant-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
@@ -102,17 +102,17 @@ Describe 'Grant-SPClientRoleAssignments' {
 
     Context 'Failure' {
 
-        It 'Throws an error when has not unique role assignments' {
+        It 'Throws an error when has not unique permission' {
             $Throw = {
                 $Web = Get-SPClientWeb -Identity $TestConfig.WebId
                 $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
-                $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+                $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
                 $Params = @{
                     ClientObject = $List
                     Member = $Group
                     Roles = 'Full Control'
                 }
-                $Result = Grant-SPClientRoleAssignments @Params
+                $Result = Grant-SPClientPermission @Params
                 $Result | Should Not BeNullOrEmpty
             }
             $Throw | Should Throw 'This operation is not allowed on an object that inherits permissions.'

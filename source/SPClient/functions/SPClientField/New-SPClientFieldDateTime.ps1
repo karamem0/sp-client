@@ -29,7 +29,7 @@ function New-SPClientFieldDateTime {
   Creates a new field which user can enter a date and time.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ParentObject
   Indicates the list which a field to be created.
 .PARAMETER Name
@@ -57,6 +57,8 @@ function New-SPClientFieldDateTime {
   Indicates the default value.
 .PARAMETER AddToDefaultView
   If true, the field is add to default view.
+.PARAMETER Retrievals
+  Indicates the data retrieval expression.
 #>
 
     [CmdletBinding()]
@@ -97,7 +99,10 @@ function New-SPClientFieldDateTime {
         $DefaultValue,
         [Parameter(Mandatory = $false)]
         [bool]
-        $AddToDefaultView
+        $AddToDefaultView,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Retrievals
     )
 
     process {
@@ -137,7 +142,8 @@ function New-SPClientFieldDateTime {
         $ClientObject = $ParentObject.Fields.AddFieldAsXml($XmlDocument.InnerXml, $AddToDefaultView, $AddFieldOptions)
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -ClientObject $ClientObject `
+            -Retrievals $Retrievals
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject

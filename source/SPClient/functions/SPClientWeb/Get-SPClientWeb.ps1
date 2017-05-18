@@ -28,19 +28,19 @@ function Get-SPClientWeb {
 .SYNOPSIS
   Lists all webs or retrieve the specified web.
 .DESCRIPTION
-  If not specified 'Identity', 'Url', 'Default', and 'Root', returns the default
-  web and its descendants. Otherwise, returns a web which matches the parameter.
+  If not specified 'Identity', 'Url', 'Default', and 'Root', returns default web
+  and its descendants. Otherwise, returns a web which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER Identity
   Indicates the web GUID.
 .PARAMETER Url
   Indicates the web relative url.
 .PARAMETER Default
-  If specified, returns the default web of the client context.
+  If specified, returns default web of the client context.
 .PARAMETER Root
-  If specified, returns the root web.
+  If specified, returns root web.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -115,7 +115,12 @@ function Get-SPClientWeb {
             } while ($Stack.Count -gt 0)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $ClientObject = $ClientContext.Site.OpenWebById($Identity)
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $ClientContext.Site.Path, `
+                'OpenWebById', `
+                [object[]]$Identity)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod);
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

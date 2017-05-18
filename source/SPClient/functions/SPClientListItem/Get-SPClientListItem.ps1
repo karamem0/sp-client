@@ -29,7 +29,7 @@ function Get-SPClientListItem {
   Retrieve list items using CAML query.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ParentObject
   Indicates the list which the list items are contained.
 .PARAMETER FolderUrl
@@ -141,7 +141,12 @@ function Get-SPClientListItem {
             Write-Output @(, $ClientObjectCollection)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $ClientObject = $ParentObject.GetItemById($Identity)
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $ParentObject.Path, `
+                'GetItemById', `
+                [object[]]$Identity)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.ListItem($ClientContext, $PathMethod);
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

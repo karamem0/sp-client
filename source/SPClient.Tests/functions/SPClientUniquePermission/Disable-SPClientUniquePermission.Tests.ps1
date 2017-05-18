@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
-Describe 'Disable-SPClientUniqueRoleAssignments' {
+Describe 'Disable-SPClientUniquePermission' {
 
     Context 'Success' {
 
@@ -32,14 +32,14 @@ Describe 'Disable-SPClientUniqueRoleAssignments' {
             }
         }
 
-        It 'Disables unique role assignment' {
+        It 'Disables unique permission' {
             $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
             $List.BreakRoleInheritance($false, $false)
             $Params = @{
                 ClientObject = $List
             }
-            $Result = Disable-SPClientUniqueRoleAssignments @Params
+            $Result = Disable-SPClientUniquePermission @Params
             $Result | Should BeNullOrEmpty
             $List.HasUniqueRoleAssignments | Should Be $false
         }

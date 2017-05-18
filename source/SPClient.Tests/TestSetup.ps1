@@ -112,45 +112,46 @@ $ClientContext.Load($List3.RootFolder)
 
 $ClientContext.ExecuteQuery()
 
-$Field1 = $List1.Fields.AddFieldAsXml( `
-    '<Field Type="Text" Name="TestField1" DisplayName="Test Field 1" />', `
-    $true, 8)
+$Xml = '<Field Type="Text" Name="TestField1" DisplayName="Test Field 1" />'
+$Field1 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field1.Update()
 $ClientContext.Load($Field1)
 
-$Field2 = $List1.Fields.AddFieldAsXml( `
-    '<Field Type="Note" Name="TestField2" DisplayName="Test Field 2" />', `
-    $true, 8)
+$Xml = '<Field Type="Note" Name="TestField2" DisplayName="Test Field 2" />'
+$Field2 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field2.Update()
 $ClientContext.Load($Field2)
 
-$Field3 = $List1.Fields.AddFieldAsXml( `
+$Xml = `
     '<Field Type="Choice" Name="TestField3" DisplayName="Test Field 3">' + `
     '<CHOICES>' + `
     '<CHOICE>Test Value 1</CHOICE>' + `
     '<CHOICE>Test Value 2</CHOICE>' + `
     '<CHOICE>Test Value 3</CHOICE>' + `
     '</CHOICES>' + `
-    '</Field>', `
-    $true, 8)
+    '</Field>'
+$Field3 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field3.Update()
 $ClientContext.Load($Field3)
 
-$Field4 = $List1.Fields.AddFieldAsXml( `
-    '<Field Type="Number" Name="TestField4" DisplayName="Test Field 4" />', `
-    $true, 8)
+$Xml = '<Field Type="Number" Name="TestField4" DisplayName="Test Field 4" />'
+$Field4 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field4.Update()
 $ClientContext.Load($Field4)
 
-$Field5 = $List1.Fields.AddFieldAsXml( `
-    '<Field Type="Currency" Name="TestField5" DisplayName="Test Field 5" />', `
-    $true, 8)
+$Xml = '<Field Type="Currency" Name="TestField5" DisplayName="Test Field 5" />'
+$Field5 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field5.Update()
 $ClientContext.Load($Field5)
 
-$Field6 = $List1.Fields.AddFieldAsXml( `
-    '<Field Type="DateTime" Name="TestField6" DisplayName="Test Field 6" />', `
-    $true, 8)
+$Xml = '<Field Type="DateTime" Name="TestField6" DisplayName="Test Field 6" />'
+$Field6 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field6.Update()
 $ClientContext.Load($Field6)
 
-$Field7 = $List1.Fields.AddFieldAsXml( `
-    '<Field Type="Boolean" Name="TestField7" DisplayName="Test Field 7" />', `
-    $true, 8)
+$Xml = '<Field Type="Boolean" Name="TestField7" DisplayName="Test Field 7" />'
+$Field7 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field7.Update()
 $ClientContext.Load($Field7)
 
 $ClientContext.ExecuteQuery()
@@ -207,6 +208,7 @@ $ListItem1['TestField5'] = 1
 $ListItem1['TestField6'] = [datetime]'10/10/2010'
 $ListItem1['TestField7'] = 1
 $ListItem1.Update()
+$ClientContext.Load($ListItem1)
 
 $ListItem2 = New-Object Microsoft.SharePoint.Client.ListItemCreationInformation
 $ListItem2 = $List1.AddItem($ListItem2)
@@ -219,6 +221,7 @@ $ListItem2['TestField5'] = 2
 $ListItem2['TestField6'] = [datetime]'12/20/2016'
 $ListItem2['TestField7'] = 0
 $ListItem2.Update()
+$ClientContext.Load($ListItem2)
 
 $ListItem3 = New-Object Microsoft.SharePoint.Client.ListItemCreationInformation
 $ListItem3 = $List1.AddItem($ListItem3)
@@ -231,24 +234,81 @@ $ListItem3['TestField5'] = 3
 $ListItem3['TestField6'] = [datetime]'12/25/2017'
 $ListItem3['TestField7'] = 1
 $ListItem3.Update()
+$ClientContext.Load($ListItem3)
 
 $ClientContext.ExecuteQuery()
 
-$User1 = $ClientContext.Web.CurrentUser
-$ClientContext.Load($User1)
+$Buffer = [System.Text.Encoding]::UTF8.GetBytes('TestAttachment1')
+$Stream = New-Object System.IO.MemoryStream(@(, $Buffer))
+$Attachment1 = New-Object Microsoft.SharePoint.Client.AttachmentCreationInformation
+$Attachment1.FileName = 'TestAttachment1.txt'
+$Attachment1.ContentStream = $Stream
+$Attachment1 = $ListItem1.AttachmentFiles.Add($Attachment1)
+$ClientContext.Load($Attachment1)
+
+$Buffer = [System.Text.Encoding]::UTF8.GetBytes('TestAttachment2')
+$Stream = New-Object System.IO.MemoryStream(@(, $Buffer))
+$Attachment2 = New-Object Microsoft.SharePoint.Client.AttachmentCreationInformation
+$Attachment2.FileName = 'TestAttachment2.txt'
+$Attachment2.ContentStream = $Stream
+$Attachment2 = $ListItem1.AttachmentFiles.Add($Attachment2)
+$ClientContext.Load($Attachment2)
+
+$Buffer = [System.Text.Encoding]::UTF8.GetBytes('TestAttachment3')
+$Stream = New-Object System.IO.MemoryStream(@(, $Buffer))
+$Attachment3 = New-Object Microsoft.SharePoint.Client.AttachmentCreationInformation
+$Attachment3.FileName = 'TestAttachment3.txt'
+$Attachment3.ContentStream = $Stream
+$Attachment3 = $ListItem1.AttachmentFiles.Add($Attachment3)
+$ClientContext.Load($Attachment3)
 
 $ClientContext.ExecuteQuery()
-
-$Group1 = New-Object Microsoft.SharePoint.Client.GroupCreationInformation
-$Group1.Title = 'TestGroup1'
-$Group1.Description = 'Test Group 1'
-$Group1 = $Web1.SiteGroups.Add($Group1)
-$Group1.Owner = $User1
-$Group1.Update()
-$ClientContext.Load($Group1)
 
 $Web1.BreakRoleInheritance($false, $false)
 
+$Group1 = New-Object Microsoft.SharePoint.Client.GroupCreationInformation
+$Group1.Title = 'Test Group 1'
+$Group1.Description = 'Test Group 1'
+$Group1 = $Web1.SiteGroups.Add($Group1)
+$Group1.Owner = $Group1
+$Group1.Update()
+$ClientContext.Load($Group1)
+
+$Group2 = New-Object Microsoft.SharePoint.Client.GroupCreationInformation
+$Group2.Title = 'Test Group 2'
+$Group2.Description = 'Test Group 2'
+$Group2 = $Web1.SiteGroups.Add($Group2)
+$Group2.Owner = $Group2
+$Group2.Update()
+$ClientContext.Load($Group2)
+
+$Group3 = New-Object Microsoft.SharePoint.Client.GroupCreationInformation
+$Group3.Title = 'Test Group 3'
+$Group3.Description = 'Test Group 3'
+$Group3 = $Web1.SiteGroups.Add($Group3)
+$Group3.Owner = $Group3
+$Group3.Update()
+$ClientContext.Load($Group3)
+
+$ClientContext.ExecuteQuery()
+
+$User1 = New-Object Microsoft.SharePoint.Client.UserCreationInformation
+$User1.LoginName = "i:0#.f|membership|testuser1@$($Env:LoginDomain)"
+$User1.Title = 'Test User 1'
+$User1 = $Group1.Users.Add($User1)
+$ClientContext.Load($User1)
+
+$User2 = New-Object Microsoft.SharePoint.Client.UserCreationInformation
+$User2.LoginName = "i:0#.f|membership|testuser2@$($Env:LoginDomain)"
+$User2.Title = 'Test User 2'
+$User2 = $Group2.Users.Add($User2)
+$ClientContext.Load($User2)
+
+$User3 = New-Object Microsoft.SharePoint.Client.UserCreationInformation
+$User3.LoginName = "i:0#.f|membership|testuser3@$($Env:LoginDomain)"
+$User3.Title = 'Test User 3'
+$User3 = $Group3.Users.Add($User3)
+$ClientContext.Load($User3)
 
 $ClientContext.ExecuteQuery()
 
@@ -270,6 +330,7 @@ $TestConfig = @{
     ViewTitle = $View1.Title
     ViewUrl = $View1.ServerRelativeUrl
     ListItemId = $ListItem1.Id
+    AttachmentFileName = $Attachment1.FileName
     UserId = $User1.Id
     UserName = $User1.LoginName
     UserEmail = $User1.Email

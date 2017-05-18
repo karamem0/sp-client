@@ -29,7 +29,7 @@ function New-SPClientWeb {
   Creates a new web.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ParentObject
   Indicates the web which a web to be created.
 .PARAMETER Url
@@ -46,6 +46,8 @@ function New-SPClientWeb {
   Indicates the template name.
 .PARAMETER UniquePermissions
   If specified, the web uses unique permissions.
+.PARAMETER Retrievals
+  Indicates the data retrieval expression.
 #>
 
     [CmdletBinding()]
@@ -73,7 +75,10 @@ function New-SPClientWeb {
         $Template,
         [Parameter(Mandatory = $false)]
         [switch]
-        $UniquePermissions
+        $UniquePermissions,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Retrievals
     )
 
     process {
@@ -91,7 +96,8 @@ function New-SPClientWeb {
         $ClientObject.Update()
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -ClientObject $ClientObject `
+            -Retrievals $Retrievals
         Write-Output $ClientObject
     }
 

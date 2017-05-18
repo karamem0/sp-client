@@ -18,61 +18,14 @@ Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com
 SPClient is published to [PowerShell Gallery](https://www.powershellgallery.com/packages/SPClient). To install SPClient to your computer run the cmdlet below.
 
 ```
-Install-Module -Name SPClient 
+PS> Install-Module -Name SPClient 
 ```
 
-## Cmdlets
+## Functions
 
-- Common
-  - `Use-SPClientType`
-  - `Connect-SPClientContext`
-  - `Disconnect-SPClientContext`
-- Web
-  - `Get-SPClientWeb`
-  - `New-SPClientWeb`
-  - `Remove-SPClientWeb`
-- Content Type
-  - `Get-SPClientContentType`
-  - `New-SPClientContentType`
-  - `Remove-SPClientContentType`
-- List
-  - `Get-SPClientList`
-  - `New-SPClientList`
-  - `Remove-SPClientList`
-- Field
-  - `Convert-SPClientField`
-  - `Get-SPClientField`
-  - `New-SPClientFieldBoolean`
-  - `New-SPClientFieldCalculated`
-  - `New-SPClientFieldChoice`
-  - `New-SPClientFieldCurrency`
-  - `New-SPClientFieldDateTime`
-  - `New-SPClientFieldLookup`
-  - `New-SPClientFieldMultilineText`
-  - `New-SPClientFieldNumber`
-  - `New-SPClientFieldText`
-  - `New-SPClientFieldUrl`
-  - `Remove-SPClientField`
-- View
-  - `Get-SPClientView`
-  - `New-SPClientView`
-  - `Remove-SPClientView`
-- List Item
-  - `Get-SPClientListItem`
-  - `New-SPClientListItem`
-  - `Remove-SPClientListItem`
-- User and Group
-  - `Get-SPClientGroup`
-  - `Get-SPClientUser`
-  - `Resolve-SPClientUser`
-- Role Assignment
-  - `Grant-SPClientRoleAssignments`
-  - `Clear-SPClientRoleAssignments`
-  - `Disable-SPClientUniqueRoleAssignments`
-  - `Enable-SPClientUniqueRoleAssignments`
-  - `Revoke-SPClientRoleAssignments`
+See [Wiki Home](https://github.com/karamem0/SPClient/wiki).
 
-## Getting started
+## Getting Started
 
 If you write PowerShell script using the CSOM, it will be like below. 
 

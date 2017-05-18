@@ -29,7 +29,7 @@ function Remove-SPClientList {
   Deletes a list.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the list to delete.
 .PARAMETER ParentObject
@@ -76,34 +76,53 @@ function Remove-SPClientList {
             if (-not $ClientObject.IsPropertyAvailable('Id')) {
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id'
             }
         } else {
             $ClientObjectCollection = $ParentObject.Lists
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-                $ClientObject = $ClientObjectCollection.GetById($Identity)
+                $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                    $ClientContext, `
+                    $ClientObjectCollection.Path, `
+                    'GetById', `
+                    [object[]]$Identity)
+                $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod);
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id'
                 trap {
                     throw 'The specified list could not be found.'
                 }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
-                $ClientObject = $ParentObject.GetList($Url)
+                $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                    $ClientContext, `
+                    $ParentObject.Path, `
+                    'GetList', `
+                    [object[]]$Url)
+                $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod);
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id'
                 trap {
                     throw 'The specified list could not be found.'
                 }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Name') {
                 try {
-                    $ClientObject = $ClientObjectCollection.GetByTitle($Name)
+                    $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                        $ClientContext, `
+                        $ClientObjectCollection.Path, `
+                        'GetByTitle', `
+                        [object[]]$Name)
+                    $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod);
                     Invoke-SPClientLoadQuery `
                         -ClientContext $ClientContext `
-                        -ClientObject $ClientObject
+                        -ClientObject $ClientObject `
+                        -Retrievals 'Id'
                 } catch {
                     Invoke-SPClientLoadQuery `
                         -ClientContext $ClientContext `

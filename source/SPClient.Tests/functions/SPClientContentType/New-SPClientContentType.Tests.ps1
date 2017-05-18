@@ -11,7 +11,7 @@ Describe 'New-SPClientContentType' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
                 $SPClient.ClientContext.Load($Web.ContentTypes)
                 $SPClient.ClientContext.ExecuteQuery()
-                for ($index = $Web.ContentTypes.Count - 1; $index -gt 0 ; $index--) {
+                for ($index = $Web.ContentTypes.Count - 1; $index -ge 0; $index--) {
                     $ContentType = $Web.ContentTypes[$index]
                     $SPClient.ClientContext.Load($ContentType)
                     $SPClient.ClientContext.ExecuteQuery()

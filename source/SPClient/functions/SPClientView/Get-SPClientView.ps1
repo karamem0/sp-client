@@ -32,7 +32,7 @@ function Get-SPClientView {
   Otherwise, returns a view which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ParentObject
   Indicates the list which the views are contained.
 .PARAMETER Identity
@@ -90,7 +90,12 @@ function Get-SPClientView {
             Write-Output @(, $ClientObjectCollection)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $ClientObject = $ClientObjectCollection.GetById($Identity)
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $ClientObjectCollection.Path, `
+                'GetById', `
+                [object[]]$Identity)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod);
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -116,7 +121,12 @@ function Get-SPClientView {
             Write-Output $ClientObject
         }
         if ($PSCmdlet.ParameterSetName -eq 'Title') {
-            $ClientObject = $ClientObjectCollection.GetByTitle($Title)
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $ClientObjectCollection.Path, `
+                'GetByTitle', `
+                [object[]]$Title)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod);
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

@@ -29,7 +29,7 @@ function Remove-SPClientListItem {
   Deletes a list item.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the list item to delete.
 .PARAMETER ParentObject
@@ -63,14 +63,21 @@ function Remove-SPClientListItem {
             if (-not $ClientObject.IsPropertyAvailable('Id')) {
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id'
             }
         } else {
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-                $ClientObject = $ParentObject.GetItemById($Identity)
+                $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                    $ClientContext, `
+                    $ParentObject.Path, `
+                    'GetItemById', `
+                    [object[]]$Identity)
+                $ClientObject = New-Object Microsoft.SharePoint.Client.ListItem($ClientContext, $PathMethod);
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id'
                 trap {
                     throw 'The specified list item could not be found.'
                 }

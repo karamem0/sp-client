@@ -29,7 +29,7 @@ function Remove-SPClientField {
   Deletes a field.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the field to delete.
 .PARAMETER ParentObject
@@ -70,24 +70,37 @@ function Remove-SPClientField {
             if (-not $ClientObject.IsPropertyAvailable('Id')) {
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id,SchemaXml'
             }
         } else {
             $ClientObjectCollection = $ParentObject.Fields
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-                $ClientObject = $ClientObjectCollection.GetById($Identity)
+                $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                    $ClientContext, `
+                    $ClientObjectCollection.Path, `
+                    'GetById', `
+                    [object[]]$Identity)
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod);
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id,SchemaXml'
                 trap {
                     throw 'The specified field could not be found.'
                 }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Name') {
-                $ClientObject = $ClientObjectCollection.GetByInternalNameOrTitle($Name)
+                $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                    $ClientContext, `
+                    $ClientObjectCollection.Path, `
+                    'GetByInternalNameOrTitle', `
+                    [object[]]$Name)
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod);
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id,SchemaXml'
                 trap {
                     throw 'The specified field could not be found.'
                 }

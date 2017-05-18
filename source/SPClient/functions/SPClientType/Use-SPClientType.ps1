@@ -54,8 +54,7 @@ function Use-SPClientType {
     process {
         if ($PSCmdlet.ParameterSetName -eq 'Version') {
             $Path = $Env:CommonProgramFiles
-            if (-not [System.Environment]::Is64BitProcess -and
-                -not [string]::IsNullOrEmpty($Env:CommonProgramW6432)) {
+            if (-not [string]::IsNullOrEmpty($Env:CommonProgramW6432)) {
                 $Path = $Env:CommonProgramW6432
             }
             $Path = Join-Path -Path $Path -ChildPath 'Microsoft Shared\Web Server Extensions'

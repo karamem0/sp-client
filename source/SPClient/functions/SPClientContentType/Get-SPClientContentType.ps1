@@ -77,7 +77,12 @@ function Get-SPClientContentType {
             Write-Output @(, $ClientObjectCollection)
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $ClientObject = $ClientObjectCollection.GetById($Identity)
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $ClientObjectCollection.Path, `
+                'GetById', `
+                [object[]]$Identity)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.ContentType($ClientContext, $PathMethod);
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

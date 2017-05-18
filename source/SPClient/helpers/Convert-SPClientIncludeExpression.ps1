@@ -45,19 +45,33 @@ function Convert-SPClientIncludeExpression {
         $ItemType = $Expression.Type.BaseType.GenericTypeArguments[0]
         $FuncType = [type]'System.Func`2' | &{ process { $_.MakeGenericType($ItemType, [object]) } }
         $ExprType = [type]'System.Linq.Expressions.Expression`1' | &{ process { $_.MakeGenericType($FuncType) } }
+        $ListType = [type]'System.Collections.Generic.List`1' | &{ process { $_.MakeGenericType($ExprType) } }
         $ParamExpr = [System.Linq.Expressions.Expression]::Parameter($ItemType, $ItemType.Name)
-        $LambdaExprArray = Split-SPClientExpressionString -InputString $InputString -Separator ',' | ForEach-Object {
-            $PropExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $ParamExpr
-            $CastExpr = [System.Linq.Expressions.Expression]::Convert($PropExpr, [object])
-            $LambdaExpr = [System.Linq.Expressions.Expression]::Lambda($FuncType, $CastExpr, $ParamExpr)
-            Write-Output $LambdaExpr
+        $LambdaExprList = New-Object $ListType
+        $Splits = Split-SPClientExpressionString -InputString $InputString -Separator ','
+        $Splits | ForEach-Object {
+            if ($Splits -ne '*') {
+                $PropExpr = Convert-SPClientMemberAccessExpression -InputString $_ -Expression $ParamExpr
+                $CastExpr = [System.Linq.Expressions.Expression]::Convert($PropExpr, [object])
+                $LambdaExpr = [System.Linq.Expressions.Expression]::Lambda($FuncType, $CastExpr, $ParamExpr)
+                $LambdaExprList.Add($LambdaExpr)
+            }
         }
-        $ArrayExpr = [System.Linq.Expressions.Expression]::NewArrayInit($ExprType, [System.Linq.Expressions.Expression[]]$LambdaExprArray)
-        $IncludeExpr = [System.Linq.Expressions.Expression]::Call( `
-            [Microsoft.SharePoint.Client.ClientObjectQueryableExtension].GetMethod('Include').MakeGenericMethod($ItemType), `
-            [System.Linq.Expressions.Expression[]]@($Expression, $ArrayExpr)
-        )
-        Write-Output $IncludeExpr
+        $ExtType = [Microsoft.SharePoint.Client.ClientObjectQueryableExtension]
+        $ArrayExpr = [System.Linq.Expressions.Expression]::NewArrayInit($ExprType, $LambdaExprList.ToArray())
+        if ($Splits -contains '*') {
+            $IncludeExpr = [System.Linq.Expressions.Expression]::Call( `
+                $ExtType.GetMethod('IncludeWithDefaultProperties').MakeGenericMethod($ItemType), `
+                [System.Linq.Expressions.Expression[]]@($Expression, $ArrayExpr)
+            )
+            Write-Output $IncludeExpr
+        } else {
+            $IncludeExpr = [System.Linq.Expressions.Expression]::Call( `
+                $ExtType.GetMethod('Include').MakeGenericMethod($ItemType), `
+                [System.Linq.Expressions.Expression[]]@($Expression, $ArrayExpr)
+            )
+            Write-Output $IncludeExpr
+        }
     }
 
 }

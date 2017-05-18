@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
-Describe 'Enable-SPClientUniqueRoleAssignments' {
+Describe 'Clear-SPClientPermission' {
 
     Context 'Success' {
 
@@ -32,17 +32,32 @@ Describe 'Enable-SPClientUniqueRoleAssignments' {
             }
         }
 
-        It 'Enables unique role assignment' {
+        It 'Clears permissions' {
             $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+            $List.BreakRoleInheritance($false, $false)
             $Params = @{
                 ClientObject = $List
-                CopyRoleAssignments = $true
-                ClearSubscopes = $true
             }
-            $Result = Enable-SPClientUniqueRoleAssignments @Params
-            $Result | Should BeNullOrEmpty
-            $List.HasUniqueRoleAssignments | Should Be $true
+            $Result = Clear-SPClientPermission @Params
+            $Result | Should Not BeNullOrEmpty
+        }
+
+    }
+
+    Context 'Failure' {
+
+        It 'Throws an error when has not unique permission' {
+            $Throw = {
+                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+                $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+                $Params = @{
+                    ClientObject = $List
+                }
+                $Result = Clear-SPClientPermission @Params
+                $Result | Should Not BeNullOrEmpty
+            }
+            $Throw | Should Throw 'This operation is not allowed on an object that inherits permissions.'
         }
 
     }

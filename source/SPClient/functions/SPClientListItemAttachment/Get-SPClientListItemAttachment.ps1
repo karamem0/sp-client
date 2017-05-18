@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Get-SPClientGroup.ps1
+# Get-SPClientListItemAttachment.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,21 +22,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Get-SPClientGroup {
+function Get-SPClientListItemAttachment {
 
 <#
 .SYNOPSIS
-  Lists all site groups or retrieve the specified site group.
+  Lists all attachments or retrieve the specified attachment.
 .DESCRIPTION
-  If not specified 'Identitiy' 'Name', returns site all groups. Otherwise,
-  returns a group which matches the parameter.
+  If not specified 'FileName', returns all attachments. Otherwise, returns a
+  attachment which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER Identity
-  Indicates the group id.
-.PARAMETER Name
-  Indicates the group name.
+.PARAMETER ParentObject
+  Indicates the list item which the attachments are contained.
+.PARAMETER FileName
+  Indicates the attachment file name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -44,18 +44,15 @@ function Get-SPClientGroup {
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'FileName')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
-        [Alias('Id')]
-        [int]
-        $Identity,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
-        [Alias('Title')]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Microsoft.SharePoint.Client.ListItem]
+        $ParentObject,
+        [Parameter(Mandatory = $true, ParameterSetName = 'FileName')]
         [string]
-        $Name,
+        $FileName,
         [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
@@ -65,7 +62,7 @@ function Get-SPClientGroup {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObjectCollection = $ClientContext.Site.RootWeb.SiteGroups
+        $ClientObjectCollection = $ParentObject.AttachmentFiles
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
@@ -73,36 +70,20 @@ function Get-SPClientGroup {
                 -Retrievals $Retrievals
             Write-Output @(, $ClientObjectCollection)
         }
-        if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+        if ($PSCmdlet.ParameterSetName -eq 'FileName') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
                 $ClientObjectCollection.Path, `
-                'GetById', `
-                [object[]]$Identity)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod);
+                'GetByFileName', `
+                [object[]]$FileName)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.Attachment($ClientContext, $PathMethod);
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
                 -Retrievals $Retrievals
             Write-Output $ClientObject
             trap {
-                throw 'The specified group could not be found.'
-            }
-        }
-        if ($PSCmdlet.ParameterSetName -eq 'Name') {
-            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
-                $ClientContext, `
-                $ClientObjectCollection.Path, `
-                'GetByName', `
-                [object[]]$Name)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod);
-            Invoke-SPClientLoadQuery `
-                -ClientContext $ClientContext `
-                -ClientObject $ClientObject `
-                -Retrievals $Retrievals
-            Write-Output $ClientObject
-            trap {
-                throw 'The specified group could not be found.'
+                throw 'The specified attachment could not be found.'
             }
         }
     }

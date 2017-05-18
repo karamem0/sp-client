@@ -29,11 +29,13 @@ function New-SPClientListItem {
   Creates a new list item.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ParentObject
   Indicates the list which a list item to be created.
 .PARAMETER FieldValues
   Indicates the field key/value collection.
+.PARAMETER Retrievals
+  Indicates the data retrieval expression.
 #>
 
     [CmdletBinding()]
@@ -46,7 +48,10 @@ function New-SPClientListItem {
         $ParentObject,
         [Parameter(Mandatory = $false)]
         [hashtable]
-        $FieldValues
+        $FieldValues,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Retrievals
     )
 
     process {
@@ -63,7 +68,8 @@ function New-SPClientListItem {
         $ClientObject.Update()
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -ClientObject $ClientObject `
+            -Retrievals $Retrievals
         Write-Output $ClientObject
     }
 

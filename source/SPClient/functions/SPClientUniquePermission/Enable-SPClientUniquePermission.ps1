@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Enable-SPClientUniqueRoleAssignments.ps1
+# Enable-SPClientUniquePermission.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,14 +22,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Enable-SPClientUniqueRoleAssignments {
+function Enable-SPClientUniquePermission {
 
 <#
 .SYNOPSIS
-  Enables unique role assignments to the specified object.
+  Enables unique permission to the specified object.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web, list or item.
 .PARAMETER CopyRoleAssignments
@@ -55,6 +55,9 @@ function Enable-SPClientUniqueRoleAssignments {
     )
 
     process {
+        if ($ClientContext -eq $null) {
+            throw "Cannot bind argument to parameter 'ClientContext' because it is null."
+        }
         $ClientObject.BreakRoleInheritance($CopyRoleAssignments, $ClearSubscopes)
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `

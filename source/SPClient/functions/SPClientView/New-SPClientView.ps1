@@ -29,7 +29,7 @@ function New-SPClientView {
   Creates a new view.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ParentObject
   Indicates the list which a view to be created.
 .PARAMETER Name
@@ -51,6 +51,8 @@ function New-SPClientView {
   Indicates the type of the view.
 .PARAMETER PersonalView
   Indicates a value whether the view is a personal view. 
+.PARAMETER Retrievals
+  Indicates the data retrieval expression.
 #>
 
     [CmdletBinding()]
@@ -88,7 +90,10 @@ function New-SPClientView {
         $ViewType = 'Html',
         [Parameter(Mandatory = $false)]
         [bool]
-        $PersonalView
+        $PersonalView,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Retrievals
     )
 
     process {
@@ -118,7 +123,8 @@ function New-SPClientView {
         $ClientObject.Update()
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -ClientObject $ClientObject `
+            -Retrievals $Retrievals
         Write-Output $ClientObject
     }
 

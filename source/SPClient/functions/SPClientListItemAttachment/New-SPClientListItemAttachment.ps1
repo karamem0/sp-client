@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# New-SPClientContentType.ps1
+# New-SPClientListItemAttachment.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,48 +22,44 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function New-SPClientContentType {
+function New-SPClientListItemAttachment {
 
 <#
 .SYNOPSIS
-  Creates a new content type.
+  Creates a new attachment.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
 .PARAMETER ParentObject
-  Indicates the web which a content type to be created.
-.PARAMETER Name
-  Indicates the internal name.
-.PARAMETER Description
-  Indicates the description.
-.PARAMETER Group
-  Indicates the group name.
-.PARAMETER ParentContentType
-  Indicates the ID or name of parent content type.
+  Indicates the list item which a attachment to be created.
+.PARAMETER ContentPath
+  Indicates the content file path.
+.PARAMETER ContentStream
+  Indicates the content stream.
+.PARAMETER FileName
+  Indicates the file name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'ContentStream')]
     param (
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.Web]
+        [Microsoft.SharePoint.Client.ListItem]
         $ParentObject,
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $true, ParameterSetName = 'ContentStream')]
+        [System.IO.Stream]
+        $ContentStream,
+        [Parameter(Mandatory = $true, ParameterSetName = 'ContentPath')]
         [string]
-        $Name,
-        [Parameter(Mandatory = $false)]
+        $ContentPath,
+        [Parameter(Mandatory = $true, ParameterSetName = 'ContentStream')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'ContentPath')]
         [string]
-        $Description,
-        [Parameter(Mandatory = $false)]
-        [string]
-        $Group,
-        [Parameter(Mandatory = $false)]
-        [string]
-        $ParentContentType,
+        $FileName,
         [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
@@ -73,29 +69,23 @@ function New-SPClientContentType {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $Creation = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
-        $Creation.Name = $Name
-        if ($MyInvocation.BoundParameters.ContainsKey('Group')) {
-            $Creation.Group = $Group
+        $Creation = New-Object Microsoft.SharePoint.Client.AttachmentCreationInformation
+        if ($PSCmdlet.ParameterSetName -eq 'ContentStream') {
+            $Creation.ContentStream = $ContentStream
+            $Creation.FileName = $FileName
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('ParentContentType')) {
-            $ContentTypeCollection = $ClientContext.Site.RootWeb.ContentTypes
-            Invoke-SPClientLoadQuery `
-                -ClientContext $ClientContext `
-                -ClientObject $ContentTypeCollection `
-                -Retrievals 'Include(StringId,Name)'
-            $ContentType = $ContentTypeCollection | Where-Object {
-                $_.StringId -eq $ParentContentType -or
-                $_.Name -eq $ParentContentType
+        if ($PSCmdlet.ParameterSetName -eq 'ContentPath') {
+            if (-not (Test-Path -Path $ContentPath)) {
+                throw "Cannot find file '$($ContentPath)'."
             }
-            if ($ContentType -eq $null) {
-                throw 'The specified content type could not be found.'
+            $Creation.ContentStream = [System.IO.File]::OpenRead($ContentPath)
+            if ($MyInvocation.BoundParameters.ContainsKey('FileName')) {
+                $Creation.FileName = $FileName
+            } else {
+                $Creation.FileName = [System.IO.Path]::GetFileName($ContentPath)
             }
-            $Creation.ParentContentType = $ContentType
         }
-        $ClientObject = $ParentObject.ContentTypes.Add($Creation)
-        $ClientObject.Description = $Description
-        $ClientObject.Update($true)
+        $ClientObject = $ParentObject.AttachmentFiles.Add($Creation)
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `

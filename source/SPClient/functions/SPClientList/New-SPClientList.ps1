@@ -29,7 +29,7 @@ function New-SPClientList {
   Creates a new list.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ParentObject
   Indicates the web which a list to be created.
 .PARAMETER Name
@@ -52,6 +52,8 @@ function New-SPClientList {
   Indicates a value whether crawler must not crawl.
 .PARAMETER OnQuickLaunch
   Indicates a value whether the list is displayed on the quick launch.
+.PARAMETER Retrievals
+  Indicates the data retrieval expression.
 #>
 
     [CmdletBinding()]
@@ -88,7 +90,10 @@ function New-SPClientList {
         $NoCrawl,
         [Parameter(Mandatory = $false)]
         [bool]
-        $OnQuickLaunch
+        $OnQuickLaunch,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Retrievals
     )
 
     process {
@@ -109,7 +114,8 @@ function New-SPClientList {
         $ClientObject.Update()
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -ClientObject $ClientObject `
+            -Retrievals $Retrievals
         Write-Output $ClientObject
     }
 

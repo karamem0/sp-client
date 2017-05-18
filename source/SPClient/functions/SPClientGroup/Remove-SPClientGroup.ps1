@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Remove-SPClientView.ps1
+# Remove-SPClientGroup.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,24 +22,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Remove-SPClientView {
+function Remove-SPClientGroup {
 
 <#
 .SYNOPSIS
-  Deletes a view.
+  Deletes a group.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
 .PARAMETER ClientObject
-  Indicates the view to delete.
-.PARAMETER ParentObject
-  Indicates the list which the view is contained.
+  Indicates the group to delete.
 .PARAMETER Identity
-  Indicates the view GUID.
-.PARAMETER Url
-  Indicates the view url.
-.PARAMETER Title
-  Indicates the view title.
+  Indicates the group id.
+.PARAMETER Name
+  Indicates the group name.
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -48,29 +44,23 @@ function Remove-SPClientView {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
-        [Microsoft.SharePoint.Client.View]
+        [Microsoft.SharePoint.Client.Group]
         $ClientObject,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Title')]
-        [Microsoft.SharePoint.Client.List]
-        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
-        [guid]
+        [int]
         $Identity,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
+        [Alias('Title')]
         [string]
-        $Url,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Title')]
-        [string]
-        $Title
+        $Name
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
+        $ClientObjectCollection = $ClientContext.Site.RootWeb.SiteGroups
         if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
             if (-not $ClientObject.IsPropertyAvailable('Id')) {
                 Invoke-SPClientLoadQuery `
@@ -79,49 +69,38 @@ function Remove-SPClientView {
                     -Retrievals 'Id'
             }
         } else {
-            $ClientObjectCollection = $ParentObject.Views
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ClientObjectCollection.Path, `
                     'GetById', `
                     [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod);
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
                     -Retrievals 'Id'
                 trap {
-                    throw 'The specified view could not be found.'
+                    throw 'The specified group could not be found.'
                 }
             }
-            if ($PSCmdlet.ParameterSetName -eq 'Url') {
-                Invoke-SPClientLoadQuery `
-                    -ClientContext $ClientContext `
-                    -ClientObject $ClientObjectCollection `
-                    -Retrievals 'Include(Id,ServerRelativeUrl)'
-                $ClientObject = $ClientObjectCollection | Where-Object { $_.ServerRelativeUrl -eq $Url }
-                if ($ClientObject -eq $null) {
-                    throw 'The specified view could not be found.'
-                }
-            }
-            if ($PSCmdlet.ParameterSetName -eq 'Title') {
+            if ($PSCmdlet.ParameterSetName -eq 'Name') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ClientObjectCollection.Path, `
-                    'GetByTitle', `
-                    [object[]]$Title)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod);
+                    'GetByName', `
+                    [object[]]$Name)
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod);
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
                     -Retrievals 'Id'
                 trap {
-                    throw 'The specified view could not be found.'
+                    throw 'The specified group could not be found.'
                 }
             }
         }
-        $ClientObject.DeleteObject()
+        $ClientObjectCollection.Remove($ClientObject)
         $ClientContext.ExecuteQuery()
     }
 

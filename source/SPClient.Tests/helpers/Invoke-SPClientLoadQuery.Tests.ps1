@@ -15,11 +15,21 @@ Describe 'Invoke-SPClientLoadQuery' {
             $Result | Should BeNullOrEmpty
         }
 
-        It 'Loads ClientObject with retrievals' {
+        It 'Loads ClientObject with retrievals that contains specified properties' {
             $Params = @{
                 ClientContext = $SPClient.ClientContext
                 ClientObject = $SPClient.ClientContext.Web
                 Retrievals = 'Id, RootFolder.ServerRelativeUrl'
+            }
+            $Result = Invoke-SPClientLoadQuery @Params
+            $Result | Should BeNullOrEmpty
+        }
+
+        It 'Loads ClientObject with retrievals that contains all properties' {
+            $Params = @{
+                ClientContext = $SPClient.ClientContext
+                ClientObject = $SPClient.ClientContext.Web
+                Retrievals = '*, RootFolder.ServerRelativeUrl'
             }
             $Result = Invoke-SPClientLoadQuery @Params
             $Result | Should BeNullOrEmpty
@@ -34,11 +44,21 @@ Describe 'Invoke-SPClientLoadQuery' {
             $Result | Should BeNullOrEmpty
         }
 
-        It 'Loads ClientObjectCollection with retrievals' {
+        It 'Loads ClientObjectCollection with retrievals that contains specified properties' {
             $Params = @{
                 ClientContext = $SPClient.ClientContext
                 ClientObject = $SPClient.ClientContext.Web.Lists
                 Retrievals = 'Include(RootFolder.ServerRelativeUrl)'
+            }
+            $Result = Invoke-SPClientLoadQuery @Params
+            $Result | Should BeNullOrEmpty
+        }
+
+        It 'Loads ClientObjectCollection with retrievals that contains all properties' {
+            $Params = @{
+                ClientContext = $SPClient.ClientContext
+                ClientObject = $SPClient.ClientContext.Web.Lists
+                Retrievals = 'Include(*, RootFolder.ServerRelativeUrl)'
             }
             $Result = Invoke-SPClientLoadQuery @Params
             $Result | Should BeNullOrEmpty

@@ -29,7 +29,7 @@ function Remove-SPClientWeb {
   Deletes a web.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web to delete.
 .PARAMETER Identity
@@ -63,15 +63,22 @@ function Remove-SPClientWeb {
             if (-not $ClientObject.IsPropertyAvailable('Id')) {
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id'
             }
             $ClientContext.ExecuteQuery()
         } else {
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-                $ClientObject = $ClientContext.Site.OpenWebById($Identity)
+                $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                    $ClientContext, `
+                    $ClientContext.Site.Path, `
+                    'OpenWebById', `
+                    [object[]]$Identity)
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod);
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id'
             }
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
@@ -82,7 +89,8 @@ function Remove-SPClientWeb {
                 $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod);
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
-                    -ClientObject $ClientObject
+                    -ClientObject $ClientObject `
+                    -Retrievals 'Id'
             }
             trap {
                 throw 'The specified web could not be found.'

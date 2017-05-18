@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
-Describe 'Revoke-SPClientRoleAssignments' {
+Describe 'Revoke-SPClientPermission' {
 
     Context 'Success' {
 
@@ -32,10 +32,10 @@ Describe 'Revoke-SPClientRoleAssignments' {
             }
         }
 
-        It 'Removes a role assignment by role name' {
+        It 'Revokes a permission by role name' {
             $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
-            $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Full Control')
@@ -46,14 +46,14 @@ Describe 'Revoke-SPClientRoleAssignments' {
                 Member = $Group
                 Roles = 'Full Control'
             }
-            $Result = Revoke-SPClientRoleAssignments @Params
+            $Result = Revoke-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
-        It 'Removes a role assignment by role type' {
+        It 'Revokes a permission by role type' {
             $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
-            $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Full Control')
@@ -64,14 +64,14 @@ Describe 'Revoke-SPClientRoleAssignments' {
                 Member = $Group
                 Roles = [Microsoft.SharePoint.Client.RoleType]::Administrator
             }
-            $Result = Revoke-SPClientRoleAssignments @Params
+            $Result = Revoke-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
-        It 'Removes role assignments by role name' {
+        It 'Revokes permissions by role name' {
             $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
-            $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition1 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Read')
@@ -89,14 +89,14 @@ Describe 'Revoke-SPClientRoleAssignments' {
                     'Contribute'
                 )
             }
-            $Result = Revoke-SPClientRoleAssignments @Params
+            $Result = Revoke-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
-        It 'Removes role assignments by role type' {
+        It 'Revokes permissions by role type' {
             $Web = Get-SPClientWeb -Identity $TestConfig.WebId
             $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
-            $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition1 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Read')
@@ -114,7 +114,7 @@ Describe 'Revoke-SPClientRoleAssignments' {
                     [Microsoft.SharePoint.Client.RoleType]::Contributor
                 )
             }
-            $Result = Revoke-SPClientRoleAssignments @Params
+            $Result = Revoke-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
@@ -122,17 +122,17 @@ Describe 'Revoke-SPClientRoleAssignments' {
 
     Context 'Failure' {
 
-        It 'Throws an error when has not unique role assignments' {
+        It 'Throws an error when has not unique permission' {
             $Throw = {
                 $Web = Get-SPClientWeb -Identity $TestConfig.WebId
                 $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
-                $Group = Get-SPClientGroup -ParentObject $Web -Identity $TestConfig.GroupId
+                $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
                 $Params = @{
                     ClientObject = $List
                     Member = $Group
                     Roles = 'Full Control'
                 }
-                $Result = Revoke-SPClientRoleAssignments @Params
+                $Result = Revoke-SPClientPermission @Params
                 $Result | Should Not BeNullOrEmpty
             }
             $Throw | Should Throw 'This operation is not allowed on an object that inherits permissions.'

@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Disable-SPClientUniqueRoleAssignments.ps1
+# Disable-SPClientUniquePermission.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,14 +22,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Disable-SPClientUniqueRoleAssignments {
+function Disable-SPClientUniquePermission {
 
 <#
 .SYNOPSIS
-  Disables unique role assignments to the specified object.
+  Disables unique permission to the specified object.
 .PARAMETER ClientContext
   Indicates the client context.
-  If not specified, uses the default context.
+  If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web, list or item.
 #>
@@ -45,6 +45,9 @@ function Disable-SPClientUniqueRoleAssignments {
     )
 
     process {
+        if ($ClientContext -eq $null) {
+            throw "Cannot bind argument to parameter 'ClientContext' because it is null."
+        }
         $ClientObject.ResetRoleInheritance()
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `

@@ -37,16 +37,19 @@ function Convert-SPClientMemberAccessExpression {
     process {
         $Expr = $Expression
         $Type = $Expression.Type
-        Split-SPClientExpressionString -InputString $InputString -Separator '.' | ForEach-Object {
-            if (Test-GenericSubclassOf -InputType $Type -TestType 'Microsoft.SharePoint.Client.ClientObjectCollection`1') {
-                $Expr = Convert-SPClientIncludeExpression -InputString $_ -Expression $Expr
-            } else {
-                $Prop = $Type.GetProperty($_)
-                if ($Prop -eq $null) {
-                    throw "Cannot convert expression because '$($Type)' has no member named '$($_)'."
+        if ($InputString -ne '*') {
+            $Splits = Split-SPClientExpressionString -InputString $InputString -Separator '.'
+            $Splits | ForEach-Object {
+                if (Test-GenericSubclassOf -InputType $Type -TestType 'Microsoft.SharePoint.Client.ClientObjectCollection`1') {
+                    $Expr = Convert-SPClientIncludeExpression -InputString $_ -Expression $Expr
+                } else {
+                    $Prop = $Type.GetProperty($_)
+                    if ($Prop -eq $null) {
+                        throw "Cannot convert expression because '$($Type)' has no member named '$($_)'."
+                    }
+                    $Expr = [System.Linq.Expressions.Expression]::Property($Expr, $Prop)
+                    $Type = $Prop.PropertyType
                 }
-                $Expr = [System.Linq.Expressions.Expression]::Property($Expr, $Prop)
-                $Type = $Prop.PropertyType
             }
         }
         Write-Output $Expr

@@ -32,10 +32,29 @@ $WebUrls | ForEach-Object {
     }
 }
 
-$Groups = $ClientContext.Web.SiteGroups
-$ClientContext.Load($Groups)
-$ClientContext.ExecuteQuery()
-while ($Groups.Count -gt 0) {
-    $Groups.Remove($Groups[0])
+try {
+    $Groups = $ClientContext.Web.SiteGroups
+    $ClientContext.Load($Groups)
+    $ClientContext.ExecuteQuery()
+    for ($Index = $Groups.Count - 1; $Index -ge 0; $Index--) { 
+        $Groups.Remove($Groups[$Index])
+        $ClientContext.ExecuteQuery()
+    }
+} catch {
+    Write-Host $_
 }
-$ClientContext.ExecuteQuery()
+
+try {
+    $Users = $ClientContext.Web.SiteUsers
+    $ClientContext.Load($Users)
+    $ClientContext.ExecuteQuery()
+    for ($Index = $Users.Count - 1; $Index -ge 0; $Index--) { 
+        $User = $Users[$Index]
+        if (-not $User.IsSiteAdmin) {
+            $Users.Remove($User)
+            $ClientContext.ExecuteQuery()
+        }
+    }
+} catch {
+    Write-Host $_
+}

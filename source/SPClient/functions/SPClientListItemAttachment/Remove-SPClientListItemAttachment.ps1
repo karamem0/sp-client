@@ -1,6 +1,6 @@
 ﻿#Requires -Version 3.0
 
-# Remove-SPClientContentType.ps1
+# Remove-SPClientListItemAttachment.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,22 +22,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Remove-SPClientContentType {
+function Remove-SPClientListItemAttachment {
 
 <#
 .SYNOPSIS
-  Deletes a content type.
+  Deletes a attachment.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
 .PARAMETER ClientObject
-  Indicates the content type to delete.
+  Indicates the attachment to delete.
 .PARAMETER ParentObject
-  Indicates the web which the content type is contained.
-.PARAMETER Identity
-  Indicates the content type ID.
-.PARAMETER Name
-  Indicates the content type name.
+  Indicates the list item which the attachment is contained.
+.PARAMETER FileName
+  Indicates the attachment file name.
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -46,19 +44,14 @@ function Remove-SPClientContentType {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
-        [Microsoft.SharePoint.Client.ContentType]
+        [Microsoft.SharePoint.Client.Attachment]
         $ClientObject,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [Microsoft.SharePoint.Client.Web]
+        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FileName')]
+        [Microsoft.SharePoint.Client.ListItem]
         $ParentObject,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
-        [Alias('Id')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'FileName')]
         [string]
-        $Identity,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
-        [string]
-        $Name
+        $FileName
     )
 
     process {
@@ -66,37 +59,27 @@ function Remove-SPClientContentType {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
         if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
-            if (-not $ClientObject.IsPropertyAvailable('Id')) {
+            if (-not $ClientObject.IsPropertyAvailable('FileName')) {
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrievals 'FileName'
             }
         } else {
-            $ClientObjectCollection = $ParentObject.ContentTypes
-            if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+            $ClientObjectCollection = $ParentObject.AttachmentFiles
+            if ($PSCmdlet.ParameterSetName -eq 'FileName') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ClientObjectCollection.Path, `
-                    'GetById', `
-                    [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.ContentType($ClientContext, $PathMethod);
+                    'GetByFileName', `
+                    [object[]]$FileName)
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Attachment($ClientContext, $PathMethod);
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
-                if ($ClientObject.Id -eq $null) {
-                    throw 'The specified content type could not be found.'
-                }
-            }
-            if ($PSCmdlet.ParameterSetName -eq 'Name') {
-                Invoke-SPClientLoadQuery `
-                    -ClientContext $ClientContext `
-                    -ClientObject $ClientObjectCollection `
-                    -Retrievals 'Include(Id,Name)'
-                $ClientObject = $ClientObjectCollection | Where-Object { $_.Name -eq $Name }
-                if ($ClientObject -eq $null) {
-                    throw 'The specified content type could not be found.'
+                    -Retrievals 'FileName'
+                trap {
+                    throw 'The specified attachment could not be found.'
                 }
             }
         }

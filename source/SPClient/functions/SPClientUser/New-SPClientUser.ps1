@@ -1,6 +1,7 @@
-﻿#Requires -Version 3.0
+﻿
+#Requires -Version 3.0
 
-# Resolve-SPClientUser.ps1
+# New-SPClientUser.ps1
 #
 # Copyright (c) 2017 karamem0
 # 
@@ -22,16 +23,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-function Resolve-SPClientUser {
+function New-SPClientUser {
 
 <#
 .SYNOPSIS
-  Checks whether the specified login name belongs to a valid user.
+  Creates a new view.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER Name
-  Indicates login name or e-mail address.
+.PARAMETER LoginName
+  Indicates the login name.
+.PARAMETER Title
+  Indicates the display name.
+.PARAMETER Email
+  Indicates the email.
+.PARAMETER IsSiteAdmin
+  Indicates a value whether the user is a site collection administrator.
+.PARAMETER Retrievals
+  Indicates the data retrieval expression.
 #>
 
     [CmdletBinding()]
@@ -41,22 +50,39 @@ function Resolve-SPClientUser {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true)]
         [string]
-        $Name
+        $LoginName,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Title,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Email,
+        [Parameter(Mandatory = $false)]
+        [bool]
+        $IsSiteAdmin,
+        [Parameter(Mandatory = $false)]
+        [string]
+        $Retrievals
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObject = $ClientContext.Site.RootWeb.EnsureUser($Name)
+        $Creation = New-Object Microsoft.SharePoint.Client.UserCreationInformation
+        $Creation.LoginName = $LoginName
+        $Creation.Email = $Email
+        $Creation.Title = $Title
+        $ClientObject = $ClientContext.Site.RootWeb.SiteUsers.Add($Creation)
+        if ($MyInvocation.BoundParameters.ContainsKey('IsSiteAdmin')) {
+            $ClientObject.IsSiteAdmin = $IsSiteAdmin
+        }
+        $ClientObject.Update()
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
             -Retrievals $Retrievals
         Write-Output $ClientObject
-        trap {
-            throw 'The specified user could not be found.'
-        }
     }
 
 }
