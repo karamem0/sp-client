@@ -9,7 +9,7 @@ Describe 'New-SPClientUser' {
         AfterEach {
             try {
                 $Web = $SPClient.ClientContext.Site.RootWeb
-                $User = $Web.SiteUsers.GetByEmail("testuser0@$($Env:LoginDomain)")
+                $User = $Web.SiteUsers.GetByLoginName("i:0#.f|membership|testuser0@$($Env:LoginDomain)")
                 $Web.SiteUsers.Remove($User)
                 $SPClient.ClientContext.ExecuteQuery()
             } catch {
@@ -19,7 +19,7 @@ Describe 'New-SPClientUser' {
 
         It 'Creates a new user with mandatory parameters' {
             $Params = @{
-                LoginName = "i:0#.f|membership|testuser0@$($Env:LoginDomain)"
+                Name = "i:0#.f|membership|testuser0@$($Env:LoginDomain)"
             }
             $Result = New-SPClientUser @Params
             $Result | Should Not BeNullOrEmpty
@@ -32,7 +32,7 @@ Describe 'New-SPClientUser' {
 
         It 'Creates a new view with all parameters' {
             $Params = @{
-                LoginName = "i:0#.f|membership|testuser0@$($Env:LoginDomain)"
+                Name = "i:0#.f|membership|testuser0@$($Env:LoginDomain)"
                 Title = 'Test User 0 (testuser0@example.com)'
                 Email = 'testuser0@example.com'
                 IsSiteAdmin = $true

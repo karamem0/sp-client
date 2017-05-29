@@ -75,7 +75,7 @@ function Remove-SPClientGroup {
                     $ClientObjectCollection.Path, `
                     'GetById', `
                     [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
@@ -90,7 +90,7 @@ function Remove-SPClientGroup {
                     $ClientObjectCollection.Path, `
                     'GetByName', `
                     [object[]]$Name)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `

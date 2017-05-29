@@ -32,7 +32,7 @@ function Remove-SPClientField {
   If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the field to delete.
-.PARAMETER ParentObject
+.PARAMETER ParentList
   Indicates the list which the field is contained.
 .PARAMETER Identity
   Indicates the field GUID.
@@ -51,7 +51,7 @@ function Remove-SPClientField {
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.List]
-        $ParentObject,
+        $ParentList,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -74,14 +74,14 @@ function Remove-SPClientField {
                     -Retrievals 'Id,SchemaXml'
             }
         } else {
-            $ClientObjectCollection = $ParentObject.Fields
+            $ClientObjectCollection = $ParentList.Fields
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ClientObjectCollection.Path, `
                     'GetById', `
                     [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
@@ -96,7 +96,7 @@ function Remove-SPClientField {
                     $ClientObjectCollection.Path, `
                     'GetByInternalNameOrTitle', `
                     [object[]]$Name)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `

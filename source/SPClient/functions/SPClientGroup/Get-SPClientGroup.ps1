@@ -28,7 +28,7 @@ function Get-SPClientGroup {
 .SYNOPSIS
   Lists all site groups or retrieve the specified site group.
 .DESCRIPTION
-  If not specified 'Identitiy' 'Name', returns site all groups. Otherwise,
+  If not specified filterable parameter, returns site all groups. Otherwise,
   returns a group which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
@@ -79,7 +79,7 @@ function Get-SPClientGroup {
                 $ClientObjectCollection.Path, `
                 'GetById', `
                 [object[]]$Identity)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -95,7 +95,7 @@ function Get-SPClientGroup {
                 $ClientObjectCollection.Path, `
                 'GetByName', `
                 [object[]]$Name)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

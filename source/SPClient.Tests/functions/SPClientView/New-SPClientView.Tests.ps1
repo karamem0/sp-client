@@ -27,10 +27,10 @@ Describe 'New-SPClientView' {
         }
 
         It 'Creates a new view with mandatory parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestView0'
             }
             $Result = New-SPClientView @Params
@@ -44,10 +44,10 @@ Describe 'New-SPClientView' {
         }
 
         It 'Creates a new view with all parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestView0'
                 Title = 'Test View 0'
                 ViewFields = @('ID', 'Title')

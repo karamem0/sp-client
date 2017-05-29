@@ -26,9 +26,9 @@ Describe 'New-SPClientContentType' {
         }
 
         It 'Creates a new content type with mandatory parameters' {
-            $Web = Get-SPClientWeb -Url $TestConfig.WebUrl
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Name = 'Test Content Type 0'
             }
             $Result = New-SPClientContentType @Params
@@ -40,17 +40,17 @@ Describe 'New-SPClientContentType' {
             $Result.StringId | Should BeLike '0x0100*'
         }
 
-        It 'Creates a new content type by parent content type id' {
-            $Web = Get-SPClientWeb -Url $TestConfig.WebUrl
+        It 'Creates a new content type with all parameters' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $ContentType = $SPClient.ClientContext.Site.RootWeb.ContentTypes.GetById('0x0101')
             $Params = @{ 
-                ParentObject = $Web
+                ParentWeb = $Web
                 Name = 'Test Content Type 0'
                 Description = 'Test Content Type 0'
                 Group = 'Test Content Type 0'
-                ParentContentType = '0x0101'
+                ParentContentType = $ContentType
             }
             $Result = New-SPClientContentType @Params
-            $Result | Should Not BeNullOrEmpty
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
             $Result.Name | Should Be 'Test Content Type 0'
@@ -59,24 +59,6 @@ Describe 'New-SPClientContentType' {
             $Result.StringId | Should BeLike '0x010100*' 
         }
 
-        It 'Creates a new content type by parent content type name' {
-            $Web = Get-SPClientWeb -Url $TestConfig.WebUrl
-            $Params = @{ 
-                ParentObject = $Web
-                Name = 'Test Content Type 0'
-                Description = 'Test Content Type 0'
-                Group = 'Test Content Type 0'
-                ParentContentType = 'Document'
-            }
-            $Result = New-SPClientContentType @Params
-            $Result | Should Not BeNullOrEmpty
-            $Result | Should Not BeNullOrEmpty
-            $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
-            $Result.Name | Should Be 'Test Content Type 0'
-            $Result.Description | Should Be 'Test Content Type 0'
-            $Result.Group | Should Be 'Test Content Type 0'
-            $Result.StringId | Should BeLike '0x010100*' 
-        }
 
     }
 

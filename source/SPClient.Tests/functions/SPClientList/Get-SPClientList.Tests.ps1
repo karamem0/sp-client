@@ -7,9 +7,9 @@ Describe 'Get-SPClientList' {
     Context 'Success' {
 
         It 'Returns all lists' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
             }
             $Result = Get-SPClientList @Params
             $Result | Should Not BeNullOrEmpty
@@ -17,9 +17,9 @@ Describe 'Get-SPClientList' {
         }
 
         It 'Returns a list by id' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Identity = $TestConfig.ListId
             }
             $Result = Get-SPClientList @Params
@@ -29,9 +29,9 @@ Describe 'Get-SPClientList' {
         }
 
         It 'Returns a list by url' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Url = $TestConfig.ListUrl
                 Retrievals = 'Title,RootFolder.ServerRelativeUrl'
             }
@@ -42,9 +42,9 @@ Describe 'Get-SPClientList' {
         }
 
         It 'Returns a list by title' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Name = $TestConfig.ListTitle
             }
             $Result = Get-SPClientList @Params
@@ -54,9 +54,9 @@ Describe 'Get-SPClientList' {
         }
 
         It 'Returns a list by internal name' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Name = $TestConfig.ListName
                 Retrievals = 'Title,RootFolder.Name'
             }
@@ -72,9 +72,9 @@ Describe 'Get-SPClientList' {
 
         It 'Throws an error when the list could not be found by id' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
                 $Params = @{
-                    ParentObject = $Web
+                    ParentWeb = $Web
                     Identity = '080F7947-C4F0-4796-A055-D3FDEE1E9D82'
                 }
                 $Result = Get-SPClientList @Params
@@ -85,9 +85,9 @@ Describe 'Get-SPClientList' {
 
         It 'Throws an error when the list could not be found by url' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
                 $Params = @{
-                    ParentObject = $Web
+                    ParentWeb = $Web
                     Url = "$($TestConfig.WebUrl)/Lists/TestList0"
                 }
                 $Result = Get-SPClientList @Params
@@ -98,9 +98,9 @@ Describe 'Get-SPClientList' {
 
         It 'Throws an error when the list could not be found by name' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
                 $Params = @{
-                    ParentObject = $Web
+                    ParentWeb = $Web
                     Name = 'TestList0'
                 }
                 $Result = Get-SPClientList @Params

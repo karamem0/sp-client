@@ -17,8 +17,10 @@ Describe 'New-SPClientGroup' {
         }
 
         It 'Creates a new group with mandatory parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $User = Get-SPClientUser -Current
+            $Web = $SPClient.ClientContext.Site.RootWeb
+            $User = $Web.CurrentUser
+            $SPClient.ClientContext.Load($User)
+                $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 Name = 'Test Group 0'
                 Retrievals = '*,Owner.Id,Users.Include(Id)'
@@ -32,8 +34,8 @@ Describe 'New-SPClientGroup' {
         }
 
         It 'Creates a new group with all parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $User = Get-SPClientUser -Identity $TestConfig.UserId
+            $Web = $SPClient.ClientContext.Site.RootWeb
+            $User = $Web.SiteUsers.GetById($TestConfig.UserId)
             $Params = @{
                 Name = 'Test Group 0'
                 Description = 'Test Group 0'

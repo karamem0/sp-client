@@ -30,7 +30,7 @@ function Get-SPClientListItem {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentList
   Indicates the list which the list items are contained.
 .PARAMETER FolderUrl
   Indicates the folder relative url.
@@ -52,6 +52,8 @@ function Get-SPClientListItem {
   This parameter is used for item pagination.
 .PARAMETER Identity
   Indicates the list item ID.
+.PARAMETER IdentityGuid
+  Indicates the list item GUID.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -60,11 +62,12 @@ function Get-SPClientListItem {
     param (
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'IdentityGuid')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
-        $ParentObject,
+        $ParentList,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [string]
         $FolderUrl,
@@ -88,6 +91,10 @@ function Get-SPClientListItem {
         [Alias('Id')]
         [int]
         $Identity,
+        [Parameter(Mandatory = $true, ParameterSetName = 'IdentityGuid')]
+        [Alias('UniqueId')]
+        [guid]
+        $IdentityGuid,
         [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
@@ -108,32 +115,28 @@ function Get-SPClientListItem {
                 $ViewElement.SetAttribute('Scope', $Scope)
             }
             if ($MyInvocation.BoundParameters.ContainsKey('ViewFields')) {
-                $ViewFieldsElement = $XmlDocument.CreateElement('ViewFields')
-                $ViewElement.AppendChild($ViewFieldsElement) | Out-Null
-                $ViewFields | ForEach-Object {
-                    $FieldRefElement = $XmlDocument.CreateElement('FieldRef')
-                    $FieldRefElement.SetAttribute('Name', $_)
-                    $ViewFieldsElement.AppendChild($FieldRefElement) | Out-Null
+                $ViewFieldsElement = $ViewElement.AppendChild($XmlDocument.CreateElement('ViewFields'))
+                foreach ($ViewField in $ViewFields) {
+                    $FieldRefElement = $ViewFieldsElement.AppendChild($XmlDocument.CreateElement('FieldRef'))
+                    $FieldRefElement.SetAttribute('Name', $ViewField)
                 }
             }
             if ($MyInvocation.BoundParameters.ContainsKey('Query')) {
-                $QueryElement = $XmlDocument.CreateElement('Query')
+                $QueryElement = $ViewElement.AppendChild($XmlDocument.CreateElement('Query'))
                 $QueryElement.InnerXml = $Query
                 if ($QueryElement.FirstChild.Name -eq 'Query') {
                     $QueryElement = $QueryElement.FirstChild
                 }
-                $ViewElement.AppendChild($QueryElement) | Out-Null
             }
             if ($MyInvocation.BoundParameters.ContainsKey('RowLimit')) {
-                $RowLimitElement = $XmlDocument.CreateElement('RowLimit')
+                $RowLimitElement = $ViewElement.AppendChild($XmlDocument.CreateElement('RowLimit'))
                 $RowLimitElement.InnerText = $RowLimit
-                $ViewElement.AppendChild($RowLimitElement) | Out-Null
             }
             if ($MyInvocation.BoundParameters.ContainsKey('Position')) {
                 $Caml.ListItemCollectionPosition = $Position
             }
             $Caml.ViewXml = $XmlDocument.InnerXml
-            $ClientObjectCollection = $ParentObject.GetItems($Caml)
+            $ClientObjectCollection = $ParentList.GetItems($Caml)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
@@ -143,10 +146,10 @@ function Get-SPClientListItem {
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
-                $ParentObject.Path, `
+                $ParentList.Path, `
                 'GetItemById', `
                 [object[]]$Identity)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.ListItem($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.ListItem($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -155,6 +158,30 @@ function Get-SPClientListItem {
             trap {
                 throw 'The specified list item could not be found.'
             }
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'IdentityGuid') {
+            $Caml = New-object Microsoft.SharePoint.Client.CamlQuery
+            $Caml.ViewXml =  `
+                '<View Scope="RecursiveAll">' + `
+                '<RowLimit>1</RowLimit>' + `
+                '<Query>' + `
+                '<Where>' + `
+                '<Eq>' + `
+                '<FieldRef Name="UniqueId"/>' + `
+                '<Value Type="Guid">' + $IdentityGuid + '</Value>' + `
+                '</Eq>' + `
+                '</Where>' + `
+                '</Query>' + `
+                '</View>'
+            $ClientObjectCollection = $ParentList.GetItems($Caml)
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $ClientObjectCollection `
+                -Retrievals $Retrievals
+            if ($ClientObjectCollection.Count -eq 0) {
+                throw 'The specified list item could not be found.'
+            }
+            Write-Output $ClientObjectCollection[0]
         }
     }
 

@@ -28,8 +28,8 @@ function Get-SPClientUser {
 .SYNOPSIS
   Lists all site users or retrieve the specified site user.
 .DESCRIPTION
-  If not specified 'Identitiy', 'Name', 'Email' and 'Current', returns site
-  all users. Otherwise, returns a user which matches the parameter.
+  If not specified filterable parameter, returns site all users. Otherwise,
+  returns a user which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
@@ -58,7 +58,7 @@ function Get-SPClientUser {
         [int]
         $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
-        [Alias('Title')]
+        [Alias('LoginName')]
         [string]
         $Name,
         [Parameter(Mandatory = $true, ParameterSetName = 'Email')]
@@ -90,7 +90,7 @@ function Get-SPClientUser {
                 $ClientObjectCollection.Path, `
                 'GetById', `
                 [object[]]$Identity)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -106,7 +106,7 @@ function Get-SPClientUser {
                 $ClientObjectCollection.Path, `
                 'GetByLoginName', `
                 [object[]]$Name)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -122,7 +122,7 @@ function Get-SPClientUser {
                 $ClientObjectCollection.Path, `
                 'GetByEmail', `
                 [object[]]$Email)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

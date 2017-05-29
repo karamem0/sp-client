@@ -1,12 +1,7 @@
 ﻿#Requires -Version 3.0
 
-$CommonProgramFiles = $Env:CommonProgramFiles
-if (-not [System.Environment]::Is64BitProcess -and
-    -not [string]::IsNullOrEmpty($Env:CommonProgramW6432)) {
-    $CommonProgramFiles = $Env:CommonProgramW6432
-}
-Add-Type -Path "$($CommonProgramFiles)\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.dll"
-Add-Type -Path "$($CommonProgramFiles)\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.Runtime.dll"
+Add-Type -Path "$($PSScriptRoot)\..\..\lib\Microsoft.SharePoint.Client.dll"
+Add-Type -Path "$($PSScriptRoot)\..\..\lib\Microsoft.SharePoint.Client.Runtime.dll"
 
 $UserName = $Env:LoginUserName
 $Password = ConvertTo-SecureString -String $Env:LoginPassword -AsPlainText -Force

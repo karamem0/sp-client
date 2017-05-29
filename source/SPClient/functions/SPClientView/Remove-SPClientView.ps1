@@ -32,7 +32,7 @@ function Remove-SPClientView {
   If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the view to delete.
-.PARAMETER ParentObject
+.PARAMETER ParentList
   Indicates the list which the view is contained.
 .PARAMETER Identity
   Indicates the view GUID.
@@ -54,7 +54,7 @@ function Remove-SPClientView {
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Title')]
         [Microsoft.SharePoint.Client.List]
-        $ParentObject,
+        $ParentList,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -79,14 +79,14 @@ function Remove-SPClientView {
                     -Retrievals 'Id'
             }
         } else {
-            $ClientObjectCollection = $ParentObject.Views
+            $ClientObjectCollection = $ParentList.Views
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ClientObjectCollection.Path, `
                     'GetById', `
                     [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
@@ -111,7 +111,7 @@ function Remove-SPClientView {
                     $ClientObjectCollection.Path, `
                     'GetByTitle', `
                     [object[]]$Title)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `

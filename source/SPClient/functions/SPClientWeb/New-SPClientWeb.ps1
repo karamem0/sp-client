@@ -30,7 +30,7 @@ function New-SPClientWeb {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentWeb
   Indicates the web which a web to be created.
 .PARAMETER Url
   Indicates the url.
@@ -57,7 +57,7 @@ function New-SPClientWeb {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
-        $ParentObject,
+        $ParentWeb,
         [Parameter(Mandatory = $true)]
         [string]
         $Url,
@@ -92,7 +92,7 @@ function New-SPClientWeb {
         $Creation.Title = $Title
         $Creation.Description = $Description
         $Creation.UseSamePermissionsAsParentSite = -not $UniquePermissions
-        $ClientObject = $ParentObject.Webs.Add($Creation)
+        $ClientObject = $ParentWeb.Webs.Add($Creation)
         $ClientObject.Update()
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `

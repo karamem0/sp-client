@@ -22,13 +22,13 @@ Describe 'New-SPClientListItemAttachment' {
         It 'Creates a new attachment by stream' {
             $Buffer = [System.Text.Encoding]::UTF8.GetBytes('TestAttachment0')
             $Stream = New-Object System.IO.MemoryStream(@(, $Buffer))
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
-            $ListItem = Get-SPClientListItem -ParentObject $List -Identity $TestConfig.ListItemId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $ListItem = $List.GetItemById($TestConfig.ListItemId)
             $Params = @{
-                ParentObject = $ListItem
+                ParentListItem = $ListItem
                 ContentStream = $Stream
-                FileName = 'TestAttachment0.txt'
+                Name = 'TestAttachment0.txt'
             }
             $Result = New-SPClientListItemAttachment @Params
             $Result | Should Not BeNullOrEmpty
@@ -40,11 +40,11 @@ Describe 'New-SPClientListItemAttachment' {
             $FolderPath = [System.IO.Path]::GetTempPath()
             $FilePath = [System.IO.Path]::Combine($FolderPath, 'TestAttachment0.txt')
             [System.IO.File]::WriteAllText($FilePath, 'TestAttachment0')
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
-            $ListItem = Get-SPClientListItem -ParentObject $List -Identity $TestConfig.ListItemId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $ListItem = $List.GetItemById($TestConfig.ListItemId)
             $Params = @{
-                ParentObject = $ListItem
+                ParentListItem = $ListItem
                 ContentPath = $FilePath
             }
             $Result = New-SPClientListItemAttachment @Params
@@ -56,13 +56,13 @@ Describe 'New-SPClientListItemAttachment' {
         It 'Creates a new attachment by path and file name' {
             $FilePath = [System.IO.Path]::GetTempFileName()
             [System.IO.File]::WriteAllText($FilePath, 'TestAttachment0')
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
-            $ListItem = Get-SPClientListItem -ParentObject $List -Identity $TestConfig.ListItemId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $ListItem = $List.GetItemById($TestConfig.ListItemId)
             $Params = @{
-                ParentObject = $ListItem
+                ParentListItem = $ListItem
                 ContentPath = $FilePath
-                FileName = 'TestAttachment0.txt'
+                Name = 'TestAttachment0.txt'
             }
             $Result = New-SPClientListItemAttachment @Params
             $Result | Should Not BeNullOrEmpty

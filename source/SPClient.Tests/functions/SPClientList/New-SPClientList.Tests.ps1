@@ -18,9 +18,9 @@ Describe 'New-SPClientList' {
         }
 
         It 'Creates a new list with mandatory parameters' {
-            $Web = Get-SPClientWeb -Url $TestConfig.WebUrl
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Name = 'TestList0'
             }
             $Result = New-SPClientList @Params
@@ -37,9 +37,9 @@ Describe 'New-SPClientList' {
         }
 
         It 'Creates a new list with all parameters' {
-            $Web = Get-SPClientWeb -Url $TestConfig.WebUrl
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{ 
-                ParentObject = $Web
+                ParentWeb = $Web
                 Name = 'TestList0'
                 Title = 'Test List 0'
                 Description = 'Test List 0'

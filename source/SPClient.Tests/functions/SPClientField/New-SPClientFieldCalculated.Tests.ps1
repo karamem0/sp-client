@@ -24,10 +24,10 @@ Describe 'New-SPClientFieldCalculated' {
         }
 
         It 'Creates a new field with mandatory parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestField0'
                 Formula = '=[Test Field 1]&[Test Field 3]'
                 FieldRefs = @('TestField1','TestField3')
@@ -44,16 +44,16 @@ Describe 'New-SPClientFieldCalculated' {
         }
 
         It 'Creates a new field of Number' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestField0'
                 Identity = '2F992681-3273-4C8C-BACD-8B7A9BBA0EE4'
                 Title = 'Test Field 0'
                 Description = 'Test Field 0'
-                Formula = '=[Test Field 4]'
-                FieldRefs = @('TestField4')
+                Formula = '=[Test Field 5]'
+                FieldRefs = @('TestField5')
                 OutputType = 'Number'
                 Decimals = 2
                 Percentage = $true
@@ -70,16 +70,16 @@ Describe 'New-SPClientFieldCalculated' {
         }
 
         It 'Creates a new field of Currency' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestField0'
                 Identity = '2F992681-3273-4C8C-BACD-8B7A9BBA0EE4'
                 Title = 'Test Field 0'
                 Description = 'Test Field 0'
-                Formula = '=[Test Field 5]'
-                FieldRefs = @('TestField5')
+                Formula = '=[Test Field 6]'
+                FieldRefs = @('TestField6')
                 OutputType = 'Currency'
                 Decimals = 2
                 LocaleId = 1041
@@ -96,16 +96,16 @@ Describe 'New-SPClientFieldCalculated' {
         }
 
         It 'Creates a new field of DateTime' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestField0'
                 Identity = '2F992681-3273-4C8C-BACD-8B7A9BBA0EE4'
                 Title = 'Test Field 0'
                 Description = 'Test Field 0'
-                Formula = '=[Test Field 6]'
-                FieldRefs = @('TestField6')
+                Formula = '=[Test Field 7]'
+                FieldRefs = @('TestField7')
                 OutputType = 'DateTime'
                 DateFormat = 'DateOnly'
                 AddToDefaultView = $true
@@ -122,16 +122,16 @@ Describe 'New-SPClientFieldCalculated' {
         }
 
         It 'Creates a new field of Boolean' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestField0'
                 Identity = '2F992681-3273-4C8C-BACD-8B7A9BBA0EE4'
                 Title = 'Test Field 0'
                 Description = 'Test Field 0'
-                Formula = '=[Test Field 7]'
-                FieldRefs = @('TestField7')
+                Formula = '=[Test Field 10]'
+                FieldRefs = @('TestField10')
                 OutputType = 'Boolean'
             }
             $Result = New-SPClientFieldCalculated @Params

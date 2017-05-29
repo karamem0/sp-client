@@ -28,11 +28,11 @@ function Get-SPClientList {
 .SYNOPSIS
   Lists all lists or retrieve the specified list.
 .DESCRIPTION
-  If not specified 'Identity', 'Url' and 'Name', returns all lists. Otherwise,
-  returns a list which matches the parameter.
+  If not specified filterable parameter, returns all lists of the web.
+  Otherwise, returns a list which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
-.PARAMETER ParentObject
+.PARAMETER ParentWeb
   Indicates the web which the lists are contained.
 .PARAMETER Identity
   Indicates the list GUID.
@@ -54,7 +54,7 @@ function Get-SPClientList {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
-        $ParentObject,
+        $ParentWeb,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -75,7 +75,7 @@ function Get-SPClientList {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObjectCollection = $ParentObject.Lists
+        $ClientObjectCollection = $ParentWeb.Lists
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
@@ -89,7 +89,7 @@ function Get-SPClientList {
                 $ClientObjectCollection.Path, `
                 'GetById', `
                 [object[]]$Identity)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -102,10 +102,10 @@ function Get-SPClientList {
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
-                $ParentObject.Path, `
+                $ParentWeb.Path, `
                 'GetList', `
                 [object[]]$Url)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -122,7 +122,7 @@ function Get-SPClientList {
                     $ClientObjectCollection.Path, `
                     'GetByTitle', `
                     [object[]]$Name)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `

@@ -12,7 +12,7 @@
 # RootModule = 'Module.psd1'
 
 # Version number of this module.
-ModuleVersion = '0.8'
+ModuleVersion = '0.9'
 
 # ID used to uniquely identify this module
 GUID = '70F6C652-6C79-4B8B-B4A9-79635EA6AE9C'
@@ -67,12 +67,12 @@ NestedModules = @('SPClient.psm1')
 
 # Functions to export from this module
 FunctionsToExport = @(
-    'Connect-SPClientContext'
-    'Disconnect-SPClientContext'
-    'Convert-SPClientField'
     'Get-SPClientContentType'
     'New-SPClientContentType'
     'Remove-SPClientContentType'
+    'Connect-SPClientContext'
+    'Disconnect-SPClientContext'
+    'Convert-SPClientField'
     'Get-SPClientField'
     'New-SPClientFieldBoolean'
     'New-SPClientFieldCalculated'
@@ -85,12 +85,21 @@ FunctionsToExport = @(
     'New-SPClientFieldText'
     'New-SPClientFieldUrl'
     'Remove-SPClientField'
+    'ConvertTo-SPClientFile'
+    'Get-SPClientFile'
+    'New-SPClientFile'
+    'Remove-SPClientFile'
+    'ConvertTo-SPClientFolder'
+    'Get-SPClientFolder'
+    'New-SPClientFolder'
+    'Remove-SPClientFolder'
     'Get-SPClientGroup'
     'New-SPClientGroup'
     'Remove-SPClientGroup'
     'Get-SPClientList'
     'New-SPClientList'
     'Remove-SPClientList'
+    'ConvertTo-SPClientListItem'
     'Get-SPClientListItem'
     'New-SPClientListItem'
     'Remove-SPClientListItem'
@@ -101,8 +110,8 @@ FunctionsToExport = @(
     'Clear-SPClientPermission'
     'Revoke-SPClientPermission'
     'Use-SPClientType'
-    'Enable-SPClientUniquePermission'
     'Disable-SPClientUniquePermission'
+    'Enable-SPClientUniquePermission'
     'Get-SPClientUser'
     'New-SPClientUser'
     'Remove-SPClientUser'

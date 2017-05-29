@@ -30,7 +30,7 @@ function New-SPClientListItem {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentList
   Indicates the list which a list item to be created.
 .PARAMETER FieldValues
   Indicates the field key/value collection.
@@ -45,7 +45,7 @@ function New-SPClientListItem {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
-        $ParentObject,
+        $ParentList,
         [Parameter(Mandatory = $false)]
         [hashtable]
         $FieldValues,
@@ -59,7 +59,7 @@ function New-SPClientListItem {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
         $Creation = New-Object Microsoft.SharePoint.Client.ListItemCreationInformation
-        $ClientObject = $ParentObject.AddItem($Creation)
+        $ClientObject = $ParentList.AddItem($Creation)
         if ($MyInvocation.BoundParameters.ContainsKey('FieldValues')) {
             $FieldValues.GetEnumerator() | ForEach-Object {
                 $ClientObject[$_.Name] = $_.Value

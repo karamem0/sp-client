@@ -21,8 +21,10 @@ Describe 'Remove-SPClientContentType' {
         }
 
         It 'Removes a content type by loaded client object' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $ContentType = Get-SPClientContentType -ParentObject $Web -Identity '0x0100E29372CEECF346BD82ADB95FFF0C637D'
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $ContentType = $Web.ContentTypes.GetById('0x0100E29372CEECF346BD82ADB95FFF0C637D')
+            $SPClient.ClientContext.Load($ContentType)
+            $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 ClientObject = $ContentType
             }
@@ -31,7 +33,7 @@ Describe 'Remove-SPClientContentType' {
         }
 
         It 'Removes a content type by unloaded client object' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $ContentType = $Web.ContentTypes.GetById('0x0100E29372CEECF346BD82ADB95FFF0C637D')
             $Params = @{
                 ClientObject = $ContentType
@@ -41,9 +43,9 @@ Describe 'Remove-SPClientContentType' {
         }
 
         It 'Removes a content type by id' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Identity = '0x0100E29372CEECF346BD82ADB95FFF0C637D'
             }
             $Result = Remove-SPClientContentType @Params
@@ -51,9 +53,9 @@ Describe 'Remove-SPClientContentType' {
         }
 
         It 'Removes a content type by name' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Name = 'Test Content Type 0'
             }
             $Result = Remove-SPClientContentType @Params
@@ -66,9 +68,9 @@ Describe 'Remove-SPClientContentType' {
 
         It 'Throws an error when the content type could not be found by id' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
                 $Params = @{
-                    ParentObject = $Web
+                    ParentWeb = $Web
                     Identity = '0x0100E29372CEECF346BD82ADB95FFF0C637D'
                 }
                 $Result = Remove-SPClientContentType @Params
@@ -79,9 +81,9 @@ Describe 'Remove-SPClientContentType' {
 
         It 'Throws an error when the content type could not be found by name' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
                 $Params = @{
-                    ParentObject = $Web
+                    ParentWeb = $Web
                     Name = 'Test Content Type 0'
                 }
                 $Result = Remove-SPClientContentType @Params

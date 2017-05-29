@@ -9,7 +9,7 @@ Describe 'Remove-SPClientListItem' {
         BeforeEach {
             try {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+                $List = $Web.Lists.GetById($TestConfig.ListId)
                 $ListItem = New-Object Microsoft.SharePoint.Client.ListItemCreationInformation
                 $ListItem = $List.AddItem($ListItem)
                 $ListItem['Title'] = 'Test List Item 0'
@@ -22,17 +22,24 @@ Describe 'Remove-SPClientListItem' {
         }
 
         It 'Removes a list item by loaded client object' {
-            $Query = `
+            $Caml = New-Object Microsoft.SharePoint.Client.CamlQuery
+            $Caml.ViewXml = `
+                '<View>' + `
+                '<Query>' + `
                 '<Where>' + `
                 '<Eq>' + `
                 '<FieldRef Name="Title" />' + `
                 '<Value Type="Text">Test List Item 0</Value>' + `
                 '</Eq>' + `
-                '</Where>'
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
-            $ListItem = Get-SPClientListItem -ParentObject $List -Query $Query
-            $ListItem = $ListItem[0]
+                '</Where>' + `
+                '</Query>' + `
+                '</View>'
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $ListItems = $List.GetItems($Caml)
+            $SPClient.ClientContext.Load($ListItems)
+            $SPClient.ClientContext.ExecuteQuery()
+            $ListItem = $ListItems[0]
             $Params = @{
                 ClientObject = $ListItem
             }
@@ -41,17 +48,24 @@ Describe 'Remove-SPClientListItem' {
         }
 
         It 'Removes a list item by unloaded client object' {
-            $Query = `
+            $Caml = New-Object Microsoft.SharePoint.Client.CamlQuery
+            $Caml.ViewXml = `
+                '<View>' + `
+                '<Query>' + `
                 '<Where>' + `
                 '<Eq>' + `
                 '<FieldRef Name="Title" />' + `
                 '<Value Type="Text">Test List Item 0</Value>' + `
                 '</Eq>' + `
-                '</Where>'
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
-            $ListItem = Get-SPClientListItem -ParentObject $List -Query $Query
-            $ListItem = $ListItem[0]
+                '</Where>' + `
+                '</Query>' + `
+                '</View>'
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $ListItems = $List.GetItems($Caml)
+            $SPClient.ClientContext.Load($ListItems)
+            $SPClient.ClientContext.ExecuteQuery()
+            $ListItem = $ListItems[0]
             $ListItem = $List.GetItemById($ListItem.Id)
             $Params = @{
                 ClientObject = $ListItem
@@ -61,19 +75,26 @@ Describe 'Remove-SPClientListItem' {
         }
 
         It 'Removes a list item by id' {
-            $Query = `
+            $Caml = New-Object Microsoft.SharePoint.Client.CamlQuery
+            $Caml.ViewXml = `
+                '<View>' + `
+                '<Query>' + `
                 '<Where>' + `
                 '<Eq>' + `
                 '<FieldRef Name="Title" />' + `
                 '<Value Type="Text">Test List Item 0</Value>' + `
                 '</Eq>' + `
-                '</Where>'
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
-            $ListItem = Get-SPClientListItem -ParentObject $List -Query $Query
-            $ListItem = $ListItem[0]
+                '</Where>' + `
+                '</Query>' + `
+                '</View>'
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $ListItems = $List.GetItems($Caml)
+            $SPClient.ClientContext.Load($ListItems)
+            $SPClient.ClientContext.ExecuteQuery()
+            $ListItem = $ListItems[0]
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Identity = $ListItem.Id
             }
             $Result = Remove-SPClientListItem @Params
@@ -86,10 +107,10 @@ Describe 'Remove-SPClientListItem' {
 
         It 'Throws an error when the list could not be found by id' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-                $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $List = $Web.Lists.GetById($TestConfig.ListId)
                 $Params = @{
-                    ParentObject = $List
+                    ParentList = $List
                     Identity = -1
                 }
                 $Result = Remove-SPClientListItem @Params

@@ -28,12 +28,12 @@ function Get-SPClientListItemAttachment {
 .SYNOPSIS
   Lists all attachments or retrieve the specified attachment.
 .DESCRIPTION
-  If not specified 'FileName', returns all attachments. Otherwise, returns a
-  attachment which matches the parameter.
+  If not specified filterable parameter, returns all attachments of the list
+  item. Otherwise, returns a attachment which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentListItem
   Indicates the list item which the attachments are contained.
 .PARAMETER FileName
   Indicates the attachment file name.
@@ -44,15 +44,15 @@ function Get-SPClientListItemAttachment {
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'FileName')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.ListItem]
-        $ParentObject,
-        [Parameter(Mandatory = $true, ParameterSetName = 'FileName')]
+        $ParentListItem,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
         [string]
-        $FileName,
+        $Name,
         [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
@@ -62,7 +62,7 @@ function Get-SPClientListItemAttachment {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObjectCollection = $ParentObject.AttachmentFiles
+        $ClientObjectCollection = $ParentListItem.AttachmentFiles
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
@@ -70,13 +70,13 @@ function Get-SPClientListItemAttachment {
                 -Retrievals $Retrievals
             Write-Output @(, $ClientObjectCollection)
         }
-        if ($PSCmdlet.ParameterSetName -eq 'FileName') {
+        if ($PSCmdlet.ParameterSetName -eq 'Name') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
                 $ClientObjectCollection.Path, `
                 'GetByFileName', `
-                [object[]]$FileName)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.Attachment($ClientContext, $PathMethod);
+                [object[]]$Name)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.Attachment($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

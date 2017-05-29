@@ -32,7 +32,7 @@ function Remove-SPClientContentType {
   If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the content type to delete.
-.PARAMETER ParentObject
+.PARAMETER ParentWeb
   Indicates the web which the content type is contained.
 .PARAMETER Identity
   Indicates the content type ID.
@@ -51,7 +51,7 @@ function Remove-SPClientContentType {
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.Web]
-        $ParentObject,
+        $ParentWeb,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [string]
@@ -73,14 +73,14 @@ function Remove-SPClientContentType {
                     -Retrievals 'Id'
             }
         } else {
-            $ClientObjectCollection = $ParentObject.ContentTypes
+            $ClientObjectCollection = $ParentWeb.ContentTypes
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ClientObjectCollection.Path, `
                     'GetById', `
                     [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.ContentType($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.ContentType($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `

@@ -21,7 +21,7 @@ Describe 'Use-SPClientType' {
 
         It 'Loads assemblies from literal path' {
             $Params = @{
-                LiteralPath = 'C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI'
+                LiteralPath = "$($PSScriptRoot)\..\..\..\..\lib"
             }
             $Result = Use-SPClientType @Params
             $Result | Should BeNullOrEmpty

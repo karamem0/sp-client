@@ -13,6 +13,7 @@ Describe 'Revoke-SPClientPermission' {
                 $List.Title = 'TestList0'
                 $List.TemplateType = 100
                 $List = $Web.Lists.Add($List)
+                $List.Title = 'Test List 0'
                 $List.Update()
                 $SPClient.ClientContext.Load($List)
                 $SPClient.ClientContext.ExecuteQuery()
@@ -24,7 +25,7 @@ Describe 'Revoke-SPClientPermission' {
         AfterEach {
             try {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetByTitle('TestList0')
+                $List = $Web.Lists.GetByTitle('Test List 0')
                 $List.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
             } catch {
@@ -33,9 +34,9 @@ Describe 'Revoke-SPClientPermission' {
         }
 
         It 'Revokes a permission by role name' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
-            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('Test List 0')
+            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Full Control')
@@ -51,9 +52,9 @@ Describe 'Revoke-SPClientPermission' {
         }
 
         It 'Revokes a permission by role type' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
-            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('Test List 0')
+            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Full Control')
@@ -69,9 +70,9 @@ Describe 'Revoke-SPClientPermission' {
         }
 
         It 'Revokes permissions by role name' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
-            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('Test List 0')
+            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition1 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Read')
@@ -94,9 +95,9 @@ Describe 'Revoke-SPClientPermission' {
         }
 
         It 'Revokes permissions by role type' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
-            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('Test List 0')
+            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition1 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Read')
@@ -124,9 +125,9 @@ Describe 'Revoke-SPClientPermission' {
 
         It 'Throws an error when has not unique permission' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-                $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
-                $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
+                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
                 $Params = @{
                     ClientObject = $List
                     Member = $Group

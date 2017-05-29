@@ -30,7 +30,7 @@ function New-SPClientFieldBoolean {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentList
   Indicates the list which a field to be created.
 .PARAMETER Name
   Indicates the internal name.
@@ -57,7 +57,7 @@ function New-SPClientFieldBoolean {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
-        $ParentObject,
+        $ParentList,
         [Parameter(Mandatory = $true)]
         [string]
         $Name,
@@ -108,7 +108,7 @@ function New-SPClientFieldBoolean {
             $FieldElement.AppendChild($DefaultElement) | Out-Null
         }
         $AddFieldOptions = [Microsoft.SharePoint.Client.AddFieldOptions]::AddFieldInternalNameHint
-        $ClientObject = $ParentObject.Fields.AddFieldAsXml($XmlDocument.InnerXml, $AddToDefaultView, $AddFieldOptions)
+        $ClientObject = $ParentList.Fields.AddFieldAsXml($XmlDocument.InnerXml, $AddToDefaultView, $AddFieldOptions)
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `

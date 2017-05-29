@@ -30,7 +30,7 @@ function New-SPClientContentType {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentWeb
   Indicates the web which a content type to be created.
 .PARAMETER Name
   Indicates the internal name.
@@ -39,7 +39,7 @@ function New-SPClientContentType {
 .PARAMETER Group
   Indicates the group name.
 .PARAMETER ParentContentType
-  Indicates the ID or name of parent content type.
+  Indicates the parent content type.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
 #>
@@ -51,7 +51,7 @@ function New-SPClientContentType {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
-        $ParentObject,
+        $ParentWeb,
         [Parameter(Mandatory = $true)]
         [string]
         $Name,
@@ -62,7 +62,7 @@ function New-SPClientContentType {
         [string]
         $Group,
         [Parameter(Mandatory = $false)]
-        [string]
+        [Microsoft.SharePoint.Client.ContentType]
         $ParentContentType,
         [Parameter(Mandatory = $false)]
         [string]
@@ -79,21 +79,15 @@ function New-SPClientContentType {
             $Creation.Group = $Group
         }
         if ($MyInvocation.BoundParameters.ContainsKey('ParentContentType')) {
-            $ContentTypeCollection = $ClientContext.Site.RootWeb.ContentTypes
-            Invoke-SPClientLoadQuery `
-                -ClientContext $ClientContext `
-                -ClientObject $ContentTypeCollection `
-                -Retrievals 'Include(StringId,Name)'
-            $ContentType = $ContentTypeCollection | Where-Object {
-                $_.StringId -eq $ParentContentType -or
-                $_.Name -eq $ParentContentType
+            if (-not $ParentContentType.IsPropertyAvailable('Id')) {
+                Invoke-SPClientLoadQuery `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ParentContentType `
+                    -Retrievals 'Id'
             }
-            if ($ContentType -eq $null) {
-                throw 'The specified content type could not be found.'
-            }
-            $Creation.ParentContentType = $ContentType
+            $Creation.ParentContentType = $ParentContentType
         }
-        $ClientObject = $ParentObject.ContentTypes.Add($Creation)
+        $ClientObject = $ParentWeb.ContentTypes.Add($Creation)
         $ClientObject.Description = $Description
         $ClientObject.Update($true)
         Invoke-SPClientLoadQuery `

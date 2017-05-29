@@ -53,7 +53,7 @@ function Remove-SPClientUser {
         [int]
         $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
-        [Alias('Title')]
+        [Alias('LoginName')]
         [string]
         $Name,
         [Parameter(Mandatory = $true, ParameterSetName = 'Email')]
@@ -80,7 +80,7 @@ function Remove-SPClientUser {
                     $ClientObjectCollection.Path, `
                     'GetById', `
                     [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
@@ -95,7 +95,7 @@ function Remove-SPClientUser {
                     $ClientObjectCollection.Path, `
                     'GetByLoginName', `
                     [object[]]$Name)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
@@ -110,7 +110,7 @@ function Remove-SPClientUser {
                     $ClientObjectCollection.Path, `
                     'GetByEmail', `
                     [object[]]$Email)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `

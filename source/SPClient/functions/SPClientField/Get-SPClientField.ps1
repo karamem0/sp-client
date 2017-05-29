@@ -28,12 +28,12 @@ function Get-SPClientField {
 .SYNOPSIS
   Lists all fields or retrieve the specified field.
 .DESCRIPTION
-  If not specified 'Identity' and 'Name', returns all fields. Otherwise,
-  returns a field which matches the parameter.
+  If not specified filterable parameter, returns all fields of the list.
+  Otherwise, returns a field which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentList
   Indicates the list which the fields are contained.
 .PARAMETER Identity
   Indicates the field GUID.
@@ -52,7 +52,7 @@ function Get-SPClientField {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
-        $ParentObject,
+        $ParentList,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -70,7 +70,7 @@ function Get-SPClientField {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObjectCollection = $ParentObject.Fields
+        $ClientObjectCollection = $ParentList.Fields
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
@@ -84,7 +84,7 @@ function Get-SPClientField {
                 $ClientObjectCollection.Path, `
                 'GetById', `
                 [object[]]$Identity)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -100,7 +100,7 @@ function Get-SPClientField {
                 $ClientObjectCollection.Path, `
                 'GetByInternalNameOrTitle', `
                 [object[]]$Name)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

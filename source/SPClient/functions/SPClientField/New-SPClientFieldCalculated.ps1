@@ -30,7 +30,7 @@ function New-SPClientFieldCalculated {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentList
   Indicates the list which a field to be created.
 .PARAMETER Name
   Indicates the internal name.
@@ -76,7 +76,7 @@ function New-SPClientFieldCalculated {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
-        $ParentObject,
+        $ParentList,
         [Parameter(Mandatory = $true)]
         [string]
         $Name,
@@ -137,18 +137,15 @@ function New-SPClientFieldCalculated {
             $FieldElement.SetAttribute('Description', $Description)
         }
         if ($MyInvocation.BoundParameters.ContainsKey('Formula')) {
-            $FormulaElement = $XmlDocument.CreateElement('Formula')
+            $FormulaElement = $FieldElement.AppendChild($XmlDocument.CreateElement('Formula'))
             $FormulaElement.InnerText = $Formula
-            $FieldElement.AppendChild($FormulaElement) | Out-Null
         }
         if ($MyInvocation.BoundParameters.ContainsKey('FieldRefs')) {
-            $FieldRefsElement = $XmlDocument.CreateElement('FieldRefs')
-            $FieldRefs | ForEach-Object {
-                $FieldRefElement = $XmlDocument.CreateElement('FieldRef')
-                $FieldRefElement.SetAttribute('Name', $_)
-                $FieldRefsElement.AppendChild($FieldRefElement) | Out-Null
+            $FieldRefsElement = $FieldElement.AppendChild($XmlDocument.CreateElement('FieldRefs'))
+            foreach ($FieldRef in $FieldRefs) {
+                $FieldRefElement = $FieldRefsElement.AppendChild($XmlDocument.CreateElement('FieldRef'))
+                $FieldRefElement.SetAttribute('Name', $FieldRef)
             }
-            $FieldElement.AppendChild($FieldRefsElement) | Out-Null
         }
         if ($MyInvocation.BoundParameters.ContainsKey('OutputType')) {
             $FieldElement.SetAttribute('ResultType', $OutputType)
@@ -166,7 +163,7 @@ function New-SPClientFieldCalculated {
             $FieldElement.SetAttribute('Format', $DateFormat)
         }
         $AddFieldOptions = [Microsoft.SharePoint.Client.AddFieldOptions]::AddFieldInternalNameHint
-        $ClientObject = $ParentObject.Fields.AddFieldAsXml($XmlDocument.InnerXml, $AddToDefaultView, $AddFieldOptions)
+        $ClientObject = $ParentList.Fields.AddFieldAsXml($XmlDocument.InnerXml, $AddToDefaultView, $AddFieldOptions)
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `

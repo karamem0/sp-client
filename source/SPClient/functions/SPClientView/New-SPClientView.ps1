@@ -30,7 +30,7 @@ function New-SPClientView {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentList
   Indicates the list which a view to be created.
 .PARAMETER Name
   Indicates the internal name.
@@ -62,7 +62,7 @@ function New-SPClientView {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
-        $ParentObject,
+        $ParentList,
         [Parameter(Mandatory = $true)]
         [string]
         $Name,
@@ -118,7 +118,7 @@ function New-SPClientView {
         $Creation.SetAsDefaultView = $SetAsDefaultView
         $Creation.ViewTypeKind = $ViewType
         $Creation.PersonalView = $PersonalView
-        $ClientObject = $ParentObject.Views.Add($Creation)
+        $ClientObject = $ParentList.Views.Add($Creation)
         $ClientObject.Title = $Title
         $ClientObject.Update()
         Invoke-SPClientLoadQuery `

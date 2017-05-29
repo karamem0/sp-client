@@ -32,7 +32,7 @@ function Remove-SPClientListItemAttachment {
   If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the attachment to delete.
-.PARAMETER ParentObject
+.PARAMETER ParentListItem
   Indicates the list item which the attachment is contained.
 .PARAMETER FileName
   Indicates the attachment file name.
@@ -48,7 +48,7 @@ function Remove-SPClientListItemAttachment {
         $ClientObject,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FileName')]
         [Microsoft.SharePoint.Client.ListItem]
-        $ParentObject,
+        $ParentListItem,
         [Parameter(Mandatory = $true, ParameterSetName = 'FileName')]
         [string]
         $FileName
@@ -66,14 +66,14 @@ function Remove-SPClientListItemAttachment {
                     -Retrievals 'FileName'
             }
         } else {
-            $ClientObjectCollection = $ParentObject.AttachmentFiles
+            $ClientObjectCollection = $ParentListItem.AttachmentFiles
             if ($PSCmdlet.ParameterSetName -eq 'FileName') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ClientObjectCollection.Path, `
                     'GetByFileName', `
                     [object[]]$FileName)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.Attachment($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Attachment($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `

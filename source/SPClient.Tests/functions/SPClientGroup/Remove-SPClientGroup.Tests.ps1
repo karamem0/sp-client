@@ -23,7 +23,10 @@ Describe 'Remove-SPClientGroup' {
         }
 
         It 'Removes a group by loaded client object' {
-            $Group = Get-SPClientGroup -Name 'Test Group 0'
+            $Web = $SPClient.ClientContext.Site.RootWeb
+            $Group = $Web.SiteGroups.GetByName('Test Group 0')
+            $SPClient.ClientContext.Load($Group)
+            $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 ClientObject = $Group
             }
@@ -42,7 +45,10 @@ Describe 'Remove-SPClientGroup' {
         }
 
         It 'Removes a group by id' {
-            $Group = Get-SPClientGroup -Name 'Test Group 0'
+            $Web = $SPClient.ClientContext.Site.RootWeb
+            $Group = $Web.SiteGroups.GetByName('Test Group 0')
+            $SPClient.ClientContext.Load($Group)
+            $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 Identity = $Group.Id
             }

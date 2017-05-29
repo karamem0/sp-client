@@ -28,11 +28,11 @@ function Get-SPClientContentType {
 .SYNOPSIS
   Lists all content types or retrieve the specified content type.
 .DESCRIPTION
-  If not specified 'Identity', returns all content types. Otherwise,
-  returns a content type which matches the parameter.
+  If not specified filterable parameter, returns all content types of the web.
+  Otherwise, returns a content type which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
-.PARAMETER ParentObject
+.PARAMETER ParentWeb
   Indicates the web which the content types are contained.
 .PARAMETER Identity
   Indicates the content type ID.
@@ -51,7 +51,7 @@ function Get-SPClientContentType {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
-        $ParentObject,
+        $ParentWeb,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [string]
@@ -68,7 +68,7 @@ function Get-SPClientContentType {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObjectCollection = $ParentObject.ContentTypes
+        $ClientObjectCollection = $ParentWeb.ContentTypes
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
@@ -82,7 +82,7 @@ function Get-SPClientContentType {
                 $ClientObjectCollection.Path, `
                 'GetById', `
                 [object[]]$Identity)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.ContentType($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.ContentType($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

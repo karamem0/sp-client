@@ -74,7 +74,7 @@ function Remove-SPClientWeb {
                     $ClientContext.Site.Path, `
                     'OpenWebById', `
                     [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
@@ -86,7 +86,7 @@ function Remove-SPClientWeb {
                     $ClientContext.Site.Path, `
                     'OpenWeb', `
                     [object[]]$Url)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `

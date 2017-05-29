@@ -26,7 +26,9 @@ Describe 'Remove-SPClientWeb' {
         }
 
         It 'Removes a web by loaded client object' {
-            $Web = Get-SPClientWeb -Url "$($TestConfig.WebUrl)/TestWeb0"
+            $Web = $SPClient.ClientContext.Site.OpenWeb("$($TestConfig.WebUrl)/TestWeb0")
+            $SPClient.ClientContext.Load($Web)
+            $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 ClientObject = $Web
             }
@@ -35,12 +37,7 @@ Describe 'Remove-SPClientWeb' {
         }
 
         It 'Removes a web by unloaded client object' {
-            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
-                $SPClient.ClientContext, `
-                $SPClient.ClientContext.Site.Path, `
-                'OpenWeb', `
-                [object[]]"$($TestConfig.WebUrl)/TestWeb0")
-            $Web = New-Object Microsoft.SharePoint.Client.Web($SPClient.ClientContext, $PathMethod);
+            $Web = $SPClient.ClientContext.Site.OpenWeb("$($TestConfig.WebUrl)/TestWeb0")
             $Params = @{
                 ClientObject = $Web
             }
@@ -49,7 +46,9 @@ Describe 'Remove-SPClientWeb' {
         }
 
         It 'Removes a web by id' {
-            $Web = Get-SPClientWeb -Url "$($TestConfig.WebUrl)/TestWeb0"
+            $Web = $SPClient.ClientContext.Site.OpenWeb("$($TestConfig.WebUrl)/TestWeb0")
+            $SPClient.ClientContext.Load($Web)
+            $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 Identity = $Web.Id
             }
@@ -58,7 +57,9 @@ Describe 'Remove-SPClientWeb' {
         }
 
         It 'Removes a web by url' {
-            $Web = Get-SPClientWeb -Url "$($TestConfig.WebUrl)/TestWeb0"
+            $Web = $SPClient.ClientContext.Site.OpenWeb("$($TestConfig.WebUrl)/TestWeb0")
+            $SPClient.ClientContext.Load($Web)
+            $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 Url = $Web.ServerRelativeUrl
             }

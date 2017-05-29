@@ -28,12 +28,12 @@ function Get-SPClientView {
 .SYNOPSIS
   Lists all views or retrieve the specified view.
 .DESCRIPTION
-  If not specified 'Identity', 'Name', and 'Default', returns all views.
+  If not specified filterable parameter, returns all views of the list.
   Otherwise, returns a view which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentList
   Indicates the list which the views are contained.
 .PARAMETER Identity
   Indicates the view GUID.
@@ -58,7 +58,7 @@ function Get-SPClientView {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
-        $ParentObject,
+        $ParentList,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -81,7 +81,7 @@ function Get-SPClientView {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObjectCollection = $ParentObject.Views
+        $ClientObjectCollection = $ParentList.Views
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
@@ -95,7 +95,7 @@ function Get-SPClientView {
                 $ClientObjectCollection.Path, `
                 'GetById', `
                 [object[]]$Identity)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -126,7 +126,7 @@ function Get-SPClientView {
                 $ClientObjectCollection.Path, `
                 'GetByTitle', `
                 [object[]]$Title)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod);
+            $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod)
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
@@ -137,7 +137,7 @@ function Get-SPClientView {
             }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Default') {
-            $ClientObject = $ParentObject.DefaultView
+            $ClientObject = $ParentList.DefaultView
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `

@@ -24,10 +24,13 @@ Describe 'New-SPClientFieldCurrency' {
         }
 
         It 'Creates a new field with mandatory parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId -Retrievals 'RegionalSettings'
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $SPClient.ClientContext.Load($Web)
+            $SPClient.ClientContext.Load($Web.RegionalSettings)
+            $SPClient.ClientContext.ExecuteQuery()
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestField0'
             }
             $Result = New-SPClientFieldCurrency @Params
@@ -46,10 +49,10 @@ Describe 'New-SPClientFieldCurrency' {
         }
 
         It 'Creates a new field with all parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestField0'
                 Identity = '2F992681-3273-4C8C-BACD-8B7A9BBA0EE4'
                 Title = 'Test Field 0'

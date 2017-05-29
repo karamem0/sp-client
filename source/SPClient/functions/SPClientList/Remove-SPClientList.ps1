@@ -32,7 +32,7 @@ function Remove-SPClientList {
   If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the list to delete.
-.PARAMETER ParentObject
+.PARAMETER ParentWeb
   Indicates the web which the list is contained.
 .PARAMETER Identity
   Indicates the list GUID.
@@ -54,7 +54,7 @@ function Remove-SPClientList {
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.Web]
-        $ParentObject,
+        $ParentWeb,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -80,14 +80,14 @@ function Remove-SPClientList {
                     -Retrievals 'Id'
             }
         } else {
-            $ClientObjectCollection = $ParentObject.Lists
+            $ClientObjectCollection = $ParentWeb.Lists
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ClientObjectCollection.Path, `
                     'GetById', `
                     [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
@@ -99,10 +99,10 @@ function Remove-SPClientList {
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
-                    $ParentObject.Path, `
+                    $ParentWeb.Path, `
                     'GetList', `
                     [object[]]$Url)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
@@ -118,7 +118,7 @@ function Remove-SPClientList {
                         $ClientObjectCollection.Path, `
                         'GetByTitle', `
                         [object[]]$Name)
-                    $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod);
+                    $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
                     Invoke-SPClientLoadQuery `
                         -ClientContext $ClientContext `
                         -ClientObject $ClientObject `

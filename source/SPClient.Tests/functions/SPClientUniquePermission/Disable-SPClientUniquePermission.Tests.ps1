@@ -13,6 +13,7 @@ Describe 'Disable-SPClientUniquePermission' {
                 $List.Title = 'TestList0'
                 $List.TemplateType = 100
                 $List = $Web.Lists.Add($List)
+                $List.Title = 'Test List 0'
                 $List.Update()
                 $SPClient.ClientContext.Load($List)
                 $SPClient.ClientContext.ExecuteQuery()
@@ -24,7 +25,7 @@ Describe 'Disable-SPClientUniquePermission' {
         AfterEach {
             try {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetByTitle('TestList0')
+                $List = $Web.Lists.GetByTitle('Test List 0')
                 $List.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
             } catch {
@@ -33,8 +34,8 @@ Describe 'Disable-SPClientUniquePermission' {
         }
 
         It 'Disables unique permission' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('Test List 0')
             $List.BreakRoleInheritance($false, $false)
             $Params = @{
                 ClientObject = $List

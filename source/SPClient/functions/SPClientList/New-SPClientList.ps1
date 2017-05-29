@@ -30,7 +30,7 @@ function New-SPClientList {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentWeb
   Indicates the web which a list to be created.
 .PARAMETER Name
   Indicates the internal name.
@@ -63,7 +63,7 @@ function New-SPClientList {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
-        $ParentObject,
+        $ParentWeb,
         [Parameter(Mandatory = $true)]
         [string]
         $Name,
@@ -104,7 +104,7 @@ function New-SPClientList {
         $Creation.Title = $Name
         $Creation.Description = $Description
         $Creation.TemplateType = $Template
-        $ClientObject = $ParentObject.Lists.Add($Creation)
+        $ClientObject = $ParentWeb.Lists.Add($Creation)
         $ClientObject.Title = $Title
         $ClientObject.EnableAttachments = $EnableAttachments
         $ClientObject.EnableFolderCreation = $EnableFolderCreation

@@ -23,7 +23,10 @@ Describe 'Remove-SPClientUser' {
         }
 
         It 'Removes a user by loaded client object' {
-            $User = Get-SPClientUser -Email "testuser0@$($Env:LoginDomain)"
+            $Web = $SPClient.ClientContext.Site.RootWeb
+            $User = $Web.SiteUsers.GetByEmail("testuser0@$($Env:LoginDomain)")
+            $SPClient.ClientContext.Load($User)
+            $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 ClientObject = $User
             }
@@ -40,8 +43,12 @@ Describe 'Remove-SPClientUser' {
             $Result = Remove-SPClientUser @Params
             $Result | Should BeNullOrEmpty
         }
+
         It 'Removes a user by id' {
-            $User = Get-SPClientUser -Email "testuser0@$($Env:LoginDomain)"
+            $Web = $SPClient.ClientContext.Site.RootWeb
+            $User = $Web.SiteUsers.GetByEmail("testuser0@$($Env:LoginDomain)")
+            $SPClient.ClientContext.Load($User)
+            $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 Identity = $User.Id
             }
@@ -78,6 +85,7 @@ Describe 'Remove-SPClientUser' {
                 $Result | Should Not BeNullOrEmpty
             }
             $Throw | Should Throw 'The specified user could not be found.'
+        }
 
         It 'Throws an error when the group could not be found by name' {
             $Throw = {
@@ -88,7 +96,6 @@ Describe 'Remove-SPClientUser' {
                 $Result | Should Not BeNullOrEmpty
             }
             $Throw | Should Throw 'The specified user could not be found.'
-        }
         }
 
         It 'Throws an error when the group could not be found by email' {

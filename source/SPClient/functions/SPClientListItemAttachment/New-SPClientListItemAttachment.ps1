@@ -30,7 +30,7 @@ function New-SPClientListItemAttachment {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER ParentObject
+.PARAMETER ParentListItem
   Indicates the list item which a attachment to be created.
 .PARAMETER ContentPath
   Indicates the content file path.
@@ -49,7 +49,7 @@ function New-SPClientListItemAttachment {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.ListItem]
-        $ParentObject,
+        $ParentListItem,
         [Parameter(Mandatory = $true, ParameterSetName = 'ContentStream')]
         [System.IO.Stream]
         $ContentStream,
@@ -59,7 +59,7 @@ function New-SPClientListItemAttachment {
         [Parameter(Mandatory = $true, ParameterSetName = 'ContentStream')]
         [Parameter(Mandatory = $false, ParameterSetName = 'ContentPath')]
         [string]
-        $FileName,
+        $Name,
         [Parameter(Mandatory = $false)]
         [string]
         $Retrievals
@@ -72,20 +72,20 @@ function New-SPClientListItemAttachment {
         $Creation = New-Object Microsoft.SharePoint.Client.AttachmentCreationInformation
         if ($PSCmdlet.ParameterSetName -eq 'ContentStream') {
             $Creation.ContentStream = $ContentStream
-            $Creation.FileName = $FileName
+            $Creation.FileName = $Name
         }
         if ($PSCmdlet.ParameterSetName -eq 'ContentPath') {
             if (-not (Test-Path -Path $ContentPath)) {
                 throw "Cannot find file '$($ContentPath)'."
             }
             $Creation.ContentStream = [System.IO.File]::OpenRead($ContentPath)
-            if ($MyInvocation.BoundParameters.ContainsKey('FileName')) {
-                $Creation.FileName = $FileName
+            if ($MyInvocation.BoundParameters.ContainsKey('Name')) {
+                $Creation.FileName = $Name
             } else {
                 $Creation.FileName = [System.IO.Path]::GetFileName($ContentPath)
             }
         }
-        $ClientObject = $ParentObject.AttachmentFiles.Add($Creation)
+        $ClientObject = $ParentListItem.AttachmentFiles.Add($Creation)
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `

@@ -31,7 +31,7 @@ function New-SPClientUser {
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
-.PARAMETER LoginName
+.PARAMETER Name
   Indicates the login name.
 .PARAMETER Title
   Indicates the display name.
@@ -49,8 +49,9 @@ function New-SPClientUser {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true)]
+        [Alias('LoginName')]
         [string]
-        $LoginName,
+        $Name,
         [Parameter(Mandatory = $false)]
         [string]
         $Title,
@@ -70,7 +71,7 @@ function New-SPClientUser {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
         $Creation = New-Object Microsoft.SharePoint.Client.UserCreationInformation
-        $Creation.LoginName = $LoginName
+        $Creation.LoginName = $Name
         $Creation.Email = $Email
         $Creation.Title = $Title
         $ClientObject = $ClientContext.Site.RootWeb.SiteUsers.Add($Creation)

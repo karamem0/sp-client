@@ -64,6 +64,12 @@ function Convert-SPClientField {
             Url = 'Microsoft.SharePoint.Client.FieldUrl'
             Calculated = 'Microsoft.SharePoint.Client.FieldCalculated'
         }
+        if (-not $ClientObject.IsPropertyAvailable('TypeAsString')) {
+            Invoke-SPClientLoadQuery `
+                -ClientContext $ClientContext `
+                -ClientObject $ClientObject `
+                -Retrievals 'Id,TypeAsString'
+        }
         $Method = $ClientContext.GetType().GetMethod('CastTo')
         $Method = $Method.MakeGenericMethod([type[]]$Table[$ClientObject.TypeAsString])
         Write-Output $Method.Invoke($ClientContext, @($ClientObject))

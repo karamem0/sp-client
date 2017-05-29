@@ -13,6 +13,7 @@ Describe 'Grant-SPClientPermission' {
                 $List.Title = 'TestList0'
                 $List.TemplateType = 100
                 $List = $Web.Lists.Add($List)
+                $List.Title = 'Test List 0'
                 $List.Update()
                 $SPClient.ClientContext.Load($List)
                 $SPClient.ClientContext.ExecuteQuery()
@@ -24,7 +25,7 @@ Describe 'Grant-SPClientPermission' {
         AfterEach {
             try {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetByTitle('TestList0')
+                $List = $Web.Lists.GetByTitle('Test List 0')
                 $List.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
             } catch {
@@ -33,8 +34,8 @@ Describe 'Grant-SPClientPermission' {
         }
 
         It 'Grants a permission by role name' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('Test List 0')
             $List.BreakRoleInheritance($false, $false)
             $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
             $Params = @{
@@ -47,10 +48,10 @@ Describe 'Grant-SPClientPermission' {
         }
 
         It 'Grants a permission by role type' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('Test List 0')
             $List.BreakRoleInheritance($false, $false)
-            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
+            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
             $Params = @{
                 ClientObject = $List
                 Member = $Group
@@ -61,10 +62,10 @@ Describe 'Grant-SPClientPermission' {
         }
 
         It 'Grants permissions by role name collection' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('Test List 0')
             $List.BreakRoleInheritance($false, $false)
-            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
+            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
             $Params = @{
                 ClientObject = $List
                 Member = $Group
@@ -80,10 +81,10 @@ Describe 'Grant-SPClientPermission' {
         }
 
         It 'Grants permissions by role type collection' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Title 'TestList0'
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetByTitle('Test List 0')
             $List.BreakRoleInheritance($false, $false)
-            $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
+            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
             $Params = @{
                 ClientObject = $List
                 Member = $Group
@@ -104,9 +105,9 @@ Describe 'Grant-SPClientPermission' {
 
         It 'Throws an error when has not unique permission' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-                $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
-                $Group = Get-SPClientGroup -Identity $TestConfig.GroupId
+                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
                 $Params = @{
                     ClientObject = $List
                     Member = $Group

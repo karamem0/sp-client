@@ -32,7 +32,7 @@ function Remove-SPClientListItem {
   If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the list item to delete.
-.PARAMETER ParentObject
+.PARAMETER ParentList
   Indicates the list which the list item is contained.
 .PARAMETER Identity
   Indicates the list item ID.
@@ -48,7 +48,7 @@ function Remove-SPClientListItem {
         $ClientObject,
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Microsoft.SharePoint.Client.List]
-        $ParentObject,
+        $ParentList,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [int]
@@ -70,10 +70,10 @@ function Remove-SPClientListItem {
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
-                    $ParentObject.Path, `
+                    $ParentList.Path, `
                     'GetItemById', `
                     [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.ListItem($ClientContext, $PathMethod);
+                $ClientObject = New-Object Microsoft.SharePoint.Client.ListItem($ClientContext, $PathMethod)
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `

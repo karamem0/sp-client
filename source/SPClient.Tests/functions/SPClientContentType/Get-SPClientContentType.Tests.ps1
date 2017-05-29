@@ -7,9 +7,9 @@ Describe 'Get-SPClientContentType' {
     Context 'Success' {
 
         It 'Returns all content types' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
             }
             $Result = Get-SPClientContentType @Params
             $Result | Should Not BeNullOrEmpty
@@ -17,9 +17,9 @@ Describe 'Get-SPClientContentType' {
         }
 
         It 'Returns a content type by id' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Identity = $TestConfig.ContentTypeId
             }
             $Result = Get-SPClientContentType @Params
@@ -29,9 +29,9 @@ Describe 'Get-SPClientContentType' {
         }
 
         It 'Returns a content type by name' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Name = $TestConfig.ContentTypeName
             }
             $Result = Get-SPClientContentType @Params
@@ -46,9 +46,9 @@ Describe 'Get-SPClientContentType' {
 
         It 'Throws an error when the content type could not be found by id' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
                 $Params = @{
-                    ParentObject = $Web
+                    ParentWeb = $Web
                     Identity = '0x0100E29372CEECF346BD82ADB95FFF0C637D'
                 }
                 $Result = Get-SPClientContentType @Params
@@ -59,9 +59,9 @@ Describe 'Get-SPClientContentType' {
 
         It 'Throws an error when the content type could not be found by name' {
             $Throw = {
-                $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
                 $Params = @{
-                    ParentObject = $Web
+                    ParentWeb = $Web
                     Name = 'Test Content Type 0'
                 }
                 $Result = Get-SPClientContentType @Params

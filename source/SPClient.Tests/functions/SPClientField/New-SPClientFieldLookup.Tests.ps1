@@ -24,10 +24,10 @@ Describe 'New-SPClientFieldLookup' {
         }
 
         It 'Creates a new field with mandatory parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestField0'
                 LookupList = $TestConfig.ListId
                 LookupField = $TestConfig.FieldName
@@ -47,10 +47,10 @@ Describe 'New-SPClientFieldLookup' {
         }
 
         It 'Creates a new field with all parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestField0'
                 Identity = '2F992681-3273-4C8C-BACD-8B7A9BBA0EE4'
                 Title = 'Test Field 0'
@@ -79,10 +79,10 @@ Describe 'New-SPClientFieldLookup' {
         }
 
         It 'Creates a new field which allows multiple value' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
-            $List = Get-SPClientList -ParentObject $Web -Identity $TestConfig.ListId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $List = $Web.Lists.GetById($TestConfig.ListId)
             $Params = @{
-                ParentObject = $List
+                ParentList = $List
                 Name = 'TestField0'
                 EnforceUniqueValues = $false
                 AllowMultipleValues = $true

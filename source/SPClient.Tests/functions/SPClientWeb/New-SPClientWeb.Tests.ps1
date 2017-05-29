@@ -8,12 +8,7 @@ Describe 'New-SPClientWeb' {
 
         AfterEach {
             try {
-                $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
-                    $SPClient.ClientContext, `
-                    $SPClient.ClientContext.Site.Path, `
-                    'OpenWeb', `
-                    [object[]]"$($TestConfig.WebUrl)/TestWeb0")
-                $Web = New-Object Microsoft.SharePoint.Client.Web($SPClient.ClientContext, $PathMethod);
+                $Web = $SPClient.ClientContext.Site.OpenWeb("$($TestConfig.WebUrl)/TestWeb0")
                 $Web.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
             } catch {
@@ -22,9 +17,9 @@ Describe 'New-SPClientWeb' {
         }
 
         It 'Creates a new web with mandatory parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Url = 'TestWeb0'
             }
             $Result = New-SPClientWeb @Params
@@ -38,9 +33,9 @@ Describe 'New-SPClientWeb' {
         }
 
         It 'Creates a new web with all parameters' {
-            $Web = Get-SPClientWeb -Identity $TestConfig.WebId
+            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Params = @{
-                ParentObject = $Web
+                ParentWeb = $Web
                 Url = 'TestWeb0'
                 Title = 'Test Web 0'
                 Description = 'Test Web 0'
