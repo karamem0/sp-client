@@ -26,10 +26,12 @@ function New-SPClientFieldUser {
 
 <#
 .SYNOPSIS
-  Creates a new field which user can enter a user lookup value.
+  Creates a new user field.
+.DESCRIPTION
+  The New-SPClientFieldUser function adds a new field to the list. The field
+  allows the user to one or more user lookup values.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which a field to be created.
 .PARAMETER Name
@@ -58,6 +60,8 @@ function New-SPClientFieldUser {
   If true, the field is add to default view.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientFieldUser $list -Name "CustomField" -Title "Custom Field"
 #>
 
     [CmdletBinding()]
@@ -65,7 +69,7 @@ function New-SPClientFieldUser {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true)]
@@ -116,20 +120,20 @@ function New-SPClientFieldUser {
         $FieldElement.SetAttribute('Type', 'User')
         $FieldElement.SetAttribute('Name', $Name)
         $FieldElement.SetAttribute('DisplayName', $Title)
-        if ($MyInvocation.BoundParameters.ContainsKey('Identity')) {
+        if ($PSBoundParameters.ContainsKey('Identity')) {
             $FieldElement.SetAttribute('ID', $Identity)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Description')) {
+        if ($PSBoundParameters.ContainsKey('Description')) {
             $FieldElement.SetAttribute('Description', $Description)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Required')) {
+        if ($PSBoundParameters.ContainsKey('Required')) {
             $FieldElement.SetAttribute('Required', $Required.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('EnforceUniqueValues')) {
+        if ($PSBoundParameters.ContainsKey('EnforceUniqueValues')) {
             $FieldElement.SetAttribute('EnforceUniqueValues', $EnforceUniqueValues.ToString().ToUpper())
             $FieldElement.SetAttribute('Indexed', $EnforceUniqueValues.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('AllowMultipleValues')) {
+        if ($PSBoundParameters.ContainsKey('AllowMultipleValues')) {
             if ($AllowMultipleValues -eq $true) {
                 if ($EnforceUniqueValues -eq $true) {
                     throw "Cannot be EnforceUniqueValues to true when AllowMultipleValues is true."
@@ -138,13 +142,13 @@ function New-SPClientFieldUser {
                 $FieldElement.SetAttribute('Mult', $AllowMultipleValues.ToString().ToUpper())
             }
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('SelectionMode')) {
+        if ($PSBoundParameters.ContainsKey('SelectionMode')) {
             $FieldElement.SetAttribute('UserSelectionMode', $SelectionMode)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('SelectionGroup')) {
+        if ($PSBoundParameters.ContainsKey('SelectionGroup')) {
             $FieldElement.SetAttribute('UserSelectionScope', $SelectionGroup)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('LookupField')) {
+        if ($PSBoundParameters.ContainsKey('LookupField')) {
             $FieldElement.SetAttribute('ShowField', $LookupField)
         }
         $AddFieldOptions = [Microsoft.SharePoint.Client.AddFieldOptions]::AddFieldInternalNameHint
@@ -155,7 +159,7 @@ function New-SPClientFieldUser {
             -Retrievals $Retrievals
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -Field $ClientObject
         Write-Output $ClientObject
     }
 

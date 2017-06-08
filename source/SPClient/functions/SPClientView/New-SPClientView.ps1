@@ -27,16 +27,16 @@ function New-SPClientView {
 <#
 .SYNOPSIS
   Creates a new view.
+.DESCRIPTION
+  The New-SPClientView function adds a new view to the list.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which a view to be created.
 .PARAMETER Name
   Indicates the internal name.
 .PARAMETER Title
-  Indicates the title.
-  If not specified, uses the internal name.
+  Indicates the title. If not specified, uses the internal name.
 .PARAMETER ViewFields
   Indicates the collection of view fields.
 .PARAMETER Query
@@ -53,6 +53,8 @@ function New-SPClientView {
   Indicates a value whether the view is a personal view. 
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientView -Name "CustomView" -Title "Custom View" -ViewFields "ID", "Title"
 #>
 
     [CmdletBinding()]
@@ -60,7 +62,7 @@ function New-SPClientView {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true)]
@@ -103,7 +105,7 @@ function New-SPClientView {
         $Creation = New-Object Microsoft.SharePoint.Client.ViewCreationInformation
         $Creation.Title = $Name
         $Creation.ViewFields = $ViewFields
-        if ($MyInvocation.BoundParameters.ContainsKey('Query')) {
+        if ($PSBoundParameters.ContainsKey('Query')) {
             $XmlDocument = New-Object System.Xml.XmlDocument
             $QueryElement = $XmlDocument.AppendChild($XmlDocument.CreateElement('Query'))
             $QueryElement.InnerXml = $Query

@@ -26,13 +26,13 @@ function Get-SPClientField {
 
 <#
 .SYNOPSIS
-  Lists all fields or retrieve the specified field.
+  Gets one or more fields.
 .DESCRIPTION
-  If not specified filterable parameter, returns all fields of the list.
+  The Get-SPClientField function lists all fields or retrieves the specified
+  field. If not specified filterable parameter, returns all fields of the list.
   Otherwise, returns a field which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which the fields are contained.
 .PARAMETER Identity
@@ -41,6 +41,14 @@ function Get-SPClientField {
   Indicates the field title or internal name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  Get-SPClientField $list
+.EXAMPLE
+  Get-SPClientField $list -Identity "39ED73EB-FDD8-4870-91A5-EEE0ACB966B2"
+.EXAMPLE
+  Get-SPClientField $list -Name "Custom Field"
+.EXAMPLE
+  Get-SPClientField $list -Retrievals "Title"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -50,7 +58,7 @@ function Get-SPClientField {
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

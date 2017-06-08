@@ -26,22 +26,33 @@ function Get-SPClientList {
 
 <#
 .SYNOPSIS
-  Lists all lists or retrieve the specified list.
+  Gets one or more lists.
 .DESCRIPTION
+  The Get-SPClientList function lists all lists or retrieve the specified list.
   If not specified filterable parameter, returns all lists of the web.
   Otherwise, returns a list which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentWeb
   Indicates the web which the lists are contained.
 .PARAMETER Identity
   Indicates the list GUID.
 .PARAMETER Url
-  Indicates the list url.
+  Indicates the list URL.
 .PARAMETER Name
   Indicates the list title or internal name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  Get-SPClientList $web
+.EXAMPLE
+  Get-SPClientList $web -Identity "CE5D9232-37A1-41D0-BCDB-B8C59958B831"
+.EXAMPLE
+  Get-SPClientList $web -Url "/Lists/CustomList"
+.EXAMPLE
+  Get-SPClientList $web -Name "Custom List"
+.EXAMPLE
+  Get-SPClientList $web -Retrievals "Title"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -52,7 +63,7 @@ function Get-SPClientList {
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
         $ParentWeb,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

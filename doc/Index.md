@@ -1,0 +1,69 @@
+# Command Reference
+
+- Common
+  - [Use-SPClientType](Use-SPClientType.md)
+  - [Connect-SPClientContext](Connect-SPClientContext.md)
+  - [Disconnect-SPClientContext](Disconnect-SPClientContext.md)
+- Web
+  - [Get-SPClientWeb](Get-SPClientWeb.md)
+  - [New-SPClientWeb](New-SPClientWeb.md)
+  - [Remove-SPClientWeb](Remove-SPClientWeb.md)
+- Content Type
+  - [Get-SPClientContentType](Get-SPClientContentType.md)
+  - [New-SPClientContentType](New-SPClientContentType.md)
+  - [Remove-SPClientContentType](Remove-SPClientContentType.md)
+- List
+  - [Get-SPClientList](Get-SPClientList.md)
+  - [New-SPClientList](New-SPClientList.md)
+  - [Remove-SPClientList](Remove-SPClientList.md)
+- Field
+  - [Convert-SPClientField](Convert-SPClientField.md)
+  - [Get-SPClientField](Get-SPClientField.md)
+  - [New-SPClientFieldBoolean](New-SPClientFieldBoolean.md)
+  - [New-SPClientFieldCalculated](New-SPClientFieldCalculated.md)
+  - [New-SPClientFieldChoice](New-SPClientFieldChoice.md)
+  - [New-SPClientFieldCurrency](New-SPClientFieldCurrency.md)
+  - [New-SPClientFieldDateTime](New-SPClientFieldDateTime.md)
+  - [New-SPClientFieldLookup](New-SPClientFieldLookup.md)
+  - [New-SPClientFieldMultilineText](New-SPClientFieldMultilineText.md)
+  - [New-SPClientFieldNumber](New-SPClientFieldNumber.md)
+  - [New-SPClientFieldText](New-SPClientFieldText.md)
+  - [New-SPClientFieldUrl](New-SPClientFieldUrl.md)
+  - [Remove-SPClientField](Remove-SPClientField.md)
+- View
+  - [Get-SPClientView](Get-SPClientView.md)
+  - [New-SPClientView](New-SPClientView.md)
+  - [Remove-SPClientView](Remove-SPClientView.md)
+- List Item
+  - [ConvertTo-SPClientListItem](ConvertTo-SPClientListItem.md)
+  - [Get-SPClientListItem](Get-SPClientListItem.md)
+  - [New-SPClientListItem](New-SPClientListItem.md)
+  - [Remove-SPClientListItem](Remove-SPClientListItem.md)
+- List Item Attachment
+  - [Get-SPClientListItemAttachment](Get-SPClientListItemAttachment.md)
+  - [New-SPClientListItemAttachment](New-SPClientListItemAttachment.md)
+  - [Remove-SPClientListItemAttachment](Remove-SPClientListItemAttachment.md)
+- File
+  - [ConvertTo-SPClientFile](ConvertTo-SPClientFile.md)
+  - [Get-SPClientFile](Get-SPClientFile.md)
+  - [New-SPClientFile](New-SPClientFile.md)
+  - [Remove-SPClientFile](Remove-SPClientFile.md)
+- Folder
+  - [ConvertTo-SPClientFolder](ConvertTo-SPClientFolder.md)
+  - [Get-SPClientFolder](Get-SPClientFolder.md)
+  - [New-SPClientFolder](New-SPClientFolder.md)
+  - [Remove-SPClientFolder](Remove-SPClientFolder.md)
+- User and Group
+  - [Get-SPClientGroup](Get-SPClientGroup.md)
+  - [New-SPClientGroup](New-SPClientGroup.md)
+  - [Remove-SPClientGroup](Remove-SPClientGroup.md)
+  - [Get-SPClientUser](Get-SPClientUser.md)
+  - [New-SPClientUser](New-SPClientUser.md)
+  - [Remove-SPClientUser](Remove-SPClientUser.md)
+  - [Resolve-SPClientUser](Resolve-SPClientUser.md)
+- Permission
+  - [Grant-SPClientPermission](Grant-SPClientPermission.md)
+  - [Revoke-SPClientPermission](Revoke-SPClientPermission.md)
+  - [Clear-SPClientPermission](Clear-SPClientPermission.md)
+  - [Enable-SPClientUniquePermission](Enable-SPClientUniquePermission.md)
+  - [Disable-SPClientUniquePermission](Disable-SPClientUniquePermission.md)

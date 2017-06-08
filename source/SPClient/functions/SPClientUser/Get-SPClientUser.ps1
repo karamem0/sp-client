@@ -26,23 +26,33 @@ function Get-SPClientUser {
 
 <#
 .SYNOPSIS
-  Lists all site users or retrieve the specified site user.
+  Gets one or more users.
 .DESCRIPTION
-  If not specified filterable parameter, returns site all users. Otherwise,
-  returns a user which matches the parameter.
+  The Get-SPClientUser function lists all site users or retrieves the specified
+  site user. If not specified filterable parameter, returns site all users.
+  Otherwise, returns a user which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER Identity
-  Indicates the user id.
+  Indicates the user ID.
 .PARAMETER Name
   Indicates the user login name.
 .PARAMETER Email
-  Indicates the user email.
+  Indicates the user E-mail.
 .PARAMETER Current
   If specified, returns current user.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  Get-SPClientUser
+.EXAMPLE
+  Get-SPClientUser -Identity 7
+.EXAMPLE
+  Get-SPClientUser -Name "i:0#.f|membership|john@example.com"
+.EXAMPLE
+  Get-SPClientUser -Email "john@example.com"
+.EXAMPLE
+  Get-SPClientUser -Retrievals "Title"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

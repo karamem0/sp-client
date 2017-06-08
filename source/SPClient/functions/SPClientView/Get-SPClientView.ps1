@@ -26,25 +26,37 @@ function Get-SPClientView {
 
 <#
 .SYNOPSIS
-  Lists all views or retrieve the specified view.
+  Gets one or more views.
 .DESCRIPTION
+  The Get-SPClientView function lists all views or retrieves the specified view.
   If not specified filterable parameter, returns all views of the list.
   Otherwise, returns a view which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which the views are contained.
 .PARAMETER Identity
   Indicates the view GUID.
 .PARAMETER Url
-  Indicates the view url.
+  Indicates the view URL.
 .PARAMETER Title
   Indicates the view title.
 .PARAMETER Default
   If specified, returns the default view.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  Get-SPClientView $list
+.EXAMPLE
+  Get-SPClientView $list -Identity "E9F79B5B-4A14-46A9-983C-78387C40255B"
+.EXAMPLE
+  Get-SPClientView $list -Url "/Lists/List1/CustomView.aspx"
+.EXAMPLE
+  Get-SPClientView $list -Title "Custom View"
+.EXAMPLE
+  Get-SPClientView $list -Default
+.EXAMPLE
+  Get-SPClientView $list -Retrievals "Title"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -56,7 +68,7 @@ function Get-SPClientView {
         [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

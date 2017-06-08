@@ -27,9 +27,10 @@ function New-SPClientGroup {
 <#
 .SYNOPSIS
   Creates a new group.
+.DESCRIPTION
+  The New-SPClientGroup function adds a new group to the site.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER Name
   Indicates the group name.
 .PARAMETER Description
@@ -40,6 +41,8 @@ function New-SPClientGroup {
   Indicates the collection of users to add to group.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientGroup -Name "Custom Group"
 #>
 
     [CmdletBinding()]
@@ -73,10 +76,10 @@ function New-SPClientGroup {
         $Creation.Title = $Name
         $Creation.Description = $Description
         $ClientObject = $ClientContext.Site.RootWeb.SiteGroups.Add($Creation)
-        if ($MyInvocation.BoundParameters.ContainsKey('Owner')) {
+        if ($PSBoundParameters.ContainsKey('Owner')) {
             $ClientObject.Owner = $Owner
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Users')) {
+        if ($PSBoundParameters.ContainsKey('Users')) {
             foreach ($User in $Users) {
                 $ClientObject.Users.AddUser($User) | Out-Null
             }

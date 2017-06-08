@@ -26,18 +26,28 @@ function Remove-SPClientUser {
 
 <#
 .SYNOPSIS
-  Deletes a user.
+  Deletes the user.
+.DESCRIPTION
+  The Remove-SPClientUser function deletes the user from the site.
+  If the user could not be found, throws exception.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the user to delete.
 .PARAMETER Identity
-  Indicates the user id.
+  Indicates the user ID.
 .PARAMETER Name
   Indicates the user login name.
 .PARAMETER Email
-  Indicates the user email.
+  Indicates the user E-mail.
+.EXAMPLE
+  Remove-SPClientUser $user
+.EXAMPLE
+  Remove-SPClientUser -Identity 7
+.EXAMPLE
+  Remove-SPClientUser -Name "i:0#.f|membership|john@example.com"
+.EXAMPLE
+  Remove-SPClientUser -Email "john@example.com"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -45,7 +55,7 @@ function Remove-SPClientUser {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.User]
         $ClientObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

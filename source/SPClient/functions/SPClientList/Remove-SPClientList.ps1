@@ -26,10 +26,11 @@ function Remove-SPClientList {
 
 <#
 .SYNOPSIS
-  Deletes a list.
+  Deletes the list.
+.DESCRIPTION
+  The Remove-SPClientList function deletes the list from the web.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the list to delete.
 .PARAMETER ParentWeb
@@ -37,9 +38,17 @@ function Remove-SPClientList {
 .PARAMETER Identity
   Indicates the list GUID.
 .PARAMETER Url
-  Indicates the list relative url.
+  Indicates the list URL.
 .PARAMETER Name
   Indicates the list title or internal name.
+.EXAMPLE
+  Remove-SPClientList $list
+.EXAMPLE
+  Remove-SPClientList $web -Identity "CE5D9232-37A1-41D0-BCDB-B8C59958B831"
+.EXAMPLE
+  Remove-SPClientList $web -Url "/Lists/CustomList"
+.EXAMPLE
+  Remove-SPClientList $web -Name "Custom List"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -47,12 +56,12 @@ function Remove-SPClientList {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.List]
         $ClientObject,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.Web]
         $ParentWeb,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

@@ -26,10 +26,12 @@ function New-SPClientFieldUrl {
 
 <#
 .SYNOPSIS
-  Creates a new field which user can enter a url.
+  Creates a new URL field.
+.DESCRIPTION
+  The New-SPClientFieldUrl function adds a new field to the list. The field
+  allows the user to enter a url.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which a field to be created.
 .PARAMETER Name
@@ -50,6 +52,8 @@ function New-SPClientFieldUrl {
   If true, the field is add to default view.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientFieldUrl $list -Name "CustomField" -Title "Custom Field"
 #>
 
     [CmdletBinding()]
@@ -57,7 +61,7 @@ function New-SPClientFieldUrl {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true)]
@@ -96,16 +100,16 @@ function New-SPClientFieldUrl {
         $FieldElement.SetAttribute('Type', 'URL')
         $FieldElement.SetAttribute('Name', $Name)
         $FieldElement.SetAttribute('DisplayName', $Title)
-        if ($MyInvocation.BoundParameters.ContainsKey('Identity')) {
+        if ($PSBoundParameters.ContainsKey('Identity')) {
             $FieldElement.SetAttribute('ID', $Identity)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Description')) {
+        if ($PSBoundParameters.ContainsKey('Description')) {
             $FieldElement.SetAttribute('Description', $Description)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Required')) {
+        if ($PSBoundParameters.ContainsKey('Required')) {
             $FieldElement.SetAttribute('Required', $Required.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('DisplayFormat')) {
+        if ($PSBoundParameters.ContainsKey('DisplayFormat')) {
             $FieldElement.SetAttribute('Format', $DisplayFormat)
         }
         $AddFieldOptions = [Microsoft.SharePoint.Client.AddFieldOptions]::AddFieldInternalNameHint
@@ -116,7 +120,7 @@ function New-SPClientFieldUrl {
             -Retrievals $Retrievals
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -Field $ClientObject
         Write-Output $ClientObject
     }
 

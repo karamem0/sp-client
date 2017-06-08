@@ -26,16 +26,23 @@ function Remove-SPClientListItem {
 
 <#
 .SYNOPSIS
-  Deletes a list item.
+  Deletes the list item.
+.DESCRIPTION
+  The Remove-SPClientListItem function deletes the list item from the list.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the list item to delete.
 .PARAMETER ParentList
   Indicates the list which the list item is contained.
 .PARAMETER Identity
   Indicates the list item ID.
+.EXAMPLE
+  Remove-SPClientListItem $item
+.EXAMPLE
+  Remove-SPClientListItem $list -Identity 7
+.EXAMPLE
+  Remove-SPClientListItem $list -IdentityGuid "77DF0F67-9B13-4499-AC14-25EB18E1D3DA"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -43,10 +50,10 @@ function Remove-SPClientListItem {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.ListItem]
         $ClientObject,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

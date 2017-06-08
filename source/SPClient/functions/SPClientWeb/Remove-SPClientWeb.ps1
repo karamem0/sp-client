@@ -26,16 +26,23 @@ function Remove-SPClientWeb {
 
 <#
 .SYNOPSIS
-  Deletes a web.
+  Deletes the web.
+.DESCRIPTION
+  The Remove-SPClientWeb function deletes the web from the site.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web to delete.
 .PARAMETER Identity
   Indicates the web GUID.
 .PARAMETER Url
-  Indicates the web relative url.
+  Indicates the web URL.
+.EXAMPLE
+  Remove-SPClientWeb $web
+.EXAMPLE
+  Remove-SPClientWeb -Identity "B7FB9B8D-A815-496F-B16B-CC1B26CCAC33"
+.EXAMPLE
+  Remove-SPClientWeb -Url "/CustomWeb"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -43,7 +50,7 @@ function Remove-SPClientWeb {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.Web]
         $ClientObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

@@ -27,9 +27,10 @@ function New-SPClientContentType {
 <#
 .SYNOPSIS
   Creates a new content type.
+.DESCRIPTION
+  The New-SPClientContentType function adds a new content type to the web.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentWeb
   Indicates the web which a content type to be created.
 .PARAMETER Name
@@ -42,6 +43,8 @@ function New-SPClientContentType {
   Indicates the parent content type.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientContentType $web -Name "Custom Content Type"
 #>
 
     [CmdletBinding()]
@@ -49,7 +52,7 @@ function New-SPClientContentType {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
         $ParentWeb,
         [Parameter(Mandatory = $true)]
@@ -75,10 +78,10 @@ function New-SPClientContentType {
         }
         $Creation = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
         $Creation.Name = $Name
-        if ($MyInvocation.BoundParameters.ContainsKey('Group')) {
+        if ($PSBoundParameters.ContainsKey('Group')) {
             $Creation.Group = $Group
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('ParentContentType')) {
+        if ($PSBoundParameters.ContainsKey('ParentContentType')) {
             if (-not $ParentContentType.IsPropertyAvailable('Id')) {
                 Invoke-SPClientLoadQuery `
                     -ClientContext $ClientContext `

@@ -26,12 +26,16 @@ function Disable-SPClientUniquePermission {
 
 <#
 .SYNOPSIS
-  Disables unique permission to the specified object.
+  Disables unique permissions.
+.DESCRIPTION
+  The Disable-SPClientUniquePermission function disables unique role assignments
+  to the specified object.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web, list or item.
+.EXAMPLE
+  Disable-SPClientUniquePermission $item
 #>
 
     [CmdletBinding()]
@@ -39,7 +43,7 @@ function Disable-SPClientUniquePermission {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.SecurableObject]
         $ClientObject
     )

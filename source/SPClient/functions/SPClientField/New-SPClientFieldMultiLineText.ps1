@@ -26,10 +26,12 @@ function New-SPClientFieldMultiLineText {
 
 <#
 .SYNOPSIS
-  Creates a new field which user can enter multiple lines of text.
+  Creates a new multi-line text field.
+.DESCRIPTION
+  The New-SPClientFieldMultiLineText function adds a new field to the list. The
+  field allows the user to enter multiple lines of text.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which a field to be created.
 .PARAMETER Name
@@ -52,6 +54,8 @@ function New-SPClientFieldMultiLineText {
   If true, the field is add to default view.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientFieldMultiLineText $list -Name "CustomField" -Title "Custom Field"
 #>
 
     [CmdletBinding()]
@@ -59,7 +63,7 @@ function New-SPClientFieldMultiLineText {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true)]
@@ -103,23 +107,23 @@ function New-SPClientFieldMultiLineText {
         $FieldElement.SetAttribute('Type', 'Note')
         $FieldElement.SetAttribute('Name', $Name)
         $FieldElement.SetAttribute('DisplayName', $Title)
-        if ($MyInvocation.BoundParameters.ContainsKey('Identity')) {
+        if ($PSBoundParameters.ContainsKey('Identity')) {
             $FieldElement.SetAttribute('ID', $Identity)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Description')) {
+        if ($PSBoundParameters.ContainsKey('Description')) {
             $FieldElement.SetAttribute('Description', $Description)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Required')) {
+        if ($PSBoundParameters.ContainsKey('Required')) {
             $FieldElement.SetAttribute('Required', $Required.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('NumberOfLines')) {
+        if ($PSBoundParameters.ContainsKey('NumberOfLines')) {
             $FieldElement.SetAttribute('NumLines', $NumberOfLines)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('RichText')) {
+        if ($PSBoundParameters.ContainsKey('RichText')) {
             $FieldElement.SetAttribute('RichText', $RichText.ToString().ToUpper())
             $FieldElement.SetAttribute('RichTextMode', 'FullHtml')
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('DefaultValue')) {
+        if ($PSBoundParameters.ContainsKey('DefaultValue')) {
             $DefaultElement = $XmlDocument.CreateElement('Default')
             $DefaultElement.InnerText = $DefaultValue
             $FieldElement.AppendChild($DefaultElement) | Out-Null
@@ -132,7 +136,7 @@ function New-SPClientFieldMultiLineText {
             -Retrievals $Retrievals
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -Field $ClientObject
         Write-Output $ClientObject
     }
 

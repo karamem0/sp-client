@@ -26,19 +26,27 @@ function Get-SPClientGroup {
 
 <#
 .SYNOPSIS
-  Lists all site groups or retrieve the specified site group.
+  Gets one or more groups.
 .DESCRIPTION
-  If not specified filterable parameter, returns site all groups. Otherwise,
-  returns a group which matches the parameter.
+  The Get-SPClientGroup function lists all site groups or retrieves the
+  specified site group. If not specified filterable parameter, returns site all
+  groups. Otherwise, returns a group which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER Identity
-  Indicates the group id.
+  Indicates the group ID.
 .PARAMETER Name
   Indicates the group name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  Get-SPClientGroup
+.EXAMPLE
+  Get-SPClientGroup -Identity 7
+.EXAMPLE
+  Get-SPClientGroup -Name "Custom Group"
+.EXAMPLE
+  Get-SPClientGroup -Retrievals "Title"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

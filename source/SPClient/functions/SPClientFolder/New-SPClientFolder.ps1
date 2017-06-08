@@ -27,15 +27,18 @@ function New-SPClientFolder {
 <#
 .SYNOPSIS
   Creates a new folder.
+.DESCRIPTION
+  The New-SPClientFolder function adds a new folder to the folder.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentFolder
   Indicates the folder which a folder to be created.
 .PARAMETER Name
   Indicates the folder name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientFolder $folder -Name "CustomFolder"
 #>
 
     [CmdletBinding()]
@@ -43,7 +46,7 @@ function New-SPClientFolder {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Folder]
         $ParentFolder,
         [Parameter(Mandatory = $true)]

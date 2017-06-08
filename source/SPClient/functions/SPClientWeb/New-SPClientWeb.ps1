@@ -27,27 +27,29 @@ function New-SPClientWeb {
 <#
 .SYNOPSIS
   Creates a new web.
+.DESCRIPTION
+  The New-SPClientWeb function adds a new web to the site.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentWeb
   Indicates the web which a web to be created.
 .PARAMETER Url
   Indicates the url.
 .PARAMETER Title
-  Indicates the title.
-  If not specified, uses default title of the web template.
+  Indicates the title. If not specified, uses default title of the web template.
 .PARAMETER Description
   Indicates the description.
 .PARAMETER Language
-  Indicates the locale ID in which the language is used.
-  If not specified, uses the parent web language.
+  Indicates the locale ID in which the language is used. If not specified, uses
+  the parent web language.
 .PARAMETER Template
   Indicates the template name.
 .PARAMETER UniquePermissions
   If specified, the web uses unique permissions.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientWeb -Url "CustomWeb" -Title "Custom Web"
 #>
 
     [CmdletBinding()]
@@ -55,7 +57,7 @@ function New-SPClientWeb {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
         $ParentWeb,
         [Parameter(Mandatory = $true)]

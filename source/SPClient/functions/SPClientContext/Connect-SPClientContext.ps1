@@ -27,6 +27,9 @@ function Connect-SPClientContext {
 <#
 .SYNOPSIS
   Connects to SharePoint site.
+.DESCRIPTION
+  The Connect-SPClientContext function creates a new client context and sets to
+  current.
 .PARAMETER Network
   If specified, connects to SharePoint Server (On-premise).
 .PARAMETER Online
@@ -43,6 +46,10 @@ function Connect-SPClientContext {
   Indicates the credential.
 .PARAMETER PassThru
   If specified, returns a client context.
+.EXAMPLE
+  Connect-SPClientContext -Network -Url "https://example.com" -UserName "john" -Password (ConvertTo-SecureString -String "p@ssword" -AsPlainText -Force) -Domain "example.com"
+.EXAMPLE
+  Connect-SPClientContext -Online -Url "https://example.sharepoint.com" -Credential $credential
 #>
 
     [CmdletBinding()]
@@ -69,8 +76,8 @@ function Connect-SPClientContext {
         [Parameter(Mandatory = $true, ParameterSetName = 'NetworkPassword')]
         [string]
         $Domain,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'NetworkCredential')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'OnlineCredential')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'NetworkCredential')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'OnlineCredential')]
         [PSCredential]
         $Credential,
         [Parameter(Mandatory = $false)]

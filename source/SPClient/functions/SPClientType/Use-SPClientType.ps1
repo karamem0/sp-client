@@ -28,56 +28,80 @@ function Use-SPClientType {
 .SYNOPSIS
   Loads SharePoint Client Components assemblies.
 .DESCRIPTION
-  By default, this cmdlet loads assemblies below.
-    - %COMMONPROGRAMFILES%\Microsoft Shared\Web Server Extensions\<VERSION>\ISAPI
-      - Microsoft.SharePoint.Client.dll
-      - Microsoft.SharePoint.Client.Runtime.dll
-.PARAMETER Version
-  Indicates the version of SharePoint Client Components.
-  The version must be "15" (SharePoint 2013), or "16" (SharePoint 2016).
-  If not specified, uses the latest version.
+  The Use-SPClientType function loads SharePoint Client Components assemblies.
+    - Microsoft.SharePoint.Client.dll
+    - Microsoft.SharePoint.Client.Runtime.dll
 .PARAMETER LiteralPath
-  Indicates the path that locates SharePoint Client Components.
+  Indicates the path that locates SharePoint Client Components. If not
+  specified, loads from the location below.
+    - Current working directory
+    - Global assembly cache (GAC)
+.PARAMETER PassThru
+  If specified, returns loaded assemblies.
+.EXAMPLE
+  Use-SPClientType
+.EXAMPLE
+  Use-SPClientType -LiteralPath "C:\Users\John\Documents"
 #>
 
-    [CmdletBinding(DefaultParameterSetName = 'Version')]
+    [CmdletBinding()]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'Version')]
-        [ValidateSet('15', '16')]
+        [Parameter(Mandatory = $false)]
         [string]
-        $Version,
-        [Parameter(Mandatory = $true, ParameterSetName = 'LiteralPath')]
-        [string]
-        $LiteralPath
+        $LiteralPath,
+        [Parameter(Mandatory = $false)]
+        [switch]
+        $PassThru
     )
 
     process {
-        if ($PSCmdlet.ParameterSetName -eq 'Version') {
-            $Path = $Env:CommonProgramFiles
-            if (-not [string]::IsNullOrEmpty($Env:CommonProgramW6432)) {
-                $Path = $Env:CommonProgramW6432
+        $AssemblyNames = @(
+            'Microsoft.SharePoint.Client'
+            'Microsoft.SharePoint.Client.Runtime'
+        )
+        $AssemblyPaths = @()
+        if ($PSBoundParameters.ContainsKey('LiteralPath')) {
+            if (Test-Path -Path $LiteralPath) {
+                foreach ($AssemblyName in $AssemblyNames) {
+                    $AssemblyPath = Join-Path -Path $LiteralPath -ChildPath "$($AssemblyName).dll"
+                    if (Test-Path -Path $AssemblyPath) {
+                        $AssemblyPaths += $AssemblyPath
+                    }
+                }
             }
-            $Path = Join-Path -Path $Path -ChildPath 'Microsoft Shared\Web Server Extensions'
-            if (-not (Test-Path -Path $Path)) {
-                throw 'Cannot find SharePoint Client Component assemblies.'
-            }
-            if (-not (Get-ChildItem -Path $Path)) {
-                throw 'Cannot find SharePoint Client Component assemblies.'
-            }
-            if ([string]::IsNullOrEmpty($Version)) {
-                $Version = [string](Get-ChildItem -Path $Path | Sort-Object -Descending)[0]
-            }
-            $Path = Join-Path -Path $Path $Version
-            $Path = Join-Path -Path $Path 'ISAPI'
         }
-        if ($PSCmdlet.ParameterSetName -eq 'LiteralPath') {
-            if (-not (Test-Path -Path $LiteralPath)) {
-                throw 'Cannot find SharePoint Client Component assemblies.'
+        if ($AssemblyNames.Length -ne $AssemblyPaths.Length) {
+            $AssemblyPaths.Clear()
+            $LiteralPath = Get-Location
+            foreach ($AssemblyName in $AssemblyNames) {
+                $AssemblyPath = Join-Path -Path $LiteralPath -ChildPath "$($AssemblyName).dll"
+                if (Test-Path -Path $AssemblyPath) {
+                    $AssemblyPaths += $AssemblyPath
+                }
             }
-            $Path = $LiteralPath
         }
-        Add-Type -Path (Join-Path -Path $Path -ChildPath 'Microsoft.SharePoint.Client.dll')
-        Add-Type -Path (Join-Path -Path $Path -ChildPath 'Microsoft.SharePoint.Client.Runtime.dll')
+        if ($AssemblyNames.Length -ne $AssemblyPaths.Length) {
+            $AssemblyPaths.Clear()
+            $LiteralPath = "$($Env:WinDir)\Microsoft.NET\Assembly\GAC_MSIL"
+            foreach ($AssemblyName in $AssemblyNames) {
+                $AssemblyPath = Join-Path -Path $LiteralPath -ChildPath "$($AssemblyName)"
+                $AssemblyPath = Get-ChildItem -Path $AssemblyPath -Recurse |
+                    Where-Object { $_.Extension -eq '.dll' } |
+                    ForEach-Object { $_.FullName } |
+                    Sort-Object -Descending |
+                    Select-Object -First 1
+                $AssemblyPaths += $AssemblyPath
+            }
+        }
+        if ($AssemblyNames.Length -ne $AssemblyPaths.Length) {
+            throw 'Cannot find SharePoint Client Component assemblies.'
+        }
+        foreach ($AssemblyPath in $AssemblyPaths) {
+            $Assembly = [System.Reflection.Assembly]::LoadFrom($AssemblyPath)
+            if ($PassThru) {
+                Write-Output $Assembly
+            }
+        }
     }
 
 }

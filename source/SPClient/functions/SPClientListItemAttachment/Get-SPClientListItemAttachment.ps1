@@ -26,19 +26,26 @@ function Get-SPClientListItemAttachment {
 
 <#
 .SYNOPSIS
-  Lists all attachments or retrieve the specified attachment.
+  Gets one or more attachments.
 .DESCRIPTION
-  If not specified filterable parameter, returns all attachments of the list
-  item. Otherwise, returns a attachment which matches the parameter.
+  The Get-SPClientListItemAttachment function lists all attachments or retrieves
+  the specified attachment. If not specified filterable parameter, returns all
+  attachments of the list item. Otherwise, returns a attachment which matches
+  the parameter.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentListItem
   Indicates the list item which the attachments are contained.
 .PARAMETER FileName
   Indicates the attachment file name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  Get-SPClientListItemAttachment $item
+.EXAMPLE
+  Get-SPClientListItemAttachment $item -FileName "CustomAttachment.xlsx"
+.EXAMPLE
+  Get-SPClientListItemAttachment $item -Retrievals "FileName"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -47,7 +54,7 @@ function Get-SPClientListItemAttachment {
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.ListItem]
         $ParentListItem,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]

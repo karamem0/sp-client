@@ -6,57 +6,23 @@ Describe 'Use-SPClientType' {
 
     Context 'Success' {
 
-        It 'Loads assemblies of the latest version' {
-            $Result = Use-SPClientType
-            $Result | Should BeNullOrEmpty
-        }
-
-        It 'Loads assemblies of the specified version' {
+        It 'Loads assemblies from current directory' {
+            Mock Get-Location { Convert-Path -Path "$($SPClient.ModulePath)\..\..\lib" }
             $Params = @{
-                Version = '16'
+                PassThru = $true
             }
             $Result = Use-SPClientType @Params
-            $Result | Should BeNullOrEmpty
+            $Result | Should Not BeNullOrEmpty
         }
 
         It 'Loads assemblies from literal path' {
+            $LiteralPath = Convert-Path -Path "$($SPClient.ModulePath)\..\..\lib"
             $Params = @{
-                LiteralPath = "$($PSScriptRoot)\..\..\..\..\lib"
+                LiteralPath = $LiteralPath
+                PassThru = $true
             }
             $Result = Use-SPClientType @Params
-            $Result | Should BeNullOrEmpty
-        }
-
-    }
-
-    Context 'Failure' {
-
-        It 'Throws an error when root directory is not exists' {
-            Mock Test-Path { Write-Output $false }
-            $Throw = {
-                $Params = @{}
-                $Result = Use-SPClientType @Params
-            }
-            $Throw | Should Throw 'Cannot find SharePoint Client Component assemblies.'
-        }
-
-        It 'Throws an error when version directory is not exists' {
-            Mock Get-ChildItem { Write-Output $false }
-            $Throw = {
-                $Params = @{}
-                $Result = Use-SPClientType @Params
-            }
-            $Throw | Should Throw 'Cannot find SharePoint Client Component assemblies.'
-        }
-
-        It 'Throws an error when literal path is not exists' {
-            $Throw = {
-                $Params = @{
-                    LiteralPath = 'Z:\'
-                }
-                $Result = Use-SPClientType @Params
-            }
-            $Throw | Should Throw 'Cannot find SharePoint Client Component assemblies.'
+            $Result | Should Not BeNullOrEmpty
         }
 
     }

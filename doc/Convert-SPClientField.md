@@ -1,0 +1,62 @@
+# Convert-SPClientField
+
+## SYNOPSIS
+Converts the field to its derived type.
+
+## SYNTAX
+
+```
+Convert-SPClientField [-ClientContext <ClientContext>] [[-Field] <Field>]
+```
+
+## DESCRIPTION
+The Convert-SPClientField function converts the field to its derived type.
+
+## EXAMPLES
+
+### -------------------------- Example 1 --------------------------
+```
+Convert-SPClientField $field
+```
+
+## PARAMETERS
+
+### -ClientContext
+Indicates the client context.
+If not specified, uses default context.
+
+```yaml
+Type: ClientContext
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: $SPClient.ClientContext
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Field
+Indicates the field.
+
+```yaml
+Type: Field
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+## INPUTS
+
+## OUTPUTS
+
+## NOTES
+
+## RELATED LINKS
+

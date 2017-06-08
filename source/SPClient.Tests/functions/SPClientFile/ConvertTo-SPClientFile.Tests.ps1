@@ -6,7 +6,7 @@ Describe 'ConvertTo-SPClientFile' {
 
     Context 'Success' {
 
-        It 'Converts list item to file' {
+        It 'Converts a list item to file' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $List = $Web.Lists.GetById($TestConfig.DocLibId)
             $Caml = New-object Microsoft.SharePoint.Client.CamlQuery
@@ -84,6 +84,5 @@ Describe 'ConvertTo-SPClientFile' {
         }
 
     }
-
 
 }

@@ -26,16 +26,20 @@ function Revoke-SPClientPermission {
 
 <#
 .SYNOPSIS
-  Revokes permission from the specified object.
+  Revokes one or more permissions.
+.DESCRIPTION
+  The Revoke-SPClientPermission function revokes role assignments to the
+  specified object.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web, list or item.
 .PARAMETER Member
   Indicates the user or group to be revoked permission.
 .PARAMETER Roles
   Indicates the roles to be removed.
+.EXAMPLE
+  Revoke-SPClientPermission $item -Member $user -Roles "Full Control"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -44,7 +48,7 @@ function Revoke-SPClientPermission {
         [Parameter(Mandatory = $false, ParameterSetName = 'Roles')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.SecurableObject]
         $ClientObject,
         [Parameter(Mandatory = $true)]

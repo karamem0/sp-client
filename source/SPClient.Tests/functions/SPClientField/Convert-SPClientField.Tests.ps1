@@ -11,7 +11,7 @@ Describe 'Convert-SPClientField' {
             $List = $Web.Lists.GetById($TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField1')
             $Params = @{
-                ClientObject = $Field
+                Field = $Field
             }
             $Result = Convert-SPClientField @Params
             $Result | Should Not BeNullOrEmpty
@@ -23,7 +23,7 @@ Describe 'Convert-SPClientField' {
             $List = $Web.Lists.GetById($TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField2')
             $Params = @{
-                ClientObject = $Field
+                Field = $Field
             }
             $Result = Convert-SPClientField @Params
             $Result | Should Not BeNullOrEmpty
@@ -35,7 +35,7 @@ Describe 'Convert-SPClientField' {
             $List = $Web.Lists.GetById($TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField3')
             $Params = @{
-                ClientObject = $Field
+                Field = $Field
             }
             $Result = Convert-SPClientField @Params
             $Result | Should Not BeNullOrEmpty
@@ -47,7 +47,7 @@ Describe 'Convert-SPClientField' {
             $List = $Web.Lists.GetById($TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField4')
             $Params = @{
-                ClientObject = $Field
+                Field = $Field
             }
             $Result = Convert-SPClientField @Params
             $Result | Should Not BeNullOrEmpty
@@ -59,7 +59,7 @@ Describe 'Convert-SPClientField' {
             $List = $Web.Lists.GetById($TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField5')
             $Params = @{
-                ClientObject = $Field
+                Field = $Field
             }
             $Result = Convert-SPClientField @Params
             $Result | Should Not BeNullOrEmpty
@@ -71,7 +71,7 @@ Describe 'Convert-SPClientField' {
             $List = $Web.Lists.GetById($TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField6')
             $Params = @{
-                ClientObject = $Field
+                Field = $Field
             }
             $Result = Convert-SPClientField @Params
             $Result | Should Not BeNullOrEmpty
@@ -83,7 +83,7 @@ Describe 'Convert-SPClientField' {
             $List = $Web.Lists.GetById($TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField7')
             $Params = @{
-                ClientObject = $Field
+                Field = $Field
             }
             $Result = Convert-SPClientField @Params
             $Result | Should Not BeNullOrEmpty
@@ -95,7 +95,7 @@ Describe 'Convert-SPClientField' {
             $List = $Web.Lists.GetById($TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField10')
             $Params = @{
-                ClientObject = $Field
+                Field = $Field
             }
             $Result = Convert-SPClientField @Params
             $Result | Should Not BeNullOrEmpty
@@ -107,7 +107,7 @@ Describe 'Convert-SPClientField' {
             $List = $Web.Lists.GetById($TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField13')
             $Params = @{
-                ClientObject = $Field
+                Field = $Field
             }
             $Result = Convert-SPClientField @Params
             $Result | Should Not BeNullOrEmpty
@@ -119,7 +119,7 @@ Describe 'Convert-SPClientField' {
             $List = $Web.Lists.GetById($TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField14')
             $Params = @{
-                ClientObject = $Field
+                Field = $Field
             }
             $Result = Convert-SPClientField @Params
             $Result | Should Not BeNullOrEmpty

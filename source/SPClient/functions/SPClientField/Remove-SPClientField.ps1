@@ -26,10 +26,11 @@ function Remove-SPClientField {
 
 <#
 .SYNOPSIS
-  Deletes a field.
+  Deletes the field.
+.DESCRIPTION
+  The Remove-SPClientField function deletes the field from the list. 
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the field to delete.
 .PARAMETER ParentList
@@ -38,6 +39,12 @@ function Remove-SPClientField {
   Indicates the field GUID.
 .PARAMETER Name
   Indicates the field title or internal name.
+.EXAMPLE
+  Remove-SPClientField $field
+.EXAMPLE
+  Remove-SPClientField $list -Identity "39ED73EB-FDD8-4870-91A5-EEE0ACB966B2"
+.EXAMPLE
+  Remove-SPClientField $list -Name "Custom Field"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -45,11 +52,11 @@ function Remove-SPClientField {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.Field]
         $ClientObject,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

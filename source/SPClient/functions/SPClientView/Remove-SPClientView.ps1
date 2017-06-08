@@ -26,10 +26,11 @@ function Remove-SPClientView {
 
 <#
 .SYNOPSIS
-  Deletes a view.
+  Deletes the view.
+.DESCRIPTION
+  The Remove-SPClientView function deletes the view from the list.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the view to delete.
 .PARAMETER ParentList
@@ -37,9 +38,17 @@ function Remove-SPClientView {
 .PARAMETER Identity
   Indicates the view GUID.
 .PARAMETER Url
-  Indicates the view url.
+  Indicates the view URL.
 .PARAMETER Title
   Indicates the view title.
+.EXAMPLE
+  Remove-SPClientView $view
+.EXAMPLE
+  Remove-SPClientView $list -Identity "E9F79B5B-4A14-46A9-983C-78387C40255B"
+.EXAMPLE
+  Remove-SPClientView $list -Url "/Lists/List1/CustomView.aspx"
+.EXAMPLE
+  Remove-SPClientView $list -Title "Custom View"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -47,12 +56,12 @@ function Remove-SPClientView {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.View]
         $ClientObject,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Title')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Title')]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

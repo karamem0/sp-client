@@ -26,7 +26,10 @@ function New-SPClientFieldChoice {
 
 <#
 .SYNOPSIS
-  Creates a new field which user can select a value.
+  Creates a new choice field.
+.DESCRIPTION
+  The New-SPClientFieldChoice function adds a new field to the list. The field
+  allows the user to select one or mode values.
 .PARAMETER ClientContext
   Indicates the client context.
   If not specified, uses default context.
@@ -59,6 +62,8 @@ function New-SPClientFieldChoice {
   If true, the field is add to default view.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientFieldChoice $list -Name "CustomField" -Title "Custom Field"
 #>
 
     [CmdletBinding()]
@@ -66,7 +71,7 @@ function New-SPClientFieldChoice {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true)]
@@ -117,20 +122,20 @@ function New-SPClientFieldChoice {
         $FieldElement.SetAttribute('Type', 'Choice')
         $FieldElement.SetAttribute('Name', $Name)
         $FieldElement.SetAttribute('DisplayName', $Title)
-        if ($MyInvocation.BoundParameters.ContainsKey('Identity')) {
+        if ($PSBoundParameters.ContainsKey('Identity')) {
             $FieldElement.SetAttribute('ID', $Identity)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Description')) {
+        if ($PSBoundParameters.ContainsKey('Description')) {
             $FieldElement.SetAttribute('Description', $Description)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Required')) {
+        if ($PSBoundParameters.ContainsKey('Required')) {
             $FieldElement.SetAttribute('Required', $Required.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('EnforceUniqueValues')) {
+        if ($PSBoundParameters.ContainsKey('EnforceUniqueValues')) {
             $FieldElement.SetAttribute('EnforceUniqueValues', $EnforceUniqueValues.ToString().ToUpper())
             $FieldElement.SetAttribute('Indexed', $EnforceUniqueValues.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Choices')) {
+        if ($PSBoundParameters.ContainsKey('Choices')) {
             $ChoicesElement = $XmlDocument.CreateElement('CHOICES')
             $Choices | ForEach-Object {
                 $ChoiceElement = $XmlDocument.CreateElement('CHOICE')
@@ -139,7 +144,7 @@ function New-SPClientFieldChoice {
             }
             $FieldElement.AppendChild($ChoicesElement) | Out-Null
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('EditFormat')) {
+        if ($PSBoundParameters.ContainsKey('EditFormat')) {
             if ($EditFormat -eq 'Checkboxes') {
                 if ($EnforceUniqueValues -eq $true) {
                     throw "Cannot be EnforceUniqueValues to true when EditFormat is 'Checkboxes'."
@@ -148,10 +153,10 @@ function New-SPClientFieldChoice {
             }
             $FieldElement.SetAttribute('Format', $EditFormat)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('FillInChoice')) {
+        if ($PSBoundParameters.ContainsKey('FillInChoice')) {
             $FieldElement.SetAttribute('FillInChoice', $FillInChoice.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('DefaultValue')) {
+        if ($PSBoundParameters.ContainsKey('DefaultValue')) {
             $DefaultElement = $XmlDocument.CreateElement('Default')
             $DefaultElement.InnerText = $DefaultValue
             $FieldElement.AppendChild($DefaultElement) | Out-Null
@@ -164,7 +169,7 @@ function New-SPClientFieldChoice {
             -Retrievals $Retrievals
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -Field $ClientObject
         Write-Output $ClientObject
     }
 

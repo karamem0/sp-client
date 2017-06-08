@@ -26,10 +26,12 @@ function New-SPClientFieldCalculated {
 
 <#
 .SYNOPSIS
-  Creates a new field whose value is calculated based on other columns.
+  Creates a new calclated field.
+.DESCRIPTION
+  The New-SPClientFieldCalculated function adds a new field to the list. The
+  value of the field is calculated based on other columns.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which a field to be created.
 .PARAMETER Name
@@ -52,21 +54,23 @@ function New-SPClientFieldCalculated {
     - DateTime
     - Boolean
 .PARAMETER Decimals
-  Indicates the number of decimals.
-  This parameter is used when OutputType is 'Number' or 'Currency'.
+  Indicates the number of decimals. This parameter is used when OutputType is
+  'Number' or 'Currency'.
 .PARAMETER Percentage
-  Indicates a value whether the field shows as percentage.
-  This parameter is used when OutputType is 'Number'.
+  Indicates a value whether the field shows as percentage. This parameter is
+  used when OutputType is 'Number'.
 .PARAMETER LocaleId 
-  Indicates the language code identifier (LCID).
-  This parameter is used when OutputType is 'Currency'.
+  Indicates the language code identifier (LCID). This parameter is used when
+  OutputType is 'Currency'.
 .PARAMETER DateFormat
-  Indicates the datetime display format.
-  This parameter is used when OutputType is 'DateTime'.
+  Indicates the datetime display format. This parameter is used when OutputType
+  is 'DateTime'.
 .PARAMETER AddToDefaultView
   If true, the field is add to default view.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientFieldCalculated $list -Name "CustomField" -Title "Custom Field" -Formula "=[Title]" -FieldRefs "Title" -OutputType "Text"
 #>
 
     [CmdletBinding()]
@@ -74,7 +78,7 @@ function New-SPClientFieldCalculated {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true)]
@@ -130,36 +134,36 @@ function New-SPClientFieldCalculated {
         $FieldElement.SetAttribute('ReadOnly', 'TRUE')
         $FieldElement.SetAttribute('Name', $Name)
         $FieldElement.SetAttribute('DisplayName', $Title)
-        if ($MyInvocation.BoundParameters.ContainsKey('Identity')) {
+        if ($PSBoundParameters.ContainsKey('Identity')) {
             $FieldElement.SetAttribute('ID', $Identity)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Description')) {
+        if ($PSBoundParameters.ContainsKey('Description')) {
             $FieldElement.SetAttribute('Description', $Description)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Formula')) {
+        if ($PSBoundParameters.ContainsKey('Formula')) {
             $FormulaElement = $FieldElement.AppendChild($XmlDocument.CreateElement('Formula'))
             $FormulaElement.InnerText = $Formula
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('FieldRefs')) {
+        if ($PSBoundParameters.ContainsKey('FieldRefs')) {
             $FieldRefsElement = $FieldElement.AppendChild($XmlDocument.CreateElement('FieldRefs'))
             foreach ($FieldRef in $FieldRefs) {
                 $FieldRefElement = $FieldRefsElement.AppendChild($XmlDocument.CreateElement('FieldRef'))
                 $FieldRefElement.SetAttribute('Name', $FieldRef)
             }
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('OutputType')) {
+        if ($PSBoundParameters.ContainsKey('OutputType')) {
             $FieldElement.SetAttribute('ResultType', $OutputType)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Decimals')) {
+        if ($PSBoundParameters.ContainsKey('Decimals')) {
             $FieldElement.SetAttribute('Decimals', $Decimals)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Percentage')) {
+        if ($PSBoundParameters.ContainsKey('Percentage')) {
             $FieldElement.SetAttribute('Percentage', $Percentage.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('LocaleId')) {
+        if ($PSBoundParameters.ContainsKey('LocaleId')) {
             $FieldElement.SetAttribute('LCID', $LocaleId)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('DateFormat')) {
+        if ($PSBoundParameters.ContainsKey('DateFormat')) {
             $FieldElement.SetAttribute('Format', $DateFormat)
         }
         $AddFieldOptions = [Microsoft.SharePoint.Client.AddFieldOptions]::AddFieldInternalNameHint
@@ -170,7 +174,7 @@ function New-SPClientFieldCalculated {
             -Retrievals $Retrievals
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -Field $ClientObject
         Write-Output $ClientObject
     }
 

@@ -27,15 +27,20 @@ function ConvertTo-SPClientListItem {
 <#
 .SYNOPSIS
   Converts file or folder to list item.
+.DESCRIPTION
+  The ConvertTo-SPClientListItem function converts the file or folder to list item.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER File
   Indicates the file.
 .PARAMETER Folder
   Indicates the folder.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  ConvertTo-SPClientListItem $file
+.EXAMPLE
+  ConvertTo-SPClientListItem $folder
 #>
 
     [CmdletBinding()]
@@ -43,10 +48,10 @@ function ConvertTo-SPClientListItem {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'File')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'File')]
         [Microsoft.SharePoint.Client.File]
         $File,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Folder')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Folder')]
         [Microsoft.SharePoint.Client.Folder]
         $Folder,
         [Parameter(Mandatory = $false)]

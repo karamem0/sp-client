@@ -26,12 +26,16 @@ function Resolve-SPClientUser {
 
 <#
 .SYNOPSIS
-  Checks whether the specified login name belongs to a valid user.
+ Resolves login name to user.
+.DESCRIPTION
+  The Resolve-SPClientUser function checks whether the specified login name
+  belongs to a valid user.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER Name
-  Indicates login name or e-mail address.
+  Indicates login name or E-mail address.
+.EXAMPLE
+  Resolve-SPClientUser "i:0#.f|membership|john@example.com"
 #>
 
     [CmdletBinding()]

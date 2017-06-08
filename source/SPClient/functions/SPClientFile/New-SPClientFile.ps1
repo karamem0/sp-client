@@ -27,9 +27,10 @@ function New-SPClientFile {
 <#
 .SYNOPSIS
   Creates a new file.
+.DESCRIPTION
+  The New-SPClientFile function adds a new file to the folder.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentFolder
   Indicates the folder which a file to be created.
 .PARAMETER ContentPath
@@ -40,6 +41,10 @@ function New-SPClientFile {
   Indicates the file name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientFile $folder -Name "CustomFile.xlsx" -ContentStream $stream
+.EXAMPLE
+  New-SPClientFile $folder -ContentPath "C:\Users\John\Documents\CustomFile.xlsx"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ContentStream')]
@@ -47,7 +52,7 @@ function New-SPClientFile {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Folder]
         $ParentFolder,
         [Parameter(Mandatory = $true, ParameterSetName = 'ContentStream')]
@@ -79,7 +84,7 @@ function New-SPClientFile {
                 throw "Cannot find file '$($ContentPath)'."
             }
             $Creation.ContentStream = [System.IO.File]::OpenRead($ContentPath)
-            if ($MyInvocation.BoundParameters.ContainsKey('Name')) {
+            if ($PSBoundParameters.ContainsKey('Name')) {
                 $Creation.Url = $Name
             } else {
                 $Creation.Url = [System.IO.Path]::GetFileName($ContentPath)

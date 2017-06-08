@@ -26,16 +26,22 @@ function Remove-SPClientListItemAttachment {
 
 <#
 .SYNOPSIS
-  Deletes a attachment.
+  Deletes the attachment.
+.DESCRIPTION
+  The Remove-SPClientListItemAttachment function deletes the attachment from the
+  list item.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the attachment to delete.
 .PARAMETER ParentListItem
   Indicates the list item which the attachment is contained.
 .PARAMETER FileName
   Indicates the attachment file name.
+.EXAMPLE
+  Remove-SPClientListItemAttachment $attachment
+.EXAMPLE
+  Remove-SPClientListItemAttachment $item -FileName "CustomAttachment.xlsx"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -43,10 +49,10 @@ function Remove-SPClientListItemAttachment {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.Attachment]
         $ClientObject,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'FileName')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'FileName')]
         [Microsoft.SharePoint.Client.ListItem]
         $ParentListItem,
         [Parameter(Mandatory = $true, ParameterSetName = 'FileName')]

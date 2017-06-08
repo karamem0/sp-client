@@ -27,13 +27,16 @@ function ConvertTo-SPClientFile {
 <#
 .SYNOPSIS
   Converts list item to file.
+.DESCRIPTION
+  The ConvertTo-SPClientFile function converts the list item to file.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ListItem
   Indicates the list item.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  ConvertTo-SPClientFile $item
 #>
 
     [CmdletBinding()]
@@ -41,7 +44,7 @@ function ConvertTo-SPClientFile {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ListItem')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.ListItem]
         $ListItem,
         [Parameter(Mandatory = $false)]

@@ -16,5 +16,8 @@ $ClientContext = New-Object Microsoft.SharePoint.Client.ClientContext($Env:Login
 $ClientContext.Credentials = $credentials
 $ClientContext.DisableReturnValueCache = $true
 
-$Script:SPClient = @{ ClientContext = $ClientContext }
+$Script:SPClient = @{
+    ClientContext = $ClientContext
+    ModulePath = Split-Path -Parent $MyInvocation.MyCommand.Definition
+}
 $Script:TestConfig = Get-Content "$($PSScriptRoot)\TestConfiguration.json" | ConvertFrom-Json

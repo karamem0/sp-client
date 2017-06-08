@@ -18,12 +18,12 @@ Install [SharePoint Server 2016 Client Components SDK](https://www.microsoft.com
 SPClient is published to [PowerShell Gallery](https://www.powershellgallery.com/packages/SPClient). To install SPClient to your computer run the cmdlet below.
 
 ```
-PS> Install-Module -Name SPClient 
+PS> Install-Module -Name SPClient
 ```
 
 ## Functions
 
-See [Wiki Home](https://github.com/karamem0/SPClient/wiki).
+See [Command Reference](doc/Index.md).
 
 ## Getting Started
 

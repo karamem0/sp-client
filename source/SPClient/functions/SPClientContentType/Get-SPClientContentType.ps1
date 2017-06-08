@@ -26,12 +26,14 @@ function Get-SPClientContentType {
 
 <#
 .SYNOPSIS
-  Lists all content types or retrieve the specified content type.
+  Gets one or more content types.
 .DESCRIPTION
-  If not specified filterable parameter, returns all content types of the web.
-  Otherwise, returns a content type which matches the parameter.
+  The Get-SPClientContentType function lists all content types or retrieves the
+  specified content type. If not specified filterable parameter, returns all
+  content types of the web. Otherwise, returns a content type which matches the
+  parameter.
 .PARAMETER ClientContext
-  Indicates the client context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentWeb
   Indicates the web which the content types are contained.
 .PARAMETER Identity
@@ -40,6 +42,14 @@ function Get-SPClientContentType {
   Indicates the content type name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  Get-SPClientContentType $web
+.EXAMPLE
+  Get-SPClientContentType $web -Identity "0X01009BD26CA6BE114008A9D56E68022DD1A7"
+.EXAMPLE
+  Get-SPClientContentType $web -Name "Custom Content Type"
+.EXAMPLE
+  Get-SPClientContentType $web -Retrievals "Title"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -49,7 +59,7 @@ function Get-SPClientContentType {
         [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
         $ParentWeb,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

@@ -6,7 +6,7 @@ Describe 'ConvertTo-SPClientFolder' {
 
     Context 'Success' {
 
-        It 'Converts list item to folder' {
+        It 'Converts a list item to folder' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $List = $Web.Lists.GetById($TestConfig.DocLibId)
             $Caml = New-object Microsoft.SharePoint.Client.CamlQuery

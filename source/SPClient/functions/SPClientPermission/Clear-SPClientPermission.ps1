@@ -26,12 +26,16 @@ function Clear-SPClientPermission {
 
 <#
 .SYNOPSIS
-  Clears all role assignments from the specified object.
+  Clears all permission.
+.DESCRIPTION
+  The Clear-SPClientPermission function clears all role assignments from the
+  specified object.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web, list or item.
+.EXAMPLE
+  Clear-SPClientPermission $item
 #>
 
     [CmdletBinding()]
@@ -39,7 +43,7 @@ function Clear-SPClientPermission {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.SecurableObject]
         $ClientObject
     )

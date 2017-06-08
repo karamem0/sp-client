@@ -27,20 +27,23 @@ function New-SPClientUser {
 
 <#
 .SYNOPSIS
-  Creates a new view.
+  Creates a new user.
+.DESCRIPTION
+  The New-SPClientUser function adds a new user to the site.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER Name
   Indicates the login name.
 .PARAMETER Title
   Indicates the display name.
 .PARAMETER Email
-  Indicates the email.
+  Indicates the E-mail.
 .PARAMETER IsSiteAdmin
   Indicates a value whether the user is a site collection administrator.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientUser -Name "i:0#.f|membership|john@example.com"
 #>
 
     [CmdletBinding()]
@@ -75,7 +78,7 @@ function New-SPClientUser {
         $Creation.Email = $Email
         $Creation.Title = $Title
         $ClientObject = $ClientContext.Site.RootWeb.SiteUsers.Add($Creation)
-        if ($MyInvocation.BoundParameters.ContainsKey('IsSiteAdmin')) {
+        if ($PSBoundParameters.ContainsKey('IsSiteAdmin')) {
             $ClientObject.IsSiteAdmin = $IsSiteAdmin
         }
         $ClientObject.Update()

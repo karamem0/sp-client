@@ -27,21 +27,20 @@ function New-SPClientList {
 <#
 .SYNOPSIS
   Creates a new list.
+.DESCRIPTION
+  The New-SPClientList function adds a new list to the web.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentWeb
   Indicates the web which a list to be created.
 .PARAMETER Name
   Indicates the internal name.
 .PARAMETER Title
-  Indicates the title.
-  If not specified, uses the internal name.
+  Indicates the title. If not specified, uses the internal name.
 .PARAMETER Description
   Indicates the description.
 .PARAMETER Template
-  Indicates the template ID.
-  If not specified, uses 100 (Generic List).
+  Indicates the template ID. If not specified, uses 100 (Generic List).
 .PARAMETER EnableAttachments
   Indicates a value whether attachments are enabled.
 .PARAMETER EnableFolderCreation
@@ -54,6 +53,8 @@ function New-SPClientList {
   Indicates a value whether the list is displayed on the quick launch.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientList -Name "CustomList" -Title "Custom List"
 #>
 
     [CmdletBinding()]
@@ -61,7 +62,7 @@ function New-SPClientList {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Web]
         $ParentWeb,
         [Parameter(Mandatory = $true)]

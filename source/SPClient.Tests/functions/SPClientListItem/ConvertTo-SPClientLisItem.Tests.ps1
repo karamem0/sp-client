@@ -6,7 +6,7 @@ Describe 'ConvertTo-SPClientListItem' {
 
     Context 'Success' {
 
-        It 'Converts file to list item' {
+        It 'Converts a file to list item' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $File = $Web.GetFileById($TestConfig.FileId)
             $Params = @{
@@ -17,7 +17,7 @@ Describe 'ConvertTo-SPClientListItem' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.ListItem'
         }
 
-        It 'Converts folder to list item' {
+        It 'Converts a folder to list item' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
             $Folder = $Web.GetFolderById($TestConfig.FolderId)
             $Params = @{

@@ -26,16 +26,20 @@ function Enable-SPClientUniquePermission {
 
 <#
 .SYNOPSIS
-  Enables unique permission to the specified object.
+  Enables unique permissions.
+.DESCRIPTION
+  The Enable-SPClientUniquePermission function enables unique role assignments
+  to the specified object.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web, list or item.
 .PARAMETER CopyRoleAssignments
   If specified, copies role assignments from the parent object.
 .PARAMETER ClearSubscopes
   If specified, resets role assignments of child objects.
+.EXAMPLE
+  Enable-SPClientUniquePermission $item
 #>
 
     [CmdletBinding()]
@@ -43,7 +47,7 @@ function Enable-SPClientUniquePermission {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.SecurableObject]
         $ClientObject,
         [Parameter(Mandatory = $false)]

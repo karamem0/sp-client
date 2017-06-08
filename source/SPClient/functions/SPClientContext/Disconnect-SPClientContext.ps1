@@ -27,8 +27,12 @@ function Disconnect-SPClientContext {
 <#
 .SYNOPSIS
   Disconnects from SharePoint site.
+.DESCRIPTION
+  The Disconnect-SPClientContext function disposes the current client context.
 .PARAMETER ClientContext
-  Indicates the client context.
+  Indicates the client context. If not specified, uses default context.
+.EXAMPLE
+  Disconnect-SPClientContext
 #>
 
     [CmdletBinding()]

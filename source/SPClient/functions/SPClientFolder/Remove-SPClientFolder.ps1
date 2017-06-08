@@ -26,22 +26,29 @@ function Remove-SPClientFolder {
 
 <#
 .SYNOPSIS
-  Deletes a folder.
+  Deletes the folder.
+.DESCRIPTION
+  The Remove-SPClientFolder function deletes the folder from the folder.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the folder to delete.
 .PARAMETER ParentFolder
   Indicates the folder which the folders are contained.
 .PARAMETER ParentWeb
   Indicates the web which the folders are contained.
-.PARAMETER Identity
-  Indicates the folder GUID.
 .PARAMETER Name
   Indicates the folder name.
+.PARAMETER Identity
+  Indicates the folder GUID.
 .PARAMETER Url
-  Indicates the folder url.
+  Indicates the folder URL.
+.EXAMPLE
+  Remove-SPClientFolder $folder
+.EXAMPLE
+  Remove-SPClientFolder $folder -Name "Folder"
+.EXAMPLE
+  Remove-SPClientFolder $web -Url "http://example.com/DocLib1/Folder"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -49,25 +56,24 @@ function Remove-SPClientFolder {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.Folder]
         $ClientObject,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.Folder]
         $ParentFolder,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Url')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Url')]
         [Microsoft.SharePoint.Client.Web]
         $ParentWeb,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
-        [Alias('Id')]
-        [guid]
-        $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
         [Alias('Title')]
         [string]
         $Name,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Alias('Id')]
+        [guid]
+        $Identity,
         [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
         [string]
         $Url

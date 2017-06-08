@@ -26,16 +26,23 @@ function Remove-SPClientGroup {
 
 <#
 .SYNOPSIS
-  Deletes a group.
+  Deletes the group.
+.DESCRIPTION
+  The Remove-SPClientGroup function deletes the group from the site.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the group to delete.
 .PARAMETER Identity
-  Indicates the group id.
+  Indicates the group ID.
 .PARAMETER Name
   Indicates the group name.
+.EXAMPLE
+  Remove-SPClientGroup $group
+.EXAMPLE
+  Remove-SPClientGroup -Identity 7
+.EXAMPLE
+  Remove-SPClientGroup -Name "Custom Group"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -43,7 +50,7 @@ function Remove-SPClientGroup {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.Group]
         $ClientObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

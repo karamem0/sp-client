@@ -26,10 +26,12 @@ function New-SPClientFieldDateTime {
 
 <#
 .SYNOPSIS
-  Creates a new field which user can enter a date and time.
+  Creates a new date/time field.
+.DESCRIPTION
+  The New-SPClientFieldDateTime function adds a new field to the list. The field
+  allows the user to enter a date and time.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which a field to be created.
 .PARAMETER Name
@@ -59,6 +61,8 @@ function New-SPClientFieldDateTime {
   If true, the field is add to default view.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientFieldDateTime $list -Name "CustomField" -Title "Custom Field"
 #>
 
     [CmdletBinding()]
@@ -66,7 +70,7 @@ function New-SPClientFieldDateTime {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [string]
@@ -114,26 +118,26 @@ function New-SPClientFieldDateTime {
         $FieldElement.SetAttribute('Type', 'DateTime')
         $FieldElement.SetAttribute('Name', $Name)
         $FieldElement.SetAttribute('DisplayName', $Title)
-        if ($MyInvocation.BoundParameters.ContainsKey('Identity')) {
+        if ($PSBoundParameters.ContainsKey('Identity')) {
             $FieldElement.SetAttribute('ID', $Identity)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Description')) {
+        if ($PSBoundParameters.ContainsKey('Description')) {
             $FieldElement.SetAttribute('Description', $Description)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Required')) {
+        if ($PSBoundParameters.ContainsKey('Required')) {
             $FieldElement.SetAttribute('Required', $Required.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('EnforceUniqueValues')) {
+        if ($PSBoundParameters.ContainsKey('EnforceUniqueValues')) {
             $FieldElement.SetAttribute('EnforceUniqueValues', $EnforceUniqueValues.ToString().ToUpper())
             $FieldElement.SetAttribute('Indexed', $EnforceUniqueValues.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('DisplayFormat')) {
+        if ($PSBoundParameters.ContainsKey('DisplayFormat')) {
             $FieldElement.SetAttribute('Format', $DisplayFormat)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('FriendlyDisplayFormat')) {
+        if ($PSBoundParameters.ContainsKey('FriendlyDisplayFormat')) {
             $FieldElement.SetAttribute('FriendlyDisplayFormat', $FriendlyDisplayFormat)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('DefaultValue')) {
+        if ($PSBoundParameters.ContainsKey('DefaultValue')) {
             $DefaultElement = $XmlDocument.CreateElement('Default')
             $DefaultElement.InnerText = $DefaultValue
             $FieldElement.AppendChild($DefaultElement) | Out-Null
@@ -146,7 +150,7 @@ function New-SPClientFieldDateTime {
             -Retrievals $Retrievals
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -Field $ClientObject
         Write-Output $ClientObject
     }
 

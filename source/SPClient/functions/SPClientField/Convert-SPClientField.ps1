@@ -26,12 +26,15 @@ function Convert-SPClientField {
 
 <#
 .SYNOPSIS
-  Casts a specified field to its derived type.
+  Converts the field to its derived type.
+.DESCRIPTION
+  The Convert-SPClientField function converts the field to its derived type.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
-.PARAMETER ClientObject
+  Indicates the client context. If not specified, uses default context.
+.PARAMETER Field
   Indicates the field.
+.EXAMPLE
+  Convert-SPClientField $field
 #>
 
     [CmdletBinding()]
@@ -39,9 +42,9 @@ function Convert-SPClientField {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.Field]
-        $ClientObject
+        $Field
     )
 
     process {
@@ -64,15 +67,15 @@ function Convert-SPClientField {
             Url = 'Microsoft.SharePoint.Client.FieldUrl'
             Calculated = 'Microsoft.SharePoint.Client.FieldCalculated'
         }
-        if (-not $ClientObject.IsPropertyAvailable('TypeAsString')) {
+        if (-not $Field.IsPropertyAvailable('TypeAsString')) {
             Invoke-SPClientLoadQuery `
                 -ClientContext $ClientContext `
-                -ClientObject $ClientObject `
-                -Retrievals 'Id,TypeAsString'
+                -ClientObject $Field `
+                -Retrievals 'TypeAsString'
         }
         $Method = $ClientContext.GetType().GetMethod('CastTo')
-        $Method = $Method.MakeGenericMethod([type[]]$Table[$ClientObject.TypeAsString])
-        Write-Output $Method.Invoke($ClientContext, @($ClientObject))
+        $Method = $Method.MakeGenericMethod([type[]]$Table[$Field.TypeAsString])
+        Write-Output $Method.Invoke($ClientContext, @($Field))
     }
 
 }

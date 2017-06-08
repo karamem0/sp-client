@@ -26,10 +26,12 @@ function New-SPClientFieldBoolean {
 
 <#
 .SYNOPSIS
-  Creates a new field which user can enter a true/false value.
+  Creates a new boolean field.
+.DESCRIPTION
+  The New-SPClientFieldBoolean function adds a new field to the list. The field
+  allows the user to enter a true/false value.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which a field to be created.
 .PARAMETER Name
@@ -48,6 +50,8 @@ function New-SPClientFieldBoolean {
   If true, the field is add to default view.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientFieldBoolean $list -Name "CustomField" -Title "Custom Field"
 #>
 
     [CmdletBinding()]
@@ -55,7 +59,7 @@ function New-SPClientFieldBoolean {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true)]
@@ -93,16 +97,16 @@ function New-SPClientFieldBoolean {
         $FieldElement.SetAttribute('Type', 'Boolean')
         $FieldElement.SetAttribute('Name', $Name)
         $FieldElement.SetAttribute('DisplayName', $Title)
-        if ($MyInvocation.BoundParameters.ContainsKey('Identity')) {
+        if ($PSBoundParameters.ContainsKey('Identity')) {
             $FieldElement.SetAttribute('ID', $Identity)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Description')) {
+        if ($PSBoundParameters.ContainsKey('Description')) {
             $FieldElement.SetAttribute('Description', $Description)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Required')) {
+        if ($PSBoundParameters.ContainsKey('Required')) {
             $FieldElement.SetAttribute('Required', $Required.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('DefaultValue')) {
+        if ($PSBoundParameters.ContainsKey('DefaultValue')) {
             $DefaultElement = $XmlDocument.CreateElement('Default')
             $DefaultElement.InnerText = [int]$DefaultValue
             $FieldElement.AppendChild($DefaultElement) | Out-Null
@@ -115,7 +119,7 @@ function New-SPClientFieldBoolean {
             -Retrievals $Retrievals
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -Field $ClientObject
         Write-Output $ClientObject
     }
 

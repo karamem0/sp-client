@@ -26,14 +26,15 @@ function Get-SPClientListItem {
 
 <#
 .SYNOPSIS
-  Retrieve list items using CAML query.
+  Gets one or more list items.
+.DESCRIPTION
+  The Get-SPClientListItem function retrieves list items using CAML query.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which the list items are contained.
 .PARAMETER FolderUrl
-  Indicates the folder relative url.
+  Indicates the folder URL.
 .PARAMETER Scope
   Indicates the scope of retrievals.
     - FilesOnly: Only the files of a specific folder. 
@@ -45,17 +46,25 @@ function Get-SPClientListItem {
 .PARAMETER Query
   Indicates the XML representation of query.
 .PARAMETER RowLimit
-  Indicates the number of items.
-  This parameter is used for item pagination.
+  Indicates the number of items. This parameter is used for item pagination.
 .PARAMETER Position
-  Indicates the starting position.
-  This parameter is used for item pagination.
+  Indicates the starting position. This parameter is used for item pagination.
 .PARAMETER Identity
   Indicates the list item ID.
 .PARAMETER IdentityGuid
   Indicates the list item GUID.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  Get-SPClientListItem
+.EXAMPLE
+  Get-SPClientListItem -Scope "Recursive" -ViewFields "ID", "Title" -Query "<OrderBy><FieldRef Name='Title'/></OrderBy>" -RowLimit 10
+.EXAMPLE
+  Get-SPClientListItem -Identity 7
+.EXAMPLE
+  Get-SPClientListItem -IdentityGuid "77DF0F67-9B13-4499-AC14-25EB18E1D3DA"
+.EXAMPLE
+  Get-SPClientListItem -Retrievals "Title"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -65,7 +74,7 @@ function Get-SPClientListItem {
         [Parameter(Mandatory = $false, ParameterSetName = 'IdentityGuid')]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
@@ -106,33 +115,33 @@ function Get-SPClientListItem {
         }
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             $Caml = New-object Microsoft.SharePoint.Client.CamlQuery
-            if ($MyInvocation.BoundParameters.ContainsKey('FolderUrl')) {
+            if ($PSBoundParameters.ContainsKey('FolderUrl')) {
                 $Caml.FolderServerRelativeUrl = $FolderUrl
             }
             $XmlDocument = New-Object System.Xml.XmlDocument
             $ViewElement = $XmlDocument.AppendChild($XmlDocument.CreateElement('View'))
-            if ($MyInvocation.BoundParameters.ContainsKey('Scope')) {
+            if ($PSBoundParameters.ContainsKey('Scope')) {
                 $ViewElement.SetAttribute('Scope', $Scope)
             }
-            if ($MyInvocation.BoundParameters.ContainsKey('ViewFields')) {
+            if ($PSBoundParameters.ContainsKey('ViewFields')) {
                 $ViewFieldsElement = $ViewElement.AppendChild($XmlDocument.CreateElement('ViewFields'))
                 foreach ($ViewField in $ViewFields) {
                     $FieldRefElement = $ViewFieldsElement.AppendChild($XmlDocument.CreateElement('FieldRef'))
                     $FieldRefElement.SetAttribute('Name', $ViewField)
                 }
             }
-            if ($MyInvocation.BoundParameters.ContainsKey('Query')) {
+            if ($PSBoundParameters.ContainsKey('Query')) {
                 $QueryElement = $ViewElement.AppendChild($XmlDocument.CreateElement('Query'))
                 $QueryElement.InnerXml = $Query
                 if ($QueryElement.FirstChild.Name -eq 'Query') {
                     $QueryElement = $QueryElement.FirstChild
                 }
             }
-            if ($MyInvocation.BoundParameters.ContainsKey('RowLimit')) {
+            if ($PSBoundParameters.ContainsKey('RowLimit')) {
                 $RowLimitElement = $ViewElement.AppendChild($XmlDocument.CreateElement('RowLimit'))
                 $RowLimitElement.InnerText = $RowLimit
             }
-            if ($MyInvocation.BoundParameters.ContainsKey('Position')) {
+            if ($PSBoundParameters.ContainsKey('Position')) {
                 $Caml.ListItemCollectionPosition = $Position
             }
             $Caml.ViewXml = $XmlDocument.InnerXml

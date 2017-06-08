@@ -27,15 +27,18 @@ function New-SPClientListItem {
 <#
 .SYNOPSIS
   Creates a new list item.
+.DESCRIPTION
+  The New-SPClientListItem function adds a new list item to the list.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which a list item to be created.
 .PARAMETER FieldValues
   Indicates the field key/value collection.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientListItem $list -FieldValues @{ Title = "Custom List Item" }
 #>
 
     [CmdletBinding()]
@@ -43,7 +46,7 @@ function New-SPClientListItem {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $false)]
@@ -60,7 +63,7 @@ function New-SPClientListItem {
         }
         $Creation = New-Object Microsoft.SharePoint.Client.ListItemCreationInformation
         $ClientObject = $ParentList.AddItem($Creation)
-        if ($MyInvocation.BoundParameters.ContainsKey('FieldValues')) {
+        if ($PSBoundParameters.ContainsKey('FieldValues')) {
             $FieldValues.GetEnumerator() | ForEach-Object {
                 $ClientObject[$_.Name] = $_.Value
             }

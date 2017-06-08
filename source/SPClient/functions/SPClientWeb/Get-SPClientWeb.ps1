@@ -26,23 +26,35 @@ function Get-SPClientWeb {
 
 <#
 .SYNOPSIS
-  Lists all webs or retrieve the specified web.
+  Gets one or more webs.
 .DESCRIPTION
+  The Get-SPClientWeb function lists all webs or retrieve the specified web.
   If not specified filterable parameter, returns default web and its
   descendants. Otherwise, returns a web which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER Identity
   Indicates the web GUID.
 .PARAMETER Url
-  Indicates the web relative url.
+  Indicates the web URL.
 .PARAMETER Default
   If specified, returns default web of the client context.
 .PARAMETER Root
   If specified, returns root web.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  Get-SPClientWeb
+.EXAMPLE
+  Get-SPClientWeb -Identity "B7FB9B8D-A815-496F-B16B-CC1B26CCAC33"
+.EXAMPLE
+  Get-SPClientWeb -Url "/CustomWeb"
+.EXAMPLE
+  Get-SPClientWeb -Default
+.EXAMPLE
+  Get-SPClientWeb -Root
+.EXAMPLE
+  Get-SPClientWeb -Retrievals "Title"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

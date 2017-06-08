@@ -26,10 +26,12 @@ function New-SPClientFieldLookup {
 
 <#
 .SYNOPSIS
-  Creates a new field which user can enter a field lookup value.
+  Creates a new field lookup field.
+.DESCRIPTION
+  The New-SPClientFieldLookup function adds a new field to the list. The field
+  allows the user to enter one or more field lookup values.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentList
   Indicates the list which a field to be created.
 .PARAMETER Name
@@ -52,6 +54,8 @@ function New-SPClientFieldLookup {
   If true, the field is add to default view.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientFieldLookup $list -Name "CustomField" -Title "Custom Field" -LookupList "CE5D9232-37A1-41D0-BCDB-B8C59958B831" -LookupField "Title"
 #>
 
     [CmdletBinding()]
@@ -59,7 +63,7 @@ function New-SPClientFieldLookup {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.List]
         $ParentList,
         [Parameter(Mandatory = $true)]
@@ -110,20 +114,20 @@ function New-SPClientFieldLookup {
         $FieldElement.SetAttribute('Type', 'Lookup')
         $FieldElement.SetAttribute('Name', $Name)
         $FieldElement.SetAttribute('DisplayName', $Title)
-        if ($MyInvocation.BoundParameters.ContainsKey('Identity')) {
+        if ($PSBoundParameters.ContainsKey('Identity')) {
             $FieldElement.SetAttribute('ID', $Identity)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Description')) {
+        if ($PSBoundParameters.ContainsKey('Description')) {
             $FieldElement.SetAttribute('Description', $Description)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('Required')) {
+        if ($PSBoundParameters.ContainsKey('Required')) {
             $FieldElement.SetAttribute('Required', $Required.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('EnforceUniqueValues')) {
+        if ($PSBoundParameters.ContainsKey('EnforceUniqueValues')) {
             $FieldElement.SetAttribute('EnforceUniqueValues', $EnforceUniqueValues.ToString().ToUpper())
             $FieldElement.SetAttribute('Indexed', $EnforceUniqueValues.ToString().ToUpper())
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('AllowMultipleValues')) {
+        if ($PSBoundParameters.ContainsKey('AllowMultipleValues')) {
             if ($AllowMultipleValues -eq $true) {
                 if ($EnforceUniqueValues -eq $true) {
                     throw "Cannot be EnforceUniqueValues to true when AllowMultipleValues is true."
@@ -132,13 +136,13 @@ function New-SPClientFieldLookup {
                 $FieldElement.SetAttribute('Mult', $AllowMultipleValues.ToString().ToUpper())
             }
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('LookupList')) {
+        if ($PSBoundParameters.ContainsKey('LookupList')) {
             $FieldElement.SetAttribute('List', $LookupList.ToString('B'))
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('LookupField')) {
+        if ($PSBoundParameters.ContainsKey('LookupField')) {
             $FieldElement.SetAttribute('ShowField', $LookupField)
         }
-        if ($MyInvocation.BoundParameters.ContainsKey('RelationshipDeleteBehavior')) {
+        if ($PSBoundParameters.ContainsKey('RelationshipDeleteBehavior')) {
             $FieldElement.SetAttribute('RelationshipDeleteBehavior', $RelationshipDeleteBehavior)
         }
         $AddFieldOptions = [Microsoft.SharePoint.Client.AddFieldOptions]::AddFieldInternalNameHint
@@ -149,7 +153,7 @@ function New-SPClientFieldLookup {
             -Retrievals $Retrievals
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
-            -ClientObject $ClientObject
+            -Field $ClientObject
         Write-Output $ClientObject
     }
 

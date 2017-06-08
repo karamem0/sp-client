@@ -26,16 +26,20 @@ function Grant-SPClientPermission {
 
 <#
 .SYNOPSIS
-  Grants permission to the specified object.
+  Grants one or more permissions.
+.DESCRIPTION
+  The Grant-SPClientPermission function grants role assignments to the specified
+  object.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the web, list or item.
 .PARAMETER Member
   Indicates the user or group to be granted permission.
 .PARAMETER Roles
   Indicates the roles to be added.
+.EXAMPLE
+  Grant-SPClientPermission $item -Member $user -Roles "Full Control"
 #>
 
     [CmdletBinding()]
@@ -43,7 +47,7 @@ function Grant-SPClientPermission {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.SecurableObject]
         $ClientObject,
         [Parameter(Mandatory = $true)]

@@ -26,10 +26,11 @@ function Remove-SPClientContentType {
 
 <#
 .SYNOPSIS
-  Deletes a content type.
+  Deletes the content type.
+.DESCRIPTION
+  The Remove-SPClientContentType function deletes the content type from the web.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the content type to delete.
 .PARAMETER ParentWeb
@@ -38,6 +39,12 @@ function Remove-SPClientContentType {
   Indicates the content type ID.
 .PARAMETER Name
   Indicates the content type name.
+.EXAMPLE
+  Remove-SPClientContentType $contentType
+.EXAMPLE
+  Remove-SPClientContentType $web -Identity "0X01009BD26CA6BE114008A9D56E68022DD1A7"
+.EXAMPLE
+  Remove-SPClientContentType $web -Name "Custom Content Type"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -45,11 +52,11 @@ function Remove-SPClientContentType {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'ClientObject')]
         [Microsoft.SharePoint.Client.ContentType]
         $ClientObject,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
         [Microsoft.SharePoint.Client.Web]
         $ParentWeb,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]

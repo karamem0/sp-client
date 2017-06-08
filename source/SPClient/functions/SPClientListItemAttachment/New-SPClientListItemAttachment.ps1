@@ -27,9 +27,11 @@ function New-SPClientListItemAttachment {
 <#
 .SYNOPSIS
   Creates a new attachment.
+.DESCRIPTION
+  The New-SPClientListItemAttachment function adds a new attachment to the list
+  item.
 .PARAMETER ClientContext
-  Indicates the client context.
-  If not specified, uses default context.
+  Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentListItem
   Indicates the list item which a attachment to be created.
 .PARAMETER ContentPath
@@ -40,6 +42,10 @@ function New-SPClientListItemAttachment {
   Indicates the file name.
 .PARAMETER Retrievals
   Indicates the data retrieval expression.
+.EXAMPLE
+  New-SPClientListItemAttachment $item -Name "CustomAttachment.xlsx" -ContentStream $stream
+.EXAMPLE
+  New-SPClientListItemAttachment $item -ContentPath "C:\Users\John\Documents\CustomAttachment.xlsx"
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ContentStream')]
@@ -47,7 +53,7 @@ function New-SPClientListItemAttachment {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Microsoft.SharePoint.Client.ListItem]
         $ParentListItem,
         [Parameter(Mandatory = $true, ParameterSetName = 'ContentStream')]
@@ -79,7 +85,7 @@ function New-SPClientListItemAttachment {
                 throw "Cannot find file '$($ContentPath)'."
             }
             $Creation.ContentStream = [System.IO.File]::OpenRead($ContentPath)
-            if ($MyInvocation.BoundParameters.ContainsKey('Name')) {
+            if ($PSBoundParameters.ContainsKey('Name')) {
                 $Creation.FileName = $Name
             } else {
                 $Creation.FileName = [System.IO.Path]::GetFileName($ContentPath)
