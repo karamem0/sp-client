@@ -8,7 +8,7 @@ Describe 'Revoke-SPClientPermission' {
 
         BeforeEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = New-Object Microsoft.SharePoint.Client.ListCreationInformation
                 $List.Title = 'TestList0'
                 $List.TemplateType = 100
@@ -24,7 +24,7 @@ Describe 'Revoke-SPClientPermission' {
 
         AfterEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetByTitle('Test List 0')
                 $List.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
@@ -34,9 +34,9 @@ Describe 'Revoke-SPClientPermission' {
         }
 
         It 'Revokes a permission by role name' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetByTitle('Test List 0')
-            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
+            $Group = $Web.SiteGroups.GetById($SPClient.TestConfig.GroupId)
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Full Control')
@@ -46,15 +46,16 @@ Describe 'Revoke-SPClientPermission' {
                 ClientObject = $List
                 Member = $Group
                 Roles = 'Full Control'
+                PassThru = $true
             }
             $Result = Revoke-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
         It 'Revokes a permission by role type' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetByTitle('Test List 0')
-            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
+            $Group = $Web.SiteGroups.GetById($SPClient.TestConfig.GroupId)
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Full Control')
@@ -64,15 +65,16 @@ Describe 'Revoke-SPClientPermission' {
                 ClientObject = $List
                 Member = $Group
                 Roles = [Microsoft.SharePoint.Client.RoleType]::Administrator
+                PassThru = $true
             }
             $Result = Revoke-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
         It 'Revokes permissions by role name' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetByTitle('Test List 0')
-            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
+            $Group = $Web.SiteGroups.GetById($SPClient.TestConfig.GroupId)
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition1 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Read')
@@ -89,15 +91,16 @@ Describe 'Revoke-SPClientPermission' {
                     'Read'
                     'Contribute'
                 )
+                PassThru = $true
             }
             $Result = Revoke-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
         }
 
         It 'Revokes permissions by role type' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetByTitle('Test List 0')
-            $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
+            $Group = $Web.SiteGroups.GetById($SPClient.TestConfig.GroupId)
             $List.BreakRoleInheritance($false, $false)
             $RoleDefinitionBindings = New-Object Microsoft.SharePoint.Client.RoleDefinitionBindingCollection($SPClient.ClientContext)
             $RoleDefinition1 = $SPClient.ClientContext.Site.RootWeb.RoleDefinitions.GetByName('Read')
@@ -114,6 +117,7 @@ Describe 'Revoke-SPClientPermission' {
                     [Microsoft.SharePoint.Client.RoleType]::Reader
                     [Microsoft.SharePoint.Client.RoleType]::Contributor
                 )
+                PassThru = $true
             }
             $Result = Revoke-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
@@ -125,13 +129,14 @@ Describe 'Revoke-SPClientPermission' {
 
         It 'Throws an error when has not unique permission' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
-                $Group = $Web.SiteGroups.GetById($TestConfig.GroupId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+                $Group = $Web.SiteGroups.GetById($SPClient.TestConfig.GroupId)
                 $Params = @{
                     ClientObject = $List
                     Member = $Group
                     Roles = 'Full Control'
+                    PassThru = $true
                 }
                 $Result = Revoke-SPClientPermission @Params
                 $Result | Should Not BeNullOrEmpty

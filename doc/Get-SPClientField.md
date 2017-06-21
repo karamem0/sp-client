@@ -7,23 +7,27 @@ Gets one or more fields.
 
 ### All (Default)
 ```
-Get-SPClientField [-ClientContext <ClientContext>] [-ParentList] <List> [-Retrievals <String>]
+Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
+ [-Retrievals <String>]
 ```
 
 ### Name
 ```
-Get-SPClientField [-ClientContext <ClientContext>] [-ParentList] <List> -Name <String> [-Retrievals <String>]
+Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
+ -Name <String> [-Retrievals <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientField [-ClientContext <ClientContext>] [-ParentList] <List> -Identity <Guid> [-Retrievals <String>]
+Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
+ -Identity <Guid> [-Retrievals <String>]
 ```
 
 ## DESCRIPTION
 The Get-SPClientField function lists all fields or retrieves the specified
 field.
-If not specified filterable parameter, returns all fields of the list.
+If not specified filterable parameter, returns all fields of the web or
+list.
 Otherwise, returns a field which matches the parameter.
 
 ## EXAMPLES
@@ -66,11 +70,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentList
-Indicates the list which the fields are contained.
+### -ParentObject
+Indicates the web or list which the fields are contained.
 
 ```yaml
-Type: List
+Type: SPClientFieldParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -128,9 +132,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or SPClient.SPClientFieldParentParameter
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.FieldCollection or Microsoft.SharePoint.Client.Field
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientField.md](https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientField.md)
 

@@ -8,9 +8,9 @@ Describe 'Remove-SPClientListItemAttachment' {
 
         BeforeEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
-                $ListItem = $List.GetItemById($TestConfig.ListItemId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+                $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
                 $Buffer = [System.Text.Encoding]::UTF8.GetBytes('TestAttachment0')
                 $Stream = New-Object System.IO.MemoryStream(@(, $Buffer))
                 $Attachment = New-Object Microsoft.SharePoint.Client.AttachmentCreationInformation
@@ -25,9 +25,9 @@ Describe 'Remove-SPClientListItemAttachment' {
         }
 
         It 'Removes a attachment by loaded client object' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
-            $ListItem = $List.GetItemById($TestConfig.ListItemId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+            $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Attachment = $ListItem.AttachmentFiles.GetByFileName('TestAttachment0.txt')
             $SPClient.ClientContext.Load($Attachment)
             $SPClient.ClientContext.ExecuteQuery()
@@ -39,9 +39,9 @@ Describe 'Remove-SPClientListItemAttachment' {
         }
 
         It 'Removes a attachment by unloaded client object' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
-            $ListItem = $List.GetItemById($TestConfig.ListItemId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+            $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Attachment = $ListItem.AttachmentFiles.GetByFileName('TestAttachment0.txt')
             $Params = @{
                 ClientObject = $Attachment
@@ -51,9 +51,9 @@ Describe 'Remove-SPClientListItemAttachment' {
         }
 
         It 'Removes a attachment by file name' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
-            $ListItem = $List.GetItemById($TestConfig.ListItemId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+            $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Params = @{
                 ParentListItem = $ListItem
                 FileName = 'TestAttachment0.txt'
@@ -68,9 +68,9 @@ Describe 'Remove-SPClientListItemAttachment' {
 
         It 'Throws an error when the attachment could not be found by file name' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
-                $ListItem = $List.GetItemById($TestConfig.ListItemId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+                $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
                 $Params = @{
                     ParentListItem = $ListItem
                     FileName = 'TestAttachment0.txt'

@@ -7,8 +7,8 @@ Describe 'ConvertTo-SPClientFolder' {
     Context 'Success' {
 
         It 'Converts a list item to folder' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.DocLibId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.DocLibId)
             $Caml = New-object Microsoft.SharePoint.Client.CamlQuery
             $Caml.ViewXml =  `
                 '<View Scope="RecursiveAll">' + `
@@ -17,7 +17,7 @@ Describe 'ConvertTo-SPClientFolder' {
                 '<Where>' + `
                 '<Eq>' + `
                 '<FieldRef Name="UniqueId"/>' + `
-                '<Value Type="Guid">' + $TestConfig.FolderId + '</Value>' + `
+                '<Value Type="Guid">' + $SPClient.TestConfig.FolderId + '</Value>' + `
                 '</Eq>' + `
                 '</Where>' + `
                 '</Query>' + `
@@ -32,7 +32,7 @@ Describe 'ConvertTo-SPClientFolder' {
             $Result = ConvertTo-SPClientFolder @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Folder'
-            $Result.Name | Should Be $TestConfig.FolderName
+            $Result.Name | Should Be $SPClient.TestConfig.FolderName
         }
 
     }
@@ -41,8 +41,8 @@ Describe 'ConvertTo-SPClientFolder' {
 
         It 'Throws an error when the list item is a file' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.DocLibId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.DocLibId)
                 $Caml = New-object Microsoft.SharePoint.Client.CamlQuery
                 $Caml.ViewXml =  `
                     '<View Scope="RecursiveAll">' + `
@@ -51,7 +51,7 @@ Describe 'ConvertTo-SPClientFolder' {
                     '<Where>' + `
                     '<Eq>' + `
                     '<FieldRef Name="UniqueId"/>' + `
-                    '<Value Type="Guid">' + $TestConfig.FileId + '</Value>' + `
+                    '<Value Type="Guid">' + $SPClient.TestConfig.FileId + '</Value>' + `
                     '</Eq>' + `
                     '</Where>' + `
                     '</Query>' + `

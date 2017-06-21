@@ -7,7 +7,7 @@ Describe 'Use-SPClientType' {
     Context 'Success' {
 
         It 'Loads assemblies from current directory' {
-            Mock Get-Location { Convert-Path -Path "$($SPClient.ModulePath)\..\..\lib" }
+            Mock Get-Location { Convert-Path -Path $SPClient.LibPath }
             $Params = @{
                 PassThru = $true
             }
@@ -16,7 +16,7 @@ Describe 'Use-SPClientType' {
         }
 
         It 'Loads assemblies from literal path' {
-            $LiteralPath = Convert-Path -Path "$($SPClient.ModulePath)\..\..\lib"
+            $LiteralPath = Convert-Path -Path $SPClient.LibPath
             $Params = @{
                 LiteralPath = $LiteralPath
                 PassThru = $true

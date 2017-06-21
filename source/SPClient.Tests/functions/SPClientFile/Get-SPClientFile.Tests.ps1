@@ -7,8 +7,8 @@ Describe 'Get-SPClientFile' {
     Context 'Success' {
 
         It 'Returns all files' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderByServerRelativeUrl($TestConfig.FolderUrl)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
                 ParentFolder = $Folder
             }
@@ -18,10 +18,10 @@ Describe 'Get-SPClientFile' {
         }
 
         It 'Returns a file by id' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentWeb = $Web
-                Identity = $TestConfig.FileId
+                Identity = $SPClient.TestConfig.FileId
             }
             $Result = Get-SPClientFile @Params
             $Result | Should Not BeNullOrEmpty
@@ -29,11 +29,11 @@ Describe 'Get-SPClientFile' {
         }
 
         It 'Returns a file by name' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderByServerRelativeUrl($TestConfig.FolderUrl)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
                 ParentFolder = $Folder
-                Name = $TestConfig.FileName
+                Name = $SPClient.TestConfig.FileName
             }
             $Result = Get-SPClientFile @Params
             $Result | Should Not BeNullOrEmpty
@@ -41,10 +41,10 @@ Describe 'Get-SPClientFile' {
         }
 
         It 'Returns a file by url' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentWeb = $Web
-                Url = $TestConfig.FileUrl
+                Url = $SPClient.TestConfig.FileUrl
             }
             $Result = Get-SPClientFile @Params
             $Result | Should Not BeNullOrEmpty
@@ -56,7 +56,7 @@ Describe 'Get-SPClientFile' {
     Context 'Failure' {
 
         It 'Throws an error when the file could not be found by id' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Throw = {
                 $Params = @{
                     ParentWeb = $Web
@@ -70,8 +70,8 @@ Describe 'Get-SPClientFile' {
 
         It 'Throws an error when the file could not be found by name' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $Folder = $Web.GetFolderByServerRelativeUrl($TestConfig.FolderUrl)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
                 $Params = @{
                     ParentFolder = $Folder
                     Name = 'TestFile0.txt'
@@ -83,11 +83,11 @@ Describe 'Get-SPClientFile' {
         }
 
         It 'Throws an error when the file could not be found by url' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Throw = {
                 $Params = @{
                     ParentWeb = $Web
-                    Url = "$($TestConfig.FolderUrl)/TestFile0.txt"
+                    Url = "$($SPClient.TestConfig.FolderUrl)/TestFile0.txt"
                 }
                 $Result = Get-SPClientFile @Params
                 $Result | Should Not BeNullOrEmpty

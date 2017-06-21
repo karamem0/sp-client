@@ -8,13 +8,13 @@ Revokes one or more permissions.
 ### All (Default)
 ```
 Revoke-SPClientPermission [-ClientContext <ClientContext>] [-ClientObject] <SecurableObject>
- -Member <Principal> [-All]
+ -Member <Principal> [-All] [-PassThru]
 ```
 
 ### Roles
 ```
 Revoke-SPClientPermission [-ClientContext <ClientContext>] [-ClientObject] <SecurableObject>
- -Member <Principal> -Roles <Object[]>
+ -Member <Principal> -Roles <Object[]> [-PassThru]
 ```
 
 ## DESCRIPTION
@@ -106,11 +106,32 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -PassThru
+If specified, returns input object.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.SecurableObject
+
 ## OUTPUTS
+
+### None
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Revoke-SPClientPermission.md](https://github.com/karamem0/SPClient/blob/master/doc/Revoke-SPClientPermission.md)
 

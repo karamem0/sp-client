@@ -230,9 +230,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.List
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.ListItemCollection or Microsoft.SharePoint.Client.ListItem
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientListItem.md](https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientListItem.md)
 

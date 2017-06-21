@@ -17,7 +17,7 @@ belongs to a valid user.
 
 ### -------------------------- Example 1 --------------------------
 ```
-Resolve-SPClientUser "i:0#.f|membership|john@example.com"
+Resolve-SPClientUser "i:0#.f|membership|admin@example.com"
 ```
 
 ## PARAMETERS
@@ -55,9 +55,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.User
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Resolve-SPClientUser.md](https://github.com/karamem0/SPClient/blob/master/doc/Resolve-SPClientUser.md)
 

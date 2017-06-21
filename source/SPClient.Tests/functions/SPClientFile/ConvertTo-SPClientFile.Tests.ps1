@@ -7,8 +7,8 @@ Describe 'ConvertTo-SPClientFile' {
     Context 'Success' {
 
         It 'Converts a list item to file' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.DocLibId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.DocLibId)
             $Caml = New-object Microsoft.SharePoint.Client.CamlQuery
             $Caml.ViewXml =  `
                 '<View Scope="RecursiveAll">' + `
@@ -17,7 +17,7 @@ Describe 'ConvertTo-SPClientFile' {
                 '<Where>' + `
                 '<Eq>' + `
                 '<FieldRef Name="UniqueId"/>' + `
-                '<Value Type="Guid">' + $TestConfig.FileId + '</Value>' + `
+                '<Value Type="Guid">' + $SPClient.TestConfig.FileId + '</Value>' + `
                 '</Eq>' + `
                 '</Where>' + `
                 '</Query>' + `
@@ -32,7 +32,7 @@ Describe 'ConvertTo-SPClientFile' {
             $Result = ConvertTo-SPClientFile @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.File'
-            $Result.Name | Should Be $TestConfig.FileName
+            $Result.Name | Should Be $SPClient.TestConfig.FileName
         }
 
     }
@@ -41,8 +41,8 @@ Describe 'ConvertTo-SPClientFile' {
 
         It 'Throws an error when the list item is a folder' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.DocLibId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.DocLibId)
                 $Caml = New-object Microsoft.SharePoint.Client.CamlQuery
                 $Caml.ViewXml =  `
                     '<View Scope="RecursiveAll">' + `
@@ -51,7 +51,7 @@ Describe 'ConvertTo-SPClientFile' {
                     '<Where>' + `
                     '<Eq>' + `
                     '<FieldRef Name="UniqueId"/>' + `
-                    '<Value Type="Guid">' + $TestConfig.FolderId + '</Value>' + `
+                    '<Value Type="Guid">' + $SPClient.TestConfig.FolderId + '</Value>' + `
                     '</Eq>' + `
                     '</Where>' + `
                     '</Query>' + `
@@ -71,9 +71,9 @@ Describe 'ConvertTo-SPClientFile' {
 
         It 'Throws an error when the list item is not located in a document library' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
-                $ListItem = $List.GetItemById($TestConfig.ListItemId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+                $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
                 $Params = @{
                     ListItem = $ListItem
                 }

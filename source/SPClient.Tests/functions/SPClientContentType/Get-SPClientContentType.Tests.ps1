@@ -6,38 +6,83 @@ Describe 'Get-SPClientContentType' {
 
     Context 'Success' {
 
-        It 'Returns all content types' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Params = @{
-                ParentWeb = $Web
+        Context 'Site Content Type' {
+
+            It 'Returns all content types' {
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $Params = @{
+                    ParentObject = $Web
+                }
+                $Result = Get-SPClientContentType @Params
+                $Result | Should Not BeNullOrEmpty
+                $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
             }
-            $Result = Get-SPClientContentType @Params
-            $Result | Should Not BeNullOrEmpty
-            $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
+
+            It 'Returns a content type by id' {
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $Params = @{
+                    ParentObject = $Web
+                    Identity = $SPClient.TestConfig.WebContentTypeId
+                }
+                $Result = Get-SPClientContentType @Params
+                $Result | Should Not BeNullOrEmpty
+                $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
+                $Result.StringId | Should Be $Params.Identity
+            }
+
+            It 'Returns a content type by name' {
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $Params = @{
+                    ParentObject = $Web
+                    Name = $SPClient.TestConfig.WebContentTypeName
+                }
+                $Result = Get-SPClientContentType @Params
+                $Result | Should Not BeNullOrEmpty
+                $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
+                $Result.Name | Should Be $Params.Name
+            }
+
         }
 
-        It 'Returns a content type by id' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Params = @{
-                ParentWeb = $Web
-                Identity = $TestConfig.ContentTypeId
-            }
-            $Result = Get-SPClientContentType @Params
-            $Result | Should Not BeNullOrEmpty
-            $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
-            $Result.StringId | Should Be $Params.Identity
-        }
+        Context 'List Content Type' {
 
-        It 'Returns a content type by name' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Params = @{
-                ParentWeb = $Web
-                Name = $TestConfig.ContentTypeName
+            It 'Returns all content types' {
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+                $Params = @{
+                    ParentObject = $List
+                }
+                $Result = Get-SPClientContentType @Params
+                $Result | Should Not BeNullOrEmpty
+                $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
             }
-            $Result = Get-SPClientContentType @Params
-            $Result | Should Not BeNullOrEmpty
-            $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
-            $Result.Name | Should Be $Params.Name
+
+            It 'Returns a content type by id' {
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+                $Params = @{
+                    ParentObject = $List
+                    Identity = $SPClient.TestConfig.ListContentTypeId
+                }
+                $Result = Get-SPClientContentType @Params
+                $Result | Should Not BeNullOrEmpty
+                $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
+                $Result.StringId | Should Be $Params.Identity
+            }
+
+            It 'Returns a content type by name' {
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+                $Params = @{
+                    ParentObject = $List
+                    Name = $SPClient.TestConfig.ListContentTypeName
+                }
+                $Result = Get-SPClientContentType @Params
+                $Result | Should Not BeNullOrEmpty
+                $Result | Should BeOfType 'Microsoft.SharePoint.Client.ContentType'
+                $Result.Name | Should Be $Params.Name
+            }
+
         }
 
     }
@@ -46,9 +91,9 @@ Describe 'Get-SPClientContentType' {
 
         It 'Throws an error when the content type could not be found by id' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    ParentObject = $Web
                     Identity = '0x0100E29372CEECF346BD82ADB95FFF0C637D'
                 }
                 $Result = Get-SPClientContentType @Params
@@ -59,9 +104,9 @@ Describe 'Get-SPClientContentType' {
 
         It 'Throws an error when the content type could not be found by name' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    ParentObject = $Web
                     Name = 'Test Content Type 0'
                 }
                 $Result = Get-SPClientContentType @Params

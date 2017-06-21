@@ -6,16 +6,16 @@ Creates a new choice field.
 ## SYNTAX
 
 ```
-New-SPClientFieldChoice [-ClientContext <ClientContext>] [[-ParentList] <List>] -Name <String>
- [-Title <String>] [-Identity <Guid>] [-Description <String>] [-Required <Boolean>]
+New-SPClientFieldChoice [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentParameter>]
+ -Name <String> [-Title <String>] [-Identity <Guid>] [-Description <String>] [-Required <Boolean>]
  [-EnforceUniqueValues <Boolean>] [-Choices <String[]>] [-EditFormat <String>] [-FillInChoice <Boolean>]
  [-DefaultValue <String>] [-AddToDefaultView <Boolean>] [-Retrievals <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientFieldChoice function adds a new field to the list.
-The field
-allows the user to select one or mode values.
+The New-SPClientFieldChoice function adds a new field to the web or list.
+The
+field allows the user to select one or mode values.
 
 ## EXAMPLES
 
@@ -42,11 +42,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentList
-Indicates the list which a field to be created.
+### -ParentObject
+Indicates the web or list which a field to be created.
 
 ```yaml
-Type: List
+Type: SPClientFieldParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -242,9 +242,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or SPClient.SPClientFieldParentParameter
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.FieldChoice
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFieldChoice.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFieldChoice.md)
 

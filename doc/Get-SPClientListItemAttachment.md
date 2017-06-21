@@ -107,9 +107,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.ListItem
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.AttachmentCollection or Microsoft.SharePoint.Client.Attachment
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientListItemAttachment.md](https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientListItemAttachment.md)
 

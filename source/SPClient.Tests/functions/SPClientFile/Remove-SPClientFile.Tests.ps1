@@ -8,8 +8,8 @@ Describe 'Remove-SPClientFile' {
 
         BeforeEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $Folder = $Web.GetFolderById($TestConfig.FolderId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
                 $Buffer = [System.Text.Encoding]::UTF8.GetBytes('TestFile0')
                 $Stream = New-Object System.IO.MemoryStream(@(, $Buffer))
                 $File = New-Object Microsoft.SharePoint.Client.FileCreationInformation
@@ -25,8 +25,8 @@ Describe 'Remove-SPClientFile' {
         }
 
         It 'Removes a file by loaded client object' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderById($TestConfig.FolderId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
             $File = $Folder.Files.GetByUrl('TestFile0.txt')
             $SPClient.ClientContext.Load($File)
             $SPClient.ClientContext.ExecuteQuery()
@@ -38,8 +38,8 @@ Describe 'Remove-SPClientFile' {
         }
 
         It 'Removes a file by unloaded client object' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderById($TestConfig.FolderId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
             $File = $Folder.Files.GetByUrl('TestFile0.txt')
             $Params = @{
                 ClientObject = $File
@@ -49,8 +49,8 @@ Describe 'Remove-SPClientFile' {
         }
 
         It 'Removes a file by id' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderById($TestConfig.FolderId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
             $File = $Folder.Files.GetByUrl('TestFile0.txt')
             $SPClient.ClientContext.Load($File)
             $SPClient.ClientContext.ExecuteQuery()
@@ -63,8 +63,8 @@ Describe 'Remove-SPClientFile' {
         }
 
         It 'Removes a file by name' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderById($TestConfig.FolderId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
             $Params = @{
                 ParentFolder = $Folder
                 Name = "TestFile0.txt"
@@ -74,10 +74,10 @@ Describe 'Remove-SPClientFile' {
         }
 
         It 'Removes a file by url' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentWeb = $Web
-                Url = "$($TestConfig.FolderUrl)/TestFile0.txt"
+                Url = "$($SPClient.TestConfig.FolderUrl)/TestFile0.txt"
             }
             $Result = Remove-SPClientFile @Params
             $Result | Should BeNullOrEmpty
@@ -89,7 +89,7 @@ Describe 'Remove-SPClientFile' {
 
         It 'Throws an error when the file could not be found by id' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentWeb = $Web
                     Identity = '7308CB07-2BB0-483B-8856-B9F540497C25'
@@ -102,8 +102,8 @@ Describe 'Remove-SPClientFile' {
 
         It 'Throws an error when the file could not be found by name' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $Folder = $Web.GetFolderById($TestConfig.FolderId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
                 $Params = @{
                     ParentFolder = $Folder
                     Name = "TestFile0.txt"
@@ -116,10 +116,10 @@ Describe 'Remove-SPClientFile' {
 
         It 'Throws an error when the file could not be found by url' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentWeb = $Web
-                    Url = "$($TestConfig.FolderUrl)/TestFile0.txt"
+                    Url = "$($SPClient.TestConfig.FolderUrl)/TestFile0.txt"
                 }
                 $Result = Remove-SPClientFile @Params
                 $Result | Should Not BeNullOrEmpty

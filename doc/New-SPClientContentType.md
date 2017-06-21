@@ -6,8 +6,9 @@ Creates a new content type.
 ## SYNTAX
 
 ```
-New-SPClientContentType [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Name <String>
- [-Description <String>] [-Group <String>] [-ParentContentType <ContentType>] [-Retrievals <String>]
+New-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
+ -Name <String> [-Description <String>] [-Group <String>] [-ParentContentType <ContentType>]
+ [-Retrievals <String>]
 ```
 
 ## DESCRIPTION
@@ -38,11 +39,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentWeb
-Indicates the web which a content type to be created.
+### -ParentObject
+Indicates the web or list which a content type to be created.
 
 ```yaml
-Type: Web
+Type: SPClientContentTypeParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -130,9 +131,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or SPClient.SPClientContentTypeParentParameter
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.ContentType
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientContentType.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientContentType.md)
 

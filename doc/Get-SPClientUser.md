@@ -50,12 +50,12 @@ Get-SPClientUser -Identity 7
 
 ### -------------------------- Example 3 --------------------------
 ```
-Get-SPClientUser -Name "i:0#.f|membership|john@example.com"
+Get-SPClientUser -Name "i:0#.f|membership|admin@example.com"
 ```
 
 ### -------------------------- Example 4 --------------------------
 ```
-Get-SPClientUser -Email "john@example.com"
+Get-SPClientUser -Email "admin@example.com"
 ```
 
 ### -------------------------- Example 5 --------------------------
@@ -158,9 +158,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.UserCollection or Microsoft.SharePoint.Client.User
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientUser.md](https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientUser.md)
 

@@ -35,7 +35,7 @@ Describe 'New-SPClientGroup' {
 
         It 'Creates a new group with all parameters' {
             $Web = $SPClient.ClientContext.Site.RootWeb
-            $User = $Web.SiteUsers.GetById($TestConfig.UserId)
+            $User = $Web.SiteUsers.GetById($SPClient.TestConfig.UserId)
             $Params = @{
                 Name = 'Test Group 0'
                 Description = 'Test Group 0'
@@ -48,8 +48,8 @@ Describe 'New-SPClientGroup' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Group'
             $Result.Title | Should Be 'Test Group 0'
             $Result.Description | Should Be 'Test Group 0'
-            $Result.Owner.Id | Should Be $TestConfig.UserId
-            $Result.Users[0].Id | Should Be $TestConfig.UserId
+            $Result.Owner.Id | Should Be $SPClient.TestConfig.UserId
+            $Result.Users[0].Id | Should Be $SPClient.TestConfig.UserId
         }
 
     }

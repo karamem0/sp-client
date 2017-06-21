@@ -1,26 +1,28 @@
 ﻿#Requires -Version 3.0
 
-# Remove-SPClientContentType.ps1
-#
-# Copyright (c) 2017 karamem0
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+<#
+  Remove-SPClientContentType.ps1
+
+  Copyright (c) 2017 karamem0
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+#>
 
 function Remove-SPClientContentType {
 
@@ -33,8 +35,8 @@ function Remove-SPClientContentType {
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the content type to delete.
-.PARAMETER ParentWeb
-  Indicates the web which the content type is contained.
+.PARAMETER ParentObject
+  Indicates the web or list which the content type is contained.
 .PARAMETER Identity
   Indicates the content type ID.
 .PARAMETER Name
@@ -45,6 +47,12 @@ function Remove-SPClientContentType {
   Remove-SPClientContentType $web -Identity "0X01009BD26CA6BE114008A9D56E68022DD1A7"
 .EXAMPLE
   Remove-SPClientContentType $web -Name "Custom Content Type"
+.INPUTS
+  None or Microsoft.SharePoint.Client.ContentType or SPClient.SPClientContentTypeParentParameter
+.OUTPUTS
+  None
+.LINK
+  https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientContentType.md
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -57,8 +65,8 @@ function Remove-SPClientContentType {
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [Microsoft.SharePoint.Client.Web]
-        $ParentWeb,
+        [SPClient.SPClientContentTypeParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [string]
@@ -80,7 +88,7 @@ function Remove-SPClientContentType {
                     -Retrievals 'Id'
             }
         } else {
-            $ClientObjectCollection = $ParentWeb.ContentTypes
+            $ClientObjectCollection = $ParentObject.ClientObject.ContentTypes
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `

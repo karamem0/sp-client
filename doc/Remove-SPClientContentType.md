@@ -12,12 +12,14 @@ Remove-SPClientContentType [-ClientContext <ClientContext>] [-ClientObject] <Con
 
 ### Name
 ```
-Remove-SPClientContentType [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Name <String>
+Remove-SPClientContentType [-ClientContext <ClientContext>]
+ [-ParentObject] <SPClientContentTypeParentParameter> -Name <String>
 ```
 
 ### Identity
 ```
-Remove-SPClientContentType [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Identity <String>
+Remove-SPClientContentType [-ClientContext <ClientContext>]
+ [-ParentObject] <SPClientContentTypeParentParameter> -Identity <String>
 ```
 
 ## DESCRIPTION
@@ -73,11 +75,11 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ParentWeb
-Indicates the web which the content type is contained.
+### -ParentObject
+Indicates the web or list which the content type is contained.
 
 ```yaml
-Type: Web
+Type: SPClientContentTypeParentParameter
 Parameter Sets: Name, Identity
 Aliases: 
 
@@ -120,9 +122,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.ContentType or SPClient.SPClientContentTypeParentParameter
+
 ## OUTPUTS
+
+### None
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientContentType.md](https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientContentType.md)
 

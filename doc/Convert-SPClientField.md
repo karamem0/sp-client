@@ -54,9 +54,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.Field
+
 ## OUTPUTS
+
+### Derived type of Microsoft.SharePoint.Client.Field
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Convert-SPClientField.md](https://github.com/karamem0/SPClient/blob/master/doc/Convert-SPClientField.md)
 

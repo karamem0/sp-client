@@ -8,7 +8,7 @@ Describe 'Enable-SPClientUniquePermission' {
 
         BeforeEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = New-Object Microsoft.SharePoint.Client.ListCreationInformation
                 $List.Title = 'TestList0'
                 $List.TemplateType = 100
@@ -24,7 +24,7 @@ Describe 'Enable-SPClientUniquePermission' {
 
         AfterEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetByTitle('Test List 0')
                 $List.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
@@ -34,16 +34,17 @@ Describe 'Enable-SPClientUniquePermission' {
         }
 
         It 'Enables unique permission' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetByTitle('Test List 0')
             $Params = @{
                 ClientObject = $List
                 CopyRoleAssignments = $true
                 ClearSubscopes = $true
+                PassThru = $true
             }
             $Result = Enable-SPClientUniquePermission @Params
-            $Result | Should BeNullOrEmpty
-            $List.HasUniqueRoleAssignments | Should Be $true
+            $Result | Should Not BeNullOrEmpty
+            $Result.HasUniqueRoleAssignments | Should Be $true
         }
 
     }

@@ -1,26 +1,28 @@
 ﻿#Requires -Version 3.0
 
-# Remove-SPClientField.ps1
-#
-# Copyright (c) 2017 karamem0
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+<#
+  Remove-SPClientField.ps1
+
+  Copyright (c) 2017 karamem0
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+#>
 
 function Remove-SPClientField {
 
@@ -33,7 +35,7 @@ function Remove-SPClientField {
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the field to delete.
-.PARAMETER ParentList
+.PARAMETER ParentObject
   Indicates the list which the field is contained.
 .PARAMETER Identity
   Indicates the field GUID.
@@ -45,6 +47,12 @@ function Remove-SPClientField {
   Remove-SPClientField $list -Identity "39ED73EB-FDD8-4870-91A5-EEE0ACB966B2"
 .EXAMPLE
   Remove-SPClientField $list -Name "Custom Field"
+.INPUTS
+  None or Microsoft.SharePoint.Client.Field or SPClient.SPClientFieldParentParameter
+.OUTPUTS
+  None
+.LINK
+  https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientField.md
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -57,8 +65,8 @@ function Remove-SPClientField {
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [Microsoft.SharePoint.Client.List]
-        $ParentList,
+        [SPClient.SPClientFieldParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -81,7 +89,7 @@ function Remove-SPClientField {
                     -Retrievals 'Id,SchemaXml'
             }
         } else {
-            $ClientObjectCollection = $ParentList.Fields
+            $ClientObjectCollection = $ParentObject.ClientObject.Fields
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `

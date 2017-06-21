@@ -155,9 +155,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.Folder or Microsoft.SharePoint.Client.Web
+
 ## OUTPUTS
+
+### None
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientFolder.md](https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientFolder.md)
 

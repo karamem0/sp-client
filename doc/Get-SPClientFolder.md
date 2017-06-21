@@ -170,9 +170,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.Folder or Microsoft.SharePoint.Client.Web
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.FolderCollection or Microsoft.SharePoint.Client.Folder
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientFolder.md](https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientFolder.md)
 

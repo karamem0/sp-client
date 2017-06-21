@@ -95,9 +95,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.File or Microsoft.SharePoint.Client.Folder
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.ListItem
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/ConvertTo-SPClientListItem.md](https://github.com/karamem0/SPClient/blob/master/doc/ConvertTo-SPClientListItem.md)
 

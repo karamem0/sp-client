@@ -1,26 +1,28 @@
 ﻿#Requires -Version 3.0
 
-# New-SPClientFieldMultiLineText.ps1
-#
-# Copyright (c) 2017 karamem0
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+<#
+  New-SPClientFieldMultiLineText.ps1
+
+  Copyright (c) 2017 karamem0
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+#>
 
 function New-SPClientFieldMultiLineText {
 
@@ -28,12 +30,12 @@ function New-SPClientFieldMultiLineText {
 .SYNOPSIS
   Creates a new multi-line text field.
 .DESCRIPTION
-  The New-SPClientFieldMultiLineText function adds a new field to the list. The
-  field allows the user to enter multiple lines of text.
+  The New-SPClientFieldMultiLineText function adds a new field to the web or
+  list. The field allows the user to enter multiple lines of text.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ParentList
-  Indicates the list which a field to be created.
+.PARAMETER ParentObject
+  Indicates the web or list which a field to be created.
 .PARAMETER Name
   Indicates the internal name.
 .PARAMETER Title
@@ -56,6 +58,12 @@ function New-SPClientFieldMultiLineText {
   Indicates the data retrieval expression.
 .EXAMPLE
   New-SPClientFieldMultiLineText $list -Name "CustomField" -Title "Custom Field"
+.INPUTS
+  None or SPClient.SPClientFieldParentParameter
+.OUTPUTS
+  Microsoft.SharePoint.Client.FieldMultiLineText
+.LINK
+  https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFieldMultiLineText.md
 #>
 
     [CmdletBinding()]
@@ -64,8 +72,8 @@ function New-SPClientFieldMultiLineText {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.List]
-        $ParentList,
+        [SPClient.SPClientFieldParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true)]
         [string]
         $Name,
@@ -124,19 +132,18 @@ function New-SPClientFieldMultiLineText {
             $FieldElement.SetAttribute('RichTextMode', 'FullHtml')
         }
         if ($PSBoundParameters.ContainsKey('DefaultValue')) {
-            $DefaultElement = $XmlDocument.CreateElement('Default')
+            $DefaultElement = $FieldElement.AppendChild($XmlDocument.CreateElement('Default'))
             $DefaultElement.InnerText = $DefaultValue
-            $FieldElement.AppendChild($DefaultElement) | Out-Null
         }
         $AddFieldOptions = [Microsoft.SharePoint.Client.AddFieldOptions]::AddFieldInternalNameHint
-        $ClientObject = $ParentList.Fields.AddFieldAsXml($XmlDocument.InnerXml, $AddToDefaultView, $AddFieldOptions)
+        $ClientObject = $ParentObject.ClientObject.Fields.AddFieldAsXml($XmlDocument.InnerXml, $AddToDefaultView, $AddFieldOptions)
+        $ClientObject = Convert-SPClientField `
+            -ClientContext $ClientContext `
+            -Field $ClientObject
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
             -Retrievals $Retrievals
-        $ClientObject = Convert-SPClientField `
-            -ClientContext $ClientContext `
-            -Field $ClientObject
         Write-Output $ClientObject
     }
 

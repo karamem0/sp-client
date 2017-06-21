@@ -1,26 +1,28 @@
 ﻿#Requires -Version 3.0
 
-# New-SPClientFieldCalculated.ps1
-#
-# Copyright (c) 2017 karamem0
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+<#
+  New-SPClientFieldCalculated.ps1
+
+  Copyright (c) 2017 karamem0
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+#>
 
 function New-SPClientFieldCalculated {
 
@@ -28,12 +30,12 @@ function New-SPClientFieldCalculated {
 .SYNOPSIS
   Creates a new calclated field.
 .DESCRIPTION
-  The New-SPClientFieldCalculated function adds a new field to the list. The
-  value of the field is calculated based on other columns.
+  The New-SPClientFieldCalculated function adds a new field to the web or list.
+  The value of the field is calculated based on other columns.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ParentList
-  Indicates the list which a field to be created.
+.PARAMETER ParentObject
+  Indicates the web or list which a field to be created.
 .PARAMETER Name
   Indicates the internal name.
 .PARAMETER Title
@@ -71,6 +73,12 @@ function New-SPClientFieldCalculated {
   Indicates the data retrieval expression.
 .EXAMPLE
   New-SPClientFieldCalculated $list -Name "CustomField" -Title "Custom Field" -Formula "=[Title]" -FieldRefs "Title" -OutputType "Text"
+.INPUTS
+  None or SPClient.SPClientFieldParentParameter
+.OUTPUTS
+  Microsoft.SharePoint.Client.FieldCalculated
+.LINK
+  https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFieldCalculated.md
 #>
 
     [CmdletBinding()]
@@ -79,8 +87,8 @@ function New-SPClientFieldCalculated {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.List]
-        $ParentList,
+        [SPClient.SPClientFieldParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true)]
         [string]
         $Name,
@@ -167,14 +175,14 @@ function New-SPClientFieldCalculated {
             $FieldElement.SetAttribute('Format', $DateFormat)
         }
         $AddFieldOptions = [Microsoft.SharePoint.Client.AddFieldOptions]::AddFieldInternalNameHint
-        $ClientObject = $ParentList.Fields.AddFieldAsXml($XmlDocument.InnerXml, $AddToDefaultView, $AddFieldOptions)
+        $ClientObject = $ParentObject.ClientObject.Fields.AddFieldAsXml($XmlDocument.InnerXml, $AddToDefaultView, $AddFieldOptions)
+        $ClientObject = Convert-SPClientField `
+            -ClientContext $ClientContext `
+            -Field $ClientObject
         Invoke-SPClientLoadQuery `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
             -Retrievals $Retrievals
-        $ClientObject = Convert-SPClientField `
-            -ClientContext $ClientContext `
-            -Field $ClientObject
         Write-Output $ClientObject
     }
 

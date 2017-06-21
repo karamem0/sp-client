@@ -8,7 +8,7 @@ Describe 'Remove-SPClientWeb' {
 
         BeforeEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $WebCollection = $Web.Webs
                 $Web = New-Object Microsoft.SharePoint.Client.WebCreationInformation
                 $Web.Url = 'TestWeb0'
@@ -26,7 +26,7 @@ Describe 'Remove-SPClientWeb' {
         }
 
         It 'Removes a web by loaded client object' {
-            $Web = $SPClient.ClientContext.Site.OpenWeb("$($TestConfig.WebUrl)/TestWeb0")
+            $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
             $SPClient.ClientContext.Load($Web)
             $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
@@ -37,7 +37,7 @@ Describe 'Remove-SPClientWeb' {
         }
 
         It 'Removes a web by unloaded client object' {
-            $Web = $SPClient.ClientContext.Site.OpenWeb("$($TestConfig.WebUrl)/TestWeb0")
+            $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
             $Params = @{
                 ClientObject = $Web
             }
@@ -46,7 +46,7 @@ Describe 'Remove-SPClientWeb' {
         }
 
         It 'Removes a web by id' {
-            $Web = $SPClient.ClientContext.Site.OpenWeb("$($TestConfig.WebUrl)/TestWeb0")
+            $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
             $SPClient.ClientContext.Load($Web)
             $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
@@ -57,7 +57,7 @@ Describe 'Remove-SPClientWeb' {
         }
 
         It 'Removes a web by url' {
-            $Web = $SPClient.ClientContext.Site.OpenWeb("$($TestConfig.WebUrl)/TestWeb0")
+            $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
             $SPClient.ClientContext.Load($Web)
             $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
@@ -85,7 +85,7 @@ Describe 'Remove-SPClientWeb' {
         It 'Throws an error when the web could not be found by url' {
             $Throw = {
                 $Params = @{
-                    Url = "$($TestConfig.WebUrl)/TestWeb0"
+                    Url = "$($SPClient.TestConfig.WebUrl)/TestWeb0"
                 }
                 $Result = Remove-SPClientWeb @Params
                 $Result | Should Not BeNullOrEmpty

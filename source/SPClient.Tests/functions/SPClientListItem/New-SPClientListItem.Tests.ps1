@@ -8,8 +8,8 @@ Describe 'New-SPClientListItem' {
 
         AfterEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Caml = New-Object Microsoft.SharePoint.Client.CamlQuery
                 $Caml.ViewXml = `
                     '<View>' + `
@@ -36,8 +36,8 @@ Describe 'New-SPClientListItem' {
         }
 
         It 'Creates a new list item with mandatory parameters' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 FieldValues = @{
@@ -50,8 +50,8 @@ Describe 'New-SPClientListItem' {
         }
 
         It 'Creates a new list item with all parameters' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 FieldValues = @{

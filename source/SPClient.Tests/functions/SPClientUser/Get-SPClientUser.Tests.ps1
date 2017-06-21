@@ -15,7 +15,7 @@ Describe 'Get-SPClientUser' {
 
         It 'Returns a user by id' {
             $Params = @{
-                Identity = $TestConfig.UserId
+                Identity = $SPClient.TestConfig.UserId
             }
             $Result = Get-SPClientUser @Params
             $Result | Should Not BeNullOrEmpty
@@ -24,7 +24,7 @@ Describe 'Get-SPClientUser' {
 
         It 'Returns a user by name' {
             $Params = @{
-                Name = $TestConfig.UserName
+                Name = $SPClient.TestConfig.UserName
             }
             $Result = Get-SPClientUser @Params
             $Result | Should Not BeNullOrEmpty
@@ -33,7 +33,7 @@ Describe 'Get-SPClientUser' {
 
         It 'Returns a user by email' {
             $Params = @{
-                Email = $TestConfig.UserEmail
+                Email = $SPClient.TestConfig.UserEmail
             }
             $Result = Get-SPClientUser @Params
             $Result | Should Not BeNullOrEmpty

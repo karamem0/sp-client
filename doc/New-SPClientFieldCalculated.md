@@ -6,16 +6,15 @@ Creates a new calclated field.
 ## SYNTAX
 
 ```
-New-SPClientFieldCalculated [-ClientContext <ClientContext>] [[-ParentList] <List>] -Name <String>
- [-Title <String>] [-Identity <Guid>] [-Description <String>] -Formula <String> -FieldRefs <String[]>
- -OutputType <String> [-Decimals <Int32>] [-Percentage <Boolean>] [-LocaleId <Int32>] [-DateFormat <String>]
- [-AddToDefaultView <Boolean>] [-Retrievals <String>]
+New-SPClientFieldCalculated [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentParameter>]
+ -Name <String> [-Title <String>] [-Identity <Guid>] [-Description <String>] -Formula <String>
+ -FieldRefs <String[]> -OutputType <String> [-Decimals <Int32>] [-Percentage <Boolean>] [-LocaleId <Int32>]
+ [-DateFormat <String>] [-AddToDefaultView <Boolean>] [-Retrievals <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientFieldCalculated function adds a new field to the list.
-The
-value of the field is calculated based on other columns.
+The New-SPClientFieldCalculated function adds a new field to the web or list.
+The value of the field is calculated based on other columns.
 
 ## EXAMPLES
 
@@ -42,11 +41,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentList
-Indicates the list which a field to be created.
+### -ParentObject
+Indicates the web or list which a field to be created.
 
 ```yaml
-Type: List
+Type: SPClientFieldParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -267,9 +266,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or SPClient.SPClientFieldParentParameter
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.FieldCalculated
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFieldCalculated.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFieldCalculated.md)
 

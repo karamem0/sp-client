@@ -6,16 +6,15 @@ Creates a new date/time field.
 ## SYNTAX
 
 ```
-New-SPClientFieldDateTime [-ClientContext <ClientContext>] [[-ParentList] <List>] [-Name <String>]
- [-Title <String>] [-Identity <Guid>] [-Description <String>] [-Required <Boolean>]
+New-SPClientFieldDateTime [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentParameter>]
+ [-Name <String>] [-Title <String>] [-Identity <Guid>] [-Description <String>] [-Required <Boolean>]
  [-EnforceUniqueValues <Boolean>] [-DisplayFormat <String>] [-FriendlyDisplayFormat <String>]
  [-DefaultValue <String>] [-AddToDefaultView <Boolean>] [-Retrievals <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientFieldDateTime function adds a new field to the list.
-The field
-allows the user to enter a date and time.
+The New-SPClientFieldDateTime function adds a new field to the web or list.
+The field allows the user to enter a date and time.
 
 ## EXAMPLES
 
@@ -42,11 +41,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentList
-Indicates the list which a field to be created.
+### -ParentObject
+Indicates the web or list which a field to be created.
 
 ```yaml
-Type: List
+Type: SPClientFieldParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -229,9 +228,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or SPClient.SPClientFieldParentParameter
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.FieldDateTime
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFieldDateTime.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFieldDateTime.md)
 

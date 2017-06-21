@@ -7,8 +7,8 @@ Describe 'Get-SPClientFolder' {
     Context 'Success' {
 
         It 'Returns all folders' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.DocLibId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.DocLibId)
             $Folder = $List.RootFolder
             $Params = @{
                 ParentFolder = $Folder
@@ -19,10 +19,10 @@ Describe 'Get-SPClientFolder' {
         }
 
         It 'Returns a folder by id' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentWeb = $Web
-                Identity = $TestConfig.FolderId
+                Identity = $SPClient.TestConfig.FolderId
             }
             $Result = Get-SPClientFolder @Params
             $Result | Should Not BeNullOrEmpty
@@ -30,12 +30,12 @@ Describe 'Get-SPClientFolder' {
         }
 
         It 'Returns a folder by name' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.DocLibId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.DocLibId)
             $Folder = $List.RootFolder
             $Params = @{
                 ParentFolder = $Folder
-                Name = $TestConfig.FolderName
+                Name = $SPClient.TestConfig.FolderName
             }
             $Result = Get-SPClientFolder @Params
             $Result | Should Not BeNullOrEmpty
@@ -43,10 +43,10 @@ Describe 'Get-SPClientFolder' {
         }
 
         It 'Returns a folder by url' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentWeb = $Web
-                Url = $TestConfig.FolderUrl
+                Url = $SPClient.TestConfig.FolderUrl
             }
             $Result = Get-SPClientFolder @Params
             $Result | Should Not BeNullOrEmpty
@@ -58,7 +58,7 @@ Describe 'Get-SPClientFolder' {
     Context 'Failure' {
 
         It 'Throws an error when the folder could not be found by id' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Throw = {
                 $Params = @{
                     ParentWeb = $Web
@@ -72,8 +72,8 @@ Describe 'Get-SPClientFolder' {
 
         It 'Throws an error when the folder could not be found by name' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.DocLibId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.DocLibId)
                 $Folder = $List.RootFolder
                 $Params = @{
                     ParentFolder = $Folder
@@ -86,11 +86,11 @@ Describe 'Get-SPClientFolder' {
         }
 
         It 'Throws an error when the folder could not be found by url' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Throw = {
                 $Params = @{
                     ParentWeb = $Web
-                    Url = "$($TestConfig.FolderUrl)/TestFolder0"
+                    Url = "$($SPClient.TestConfig.FolderUrl)/TestFolder0"
                 }
                 $Result = Get-SPClientFolder @Params
                 $Result | Should Not BeNullOrEmpty

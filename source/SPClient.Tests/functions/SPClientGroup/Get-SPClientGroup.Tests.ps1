@@ -15,7 +15,7 @@ Describe 'Get-SPClientGroup' {
 
         It 'Returns a SharePoint group by id' {
             $Params = @{
-                Identity = $TestConfig.GroupId
+                Identity = $SPClient.TestConfig.GroupId
             }
             $Result = Get-SPClientGroup @Params
             $Result | Should Not BeNullOrEmpty
@@ -24,7 +24,7 @@ Describe 'Get-SPClientGroup' {
 
         It 'Returns a SharePoint group by name' {
             $Params = @{
-                Name = $TestConfig.GroupName
+                Name = $SPClient.TestConfig.GroupName
             }
             $Result = Get-SPClientGroup @Params
             $Result | Should Not BeNullOrEmpty

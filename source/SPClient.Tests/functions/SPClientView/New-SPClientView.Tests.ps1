@@ -8,8 +8,8 @@ Describe 'New-SPClientView' {
 
         AfterEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $SPClient.ClientContext.Load($List.Views)
                 $SPClient.ClientContext.ExecuteQuery()
                 for ($index = $List.Views.Count - 1; $index -ge 0; $index--) {
@@ -27,8 +27,8 @@ Describe 'New-SPClientView' {
         }
 
         It 'Creates a new view with mandatory parameters' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 Name = 'TestView0'
@@ -44,8 +44,8 @@ Describe 'New-SPClientView' {
         }
 
         It 'Creates a new view with all parameters' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 Name = 'TestView0'

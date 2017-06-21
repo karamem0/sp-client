@@ -7,9 +7,9 @@ Describe 'Get-SPClientListItemAttachment' {
     Context 'Success' {
 
         It 'Returns all attachments' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
-            $ListItem = $List.GetItemById($TestConfig.ListItemId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+            $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Params = @{
                 ParentListItem = $ListItem
             }
@@ -19,12 +19,12 @@ Describe 'Get-SPClientListItemAttachment' {
         }
 
         It 'Returns a list by file name' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
-            $ListItem = $List.GetItemById($TestConfig.ListItemId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+            $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Params = @{
                 ParentListItem = $ListItem
-                Name = $TestConfig.AttachmentFileName
+                Name = $SPClient.TestConfig.AttachmentFileName
             }
             $Result = Get-SPClientListItemAttachment @Params
             $Result | Should Not BeNullOrEmpty
@@ -37,9 +37,9 @@ Describe 'Get-SPClientListItemAttachment' {
 
         It 'Throws an error when the attachment could not be found by file name' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
-                $ListItem = $List.GetItemById($TestConfig.ListItemId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+                $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
                 $Params = @{
                     ParentListItem = $ListItem
                     Name = 'TestAttachment0.txt'

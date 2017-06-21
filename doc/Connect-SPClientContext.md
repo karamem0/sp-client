@@ -34,7 +34,7 @@ current.
 
 ### -------------------------- Example 1 --------------------------
 ```
-Connect-SPClientContext -Network -Url "https://example.com" -UserName "john" -Password (ConvertTo-SecureString -String "p@ssword" -AsPlainText -Force) -Domain "example.com"
+Connect-SPClientContext -Network -Url "https://example.com" -UserName "admin" -Password (ConvertTo-SecureString -String "p@ssword" -AsPlainText -Force) -Domain "example.com"
 ```
 
 ### -------------------------- Example 2 --------------------------
@@ -166,9 +166,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or System.Management.Automation.PSCredential
+
 ## OUTPUTS
+
+### None or Microsoft.SharePoint.Client.ClientContext
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Connect-SPClientContext.md](https://github.com/karamem0/SPClient/blob/master/doc/Connect-SPClientContext.md)
 

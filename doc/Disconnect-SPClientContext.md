@@ -39,9 +39,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None
+
 ## OUTPUTS
+
+### None
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Disconnect-SPClientContext.md](https://github.com/karamem0/SPClient/blob/master/doc/Disconnect-SPClientContext.md)
 

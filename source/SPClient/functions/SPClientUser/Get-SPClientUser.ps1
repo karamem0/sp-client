@@ -1,26 +1,28 @@
 ﻿#Requires -Version 3.0
 
-# Get-SPClientUser.ps1
-#
-# Copyright (c) 2017 karamem0
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+<#
+  Get-SPClientUser.ps1
+
+  Copyright (c) 2017 karamem0
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+#>
 
 function Get-SPClientUser {
 
@@ -48,11 +50,17 @@ function Get-SPClientUser {
 .EXAMPLE
   Get-SPClientUser -Identity 7
 .EXAMPLE
-  Get-SPClientUser -Name "i:0#.f|membership|john@example.com"
+  Get-SPClientUser -Name "i:0#.f|membership|admin@example.com"
 .EXAMPLE
-  Get-SPClientUser -Email "john@example.com"
+  Get-SPClientUser -Email "admin@example.com"
 .EXAMPLE
   Get-SPClientUser -Retrievals "Title"
+.INPUTS
+  None
+.OUTPUTS
+  Microsoft.SharePoint.Client.UserCollection or Microsoft.SharePoint.Client.User
+.LINK
+  https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientUser.md
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

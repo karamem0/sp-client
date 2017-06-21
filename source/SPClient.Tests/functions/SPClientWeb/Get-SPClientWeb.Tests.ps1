@@ -14,7 +14,7 @@ Describe 'Get-SPClientWeb' {
 
         It 'Gets a web by id' {
             $Params = @{
-                Identity = $TestConfig.WebId
+                Identity = $SPClient.TestConfig.WebId
             }
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
@@ -24,7 +24,7 @@ Describe 'Get-SPClientWeb' {
 
         It 'Gets a web by url' {
             $Params = @{
-                Url = $TestConfig.WebUrl
+                Url = $SPClient.TestConfig.WebUrl
             }
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
@@ -48,7 +48,7 @@ Describe 'Get-SPClientWeb' {
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-            $Result.ServerRelativeUrl | Should Be $TestConfig.SiteUrl
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.SiteUrl
         }
 
     }

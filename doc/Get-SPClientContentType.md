@@ -7,28 +7,29 @@ Gets one or more content types.
 
 ### All (Default)
 ```
-Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentWeb] <Web> [-Retrievals <String>]
+Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
+ [-Retrievals <String>]
 ```
 
 ### Name
 ```
-Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Name <String>
- [-Retrievals <String>]
+Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
+ -Name <String> [-Retrievals <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Identity <String>
- [-Retrievals <String>]
+Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
+ -Identity <String> [-Retrievals <String>]
 ```
 
 ## DESCRIPTION
 The Get-SPClientContentType function lists all content types or retrieves the
 specified content type.
 If not specified filterable parameter, returns all
-content types of the web.
-Otherwise, returns a content type which matches the
-parameter.
+content types of the web or list.
+Otherwise, returns a content type which
+matches the parameter.
 
 ## EXAMPLES
 
@@ -70,11 +71,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentWeb
-Indicates the web which the content types are contained.
+### -ParentObject
+Indicates the web or list which the content types are contained.
 
 ```yaml
-Type: Web
+Type: SPClientContentTypeParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -132,9 +133,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or SPClient.SPClientContentTypeParentParameter
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.ContentTypeCollection or Microsoft.SharePoint.Client.ContentType
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientContentType.md](https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientContentType.md)
 

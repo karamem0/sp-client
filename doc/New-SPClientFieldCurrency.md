@@ -6,16 +6,15 @@ Creates a new currency field.
 ## SYNTAX
 
 ```
-New-SPClientFieldCurrency [-ClientContext <ClientContext>] [[-ParentList] <List>] -Name <String>
- [-Title <String>] [-Identity <Guid>] [-Description <String>] [-Required <Boolean>]
+New-SPClientFieldCurrency [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentParameter>]
+ -Name <String> [-Title <String>] [-Identity <Guid>] [-Description <String>] [-Required <Boolean>]
  [-EnforceUniqueValues <Boolean>] [-MinimumValue <Double>] [-MaximumValue <Double>] [-Decimals <Int32>]
  [-LocaleId <Int32>] [-DefaultValue <Double>] [-AddToDefaultView <Boolean>] [-Retrievals <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientFieldCurrency function adds a new field to the list.
-The field
-allows the user to enter a currency value.
+The New-SPClientFieldCurrency function adds a new field to the web or list.
+The field allows the user to enter a currency value.
 
 ## EXAMPLES
 
@@ -42,11 +41,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentList
-Indicates the list which a field to be created.
+### -ParentObject
+Indicates the web or list which a field to be created.
 
 ```yaml
-Type: List
+Type: SPClientFieldParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -254,9 +253,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or SPClient.SPClientFieldParentParameter
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.FieldCurrency
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFieldCurrency.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFieldCurrency.md)
 

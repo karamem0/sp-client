@@ -8,8 +8,8 @@ Describe 'Remove-SPClientView' {
 
         BeforeEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $View = New-Object Microsoft.SharePoint.Client.ViewCreationInformation
                 $View.Title = 'TestView0'
                 $View.ViewFields = @('ID', 'Title')
@@ -24,8 +24,8 @@ Describe 'Remove-SPClientView' {
         }
 
         It 'Removes a view by loaded client object' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $View = $List.Views.GetByTitle('Test View 0')
             $SPClient.ClientContext.Load($View)
             $SPClient.ClientContext.ExecuteQuery()
@@ -37,8 +37,8 @@ Describe 'Remove-SPClientView' {
         }
 
         It 'Removes a view by unloaded client object' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $View = $List.Views.GetByTitle('Test View 0')
             $Params = @{
                 ClientObject = $View
@@ -48,8 +48,8 @@ Describe 'Remove-SPClientView' {
         }
 
         It 'Removes a view by id' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $View = $List.Views.GetByTitle('Test View 0')
             $SPClient.ClientContext.Load($View)
             $SPClient.ClientContext.ExecuteQuery()
@@ -62,19 +62,19 @@ Describe 'Remove-SPClientView' {
         }
 
         It 'Removes a view by url' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
-                Url = "$($TestConfig.ListUrl)/TestView0.aspx"
+                Url = "$($SPClient.TestConfig.ListUrl)/TestView0.aspx"
             }
             $Result = Remove-SPClientView @Params
             $Result | Should BeNullOrEmpty
         }
 
         It 'Removes a view by title' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 Title = 'Test View 0'
@@ -89,8 +89,8 @@ Describe 'Remove-SPClientView' {
 
         It 'Throws an error when the view could not be found by id' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
                     ParentList = $List
                     Identity = '538BAEA3-24BE-4411-AA54-4700C5735AF7'
@@ -103,11 +103,11 @@ Describe 'Remove-SPClientView' {
 
         It 'Throws an error when the view could not be found by url' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
                     ParentList = $List
-                    Url = "$($TestConfig.ListUrl)/TestView0.aspx"
+                    Url = "$($SPClient.TestConfig.ListUrl)/TestView0.aspx"
                 }
                 $Result = Remove-SPClientView @Params
                 $Result | Should Not BeNullOrEmpty
@@ -117,8 +117,8 @@ Describe 'Remove-SPClientView' {
 
         It 'Throws an error when the view could not be found by title' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
                     ParentList = $List
                     Title = 'Test View 0'

@@ -112,26 +112,6 @@ $ClientContext.Load($User3)
 
 $ClientContext.ExecuteQuery()
 
-$ContentType1 = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
-$ContentType1.Name = 'Test Content Type 1'
-$ContentType1 = $Web1.ContentTypes.Add($ContentType1)
-$ContentType1.Update($true)
-$ClientContext.Load($ContentType1)
-
-$ContentType2 = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
-$ContentType2.Name = 'Test Content Type 2'
-$ContentType2 = $Web1.ContentTypes.Add($ContentType2)
-$ContentType2.Update($true)
-$ClientContext.Load($ContentType2)
-
-$ContentType3 = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
-$ContentType3.Name = 'Test Content Type 3'
-$ContentType3 = $Web1.ContentTypes.Add($ContentType3)
-$ContentType3.Update($true)
-$ClientContext.Load($ContentType3)
-
-$ClientContext.ExecuteQuery()
-
 $List1 = New-Object Microsoft.SharePoint.Client.ListCreationInformation
 $List1.Title = 'TestList1'
 $List1.Description = ''
@@ -165,12 +145,12 @@ $ClientContext.Load($List3.RootFolder)
 $ClientContext.ExecuteQuery()
 
 $Xml = '<Field Name="TestField1" DisplayName="Test Field 1" Type="Text" />'
-$Field1 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field1 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field1.Update()
 $ClientContext.Load($Field1)
 
 $Xml = '<Field Name="TestField2" DisplayName="Test Field 2" Type="Note" />'
-$Field2 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field2 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field2.Update()
 $ClientContext.Load($Field2)
 
@@ -181,7 +161,7 @@ $Xml = '<Field Name="TestField3" DisplayName="Test Field 3" Type="Choice">' + `
     '<CHOICE>Test Value 3</CHOICE>' + `
     '</CHOICES>' + `
     '</Field>'
-$Field3 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field3 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field3.Update()
 $ClientContext.Load($Field3)
 
@@ -192,52 +172,52 @@ $Xml = '<Field Name="TestField4" DisplayName="Test Field 4" Type="MultiChoice" M
     '<CHOICE>Test Value 3</CHOICE>' + `
     '</CHOICES>' + `
     '</Field>'
-$Field4 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field4 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field4.Update()
 $ClientContext.Load($Field4)
 
 $Xml = '<Field Name="TestField5" DisplayName="Test Field 5" Type="Number" />'
-$Field5 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field5 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field5.Update()
 $ClientContext.Load($Field5)
 
 $Xml = '<Field Name="TestField6" DisplayName="Test Field 6" Type="Currency" />'
-$Field6 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field6 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field6.Update()
 $ClientContext.Load($Field6)
 
 $Xml = '<Field Name="TestField7" DisplayName="Test Field 7" Type="DateTime" />'
-$Field7 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field7 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field7.Update()
 $ClientContext.Load($Field7)
 
 $Xml = '<Field Name="TestField8" DisplayName="Test Field 8" Type="Lookup" List="' + $List1.Id.ToString('B') + '" ShowField="Title" />'
-$Field8 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field8 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field8.Update()
 $ClientContext.Load($Field8)
 
 $Xml = '<Field Name="TestField9" DisplayName="Test Field 9" Type="LookupMulti" Mult="TRUE" List="' + $List1.Id.ToString('B') + '" ShowField="Title" />'
-$Field9 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field9 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field9.Update()
 $ClientContext.Load($Field9)
 
 $Xml = '<Field Name="TestField10" DisplayName="Test Field 10" Type="Boolean" />'
-$Field10 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field10 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field10.Update()
 $ClientContext.Load($Field10)
 
 $Xml = '<Field Name="TestField11" DisplayName="Test Field 11" Type="User" />'
-$Field11 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field11 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field11.Update()
 $ClientContext.Load($Field11)
 
 $Xml = '<Field Name="TestField12" DisplayName="Test Field 12" Type="UserMulti" Mult="TRUE" />'
-$Field12 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field12 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field12.Update()
 $ClientContext.Load($Field12)
 
 $Xml = '<Field Name="TestField13" DisplayName="Test Field 13" Type="URL" />'
-$Field13 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field13 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field13.Update()
 $ClientContext.Load($Field13)
 
@@ -247,9 +227,123 @@ $Xml = '<Field Name="TestField14" DisplayName="Test Field 14" Type="Calculated" 
     '<FieldRef Name="Title" />' + `
     '</FieldRefs>' + `
     '</Field>'
-$Field14 = $List1.Fields.AddFieldAsXml($Xml, $true, 8)
+$Field14 = $Web1.Fields.AddFieldAsXml($Xml, $true, 8)
 $Field14.Update()
 $ClientContext.Load($Field14)
+
+$ClientContext.ExecuteQuery()
+
+$WebContentType1 = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
+$WebContentType1.Name = 'Test Content Type 1'
+$WebContentType1 = $Web1.ContentTypes.Add($WebContentType1)
+$WebContentType1.Update($true)
+$ClientContext.Load($WebContentType1)
+
+$WebContentType2 = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
+$WebContentType2.Name = 'Test Content Type 2'
+$WebContentType2 = $Web1.ContentTypes.Add($WebContentType2)
+$WebContentType2.Update($true)
+$ClientContext.Load($WebContentType2)
+
+$WebContentType3 = New-Object Microsoft.SharePoint.Client.ContentTypeCreationInformation
+$WebContentType3.Name = 'Test Content Type 3'
+$WebContentType3 = $Web1.ContentTypes.Add($WebContentType3)
+$WebContentType3.Update($true)
+$ClientContext.Load($WebContentType3)
+
+$ClientContext.ExecuteQuery()
+
+$FieldLink1 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink1.Field = $Field1
+$FieldLink1 = $WebContentType1.FieldLinks.Add($FieldLink1)
+$ClientContext.Load($FieldLink1)
+
+$FieldLink2 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink2.Field = $Field2
+$FieldLink2 = $WebContentType1.FieldLinks.Add($FieldLink2)
+$ClientContext.Load($FieldLink2)
+
+$FieldLink3 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink3.Field = $Field3
+$FieldLink3 = $WebContentType1.FieldLinks.Add($FieldLink3)
+$ClientContext.Load($FieldLink3)
+
+$FieldLink4 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink4.Field = $Field4
+$FieldLink4 = $WebContentType1.FieldLinks.Add($FieldLink4)
+$ClientContext.Load($FieldLink4)
+
+$FieldLink5 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink5.Field = $Field5
+$FieldLink5 = $WebContentType1.FieldLinks.Add($FieldLink5)
+$ClientContext.Load($FieldLink5)
+
+$FieldLink6 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink6.Field = $Field6
+$FieldLink6 = $WebContentType1.FieldLinks.Add($FieldLink6)
+$ClientContext.Load($FieldLink6)
+
+$FieldLink7 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink7.Field = $Field7
+$FieldLink7 = $WebContentType1.FieldLinks.Add($FieldLink7)
+$ClientContext.Load($FieldLink7)
+
+$FieldLink8 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink8.Field = $Field8
+$FieldLink8 = $WebContentType1.FieldLinks.Add($FieldLink8)
+$ClientContext.Load($FieldLink8)
+
+$FieldLink9 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink9.Field = $Field9
+$FieldLink9 = $WebContentType1.FieldLinks.Add($FieldLink9)
+$ClientContext.Load($FieldLink9)
+
+$FieldLink10 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink10.Field = $Field10
+$FieldLink10 = $WebContentType1.FieldLinks.Add($FieldLink10)
+$ClientContext.Load($FieldLink10)
+
+$FieldLink11 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink11.Field = $Field11
+$FieldLink11 = $WebContentType1.FieldLinks.Add($FieldLink11)
+$ClientContext.Load($FieldLink11)
+
+$FieldLink12 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink12.Field = $Field12
+$FieldLink12 = $WebContentType1.FieldLinks.Add($FieldLink12)
+$ClientContext.Load($FieldLink12)
+
+$FieldLink13 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink13.Field = $Field13
+$FieldLink13 = $WebContentType1.FieldLinks.Add($FieldLink13)
+$ClientContext.Load($FieldLink13)
+
+$FieldLink14 = New-Object Microsoft.SharePoint.Client.FieldLinkCreationInformation
+$FieldLink14.Field = $Field14
+$FieldLink14 = $WebContentType1.FieldLinks.Add($FieldLink14)
+$ClientContext.Load($FieldLink14)
+
+$WebContentType1.Update($false)
+
+$ClientContext.ExecuteQuery()
+
+$List1.ContentTypesEnabled = $true
+$List1.Update()
+$ListContentType1 = $List1.ContentTypes.AddExistingContentType($WebContentType1)
+$ListContentType1.Update($false)
+$ClientContext.Load($ListContentType1)
+
+$List2.ContentTypesEnabled = $true
+$List2.Update()
+$ListContentType2 = $List2.ContentTypes.AddExistingContentType($WebContentType2)
+$ListContentType2.Update($false)
+$ClientContext.Load($ListContentType2)
+
+$List3.ContentTypesEnabled = $true
+$List3.Update()
+$ListContentType3 = $List3.ContentTypes.AddExistingContentType($WebContentType3)
+$ListContentType3.Update($false)
+$ClientContext.Load($ListContentType3)
 
 $ClientContext.ExecuteQuery()
 
@@ -451,17 +545,19 @@ $ClientContext.Load($File4.ListItemAllFields)
 
 $ClientContext.ExecuteQuery()
 
-$TestConfig = @{
+$TestConfig = [ordered]@{
     SiteUrl = $ClientContext.Site.ServerRelativeUrl
     WebId = $Web1.Id
     WebTitle = $Web1.Title
     WebUrl = $Web1.ServerRelativeUrl
-    ContentTypeId = $ContentType1.StringId
-    ContentTypeName = $ContentType1.Name
+    WebContentTypeId = $WebContentType1.StringId
+    WebContentTypeName = $WebContentType1.Name
     ListId = $List1.Id
     ListTitle = $List1.Title
     ListUrl = $List1.RootFolder.ServerRelativeUrl
     ListName = $List1.RootFolder.Name
+    ListContentTypeId = $ListContentType1.StringId
+    ListContentTypeName = $ListContentType1.Name
     FieldId = $Field1.Id
     FieldTitle = $Field1.Title
     FieldName = $Field1.InternalName
@@ -487,6 +583,4 @@ $TestConfig = @{
     GroupId = $Group1.Id
     GroupName = $Group1.Title
 }
-$TestConfig |
-    ConvertTo-Json -Compress |
-    Out-File "$($PSScriptRoot)\TestConfiguration.json"
+$TestConfig | ConvertTo-Json -Compress | Out-File -FilePath "$($PSScriptRoot)\TestConfiguration.json"

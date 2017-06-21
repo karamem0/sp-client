@@ -12,12 +12,14 @@ Remove-SPClientField [-ClientContext <ClientContext>] [-ClientObject] <Field>
 
 ### Name
 ```
-Remove-SPClientField [-ClientContext <ClientContext>] [-ParentList] <List> -Name <String>
+Remove-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
+ -Name <String>
 ```
 
 ### Identity
 ```
-Remove-SPClientField [-ClientContext <ClientContext>] [-ParentList] <List> -Identity <Guid>
+Remove-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
+ -Identity <Guid>
 ```
 
 ## DESCRIPTION
@@ -73,11 +75,11 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ParentList
+### -ParentObject
 Indicates the list which the field is contained.
 
 ```yaml
-Type: List
+Type: SPClientFieldParentParameter
 Parameter Sets: Name, Identity
 Aliases: 
 
@@ -120,9 +122,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.Field or SPClient.SPClientFieldParentParameter
+
 ## OUTPUTS
+
+### None
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientField.md](https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientField.md)
 

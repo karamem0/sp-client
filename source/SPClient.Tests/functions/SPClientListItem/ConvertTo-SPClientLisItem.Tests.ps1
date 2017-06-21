@@ -7,8 +7,8 @@ Describe 'ConvertTo-SPClientListItem' {
     Context 'Success' {
 
         It 'Converts a file to list item' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $File = $Web.GetFileById($TestConfig.FileId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $File = $Web.GetFileById($SPClient.TestConfig.FileId)
             $Params = @{
                 File = $File
             }
@@ -18,8 +18,8 @@ Describe 'ConvertTo-SPClientListItem' {
         }
 
         It 'Converts a folder to list item' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderById($TestConfig.FolderId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
             $Params = @{
                 Folder = $Folder
             }

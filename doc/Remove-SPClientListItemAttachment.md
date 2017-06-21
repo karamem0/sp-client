@@ -97,9 +97,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.Attachment or Microsoft.SharePoint.Client.ListItem
+
 ## OUTPUTS
+
+### None
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientListItemAttachment.md](https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientListItemAttachment.md)
 

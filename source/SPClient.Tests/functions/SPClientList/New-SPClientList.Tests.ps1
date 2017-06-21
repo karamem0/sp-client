@@ -8,8 +8,8 @@ Describe 'New-SPClientList' {
 
         AfterEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.GetList("$($TestConfig.WebUrl)/Lists/TestList0")
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.GetList("$($SPClient.TestConfig.WebUrl)/Lists/TestList0")
                 $List.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
             } catch {
@@ -18,7 +18,7 @@ Describe 'New-SPClientList' {
         }
 
         It 'Creates a new list with mandatory parameters' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentWeb = $Web
                 Name = 'TestList0'
@@ -37,7 +37,7 @@ Describe 'New-SPClientList' {
         }
 
         It 'Creates a new list with all parameters' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{ 
                 ParentWeb = $Web
                 Name = 'TestList0'

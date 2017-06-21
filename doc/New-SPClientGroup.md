@@ -115,9 +115,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.Group
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientGroup.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientGroup.md)
 

@@ -8,7 +8,7 @@ Describe 'New-SPClientWeb' {
 
         AfterEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWeb("$($TestConfig.WebUrl)/TestWeb0")
+                $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
                 $Web.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
             } catch {
@@ -17,7 +17,7 @@ Describe 'New-SPClientWeb' {
         }
 
         It 'Creates a new web with mandatory parameters' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentWeb = $Web
                 Url = 'TestWeb0'
@@ -33,7 +33,7 @@ Describe 'New-SPClientWeb' {
         }
 
         It 'Creates a new web with all parameters' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentWeb = $Web
                 Url = 'TestWeb0'

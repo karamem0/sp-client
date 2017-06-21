@@ -30,7 +30,7 @@ New-SPClientListItemAttachment $item -Name "CustomAttachment.xlsx" -ContentStrea
 
 ### -------------------------- Example 2 --------------------------
 ```
-New-SPClientListItemAttachment $item -ContentPath "C:\Users\John\Documents\CustomAttachment.xlsx"
+New-SPClientListItemAttachment $item -ContentPath "C:\Users\admin\Documents\CustomAttachment.xlsx"
 ```
 
 ## PARAMETERS
@@ -140,9 +140,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.ListItem
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.Attachment
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientListItemAttachment.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientListItemAttachment.md)
 

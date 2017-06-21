@@ -8,7 +8,7 @@ Describe 'Disable-SPClientUniquePermission' {
 
         BeforeEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = New-Object Microsoft.SharePoint.Client.ListCreationInformation
                 $List.Title = 'TestList0'
                 $List.TemplateType = 100
@@ -24,7 +24,7 @@ Describe 'Disable-SPClientUniquePermission' {
 
         AfterEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetByTitle('Test List 0')
                 $List.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
@@ -34,15 +34,16 @@ Describe 'Disable-SPClientUniquePermission' {
         }
 
         It 'Disables unique permission' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetByTitle('Test List 0')
             $List.BreakRoleInheritance($false, $false)
             $Params = @{
                 ClientObject = $List
+                PassThru = $true
             }
             $Result = Disable-SPClientUniquePermission @Params
-            $Result | Should BeNullOrEmpty
-            $List.HasUniqueRoleAssignments | Should Be $false
+            $Result | Should Not BeNullOrEmpty
+            $Result.HasUniqueRoleAssignments | Should Be $false
         }
 
     }

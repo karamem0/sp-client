@@ -152,9 +152,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.Web
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.ListCollection or Microsoft.SharePoint.Client.List
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientList.md](https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientList.md)
 

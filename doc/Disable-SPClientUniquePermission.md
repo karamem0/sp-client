@@ -6,7 +6,7 @@ Disables unique permissions.
 ## SYNTAX
 
 ```
-Disable-SPClientUniquePermission [-ClientContext <ClientContext>] [-ClientObject] <SecurableObject>
+Disable-SPClientUniquePermission [-ClientContext <ClientContext>] [-ClientObject] <SecurableObject> [-PassThru]
 ```
 
 ## DESCRIPTION
@@ -53,11 +53,32 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -PassThru
+If specified, returns input object.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.SecurableObject
+
 ## OUTPUTS
+
+### None
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Disable-SPClientUniquePermission.md](https://github.com/karamem0/SPClient/blob/master/doc/Disable-SPClientUniquePermission.md)
 

@@ -8,8 +8,8 @@ Describe 'Remove-SPClientFolder' {
 
         BeforeEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $Folder = $Web.GetFolderById($TestConfig.FolderId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
                 $Folder = $Folder.Folders.Add('TestFolder0')
                 $Folder.Update()
                 $SPClient.ClientContext.Load($Folder)
@@ -20,8 +20,8 @@ Describe 'Remove-SPClientFolder' {
         }
 
         It 'Removes a folder by loaded client object' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderByServerRelativeUrl("$($TestConfig.FolderUrl)/TestFolder0")
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderByServerRelativeUrl("$($SPClient.TestConfig.FolderUrl)/TestFolder0")
             $SPClient.ClientContext.Load($Folder)
             $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
@@ -32,8 +32,8 @@ Describe 'Remove-SPClientFolder' {
         }
 
         It 'Removes a folder by unloaded client object' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderByServerRelativeUrl("$($TestConfig.FolderUrl)/TestFolder0")
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderByServerRelativeUrl("$($SPClient.TestConfig.FolderUrl)/TestFolder0")
             $Params = @{
                 ClientObject = $Folder
             }
@@ -42,8 +42,8 @@ Describe 'Remove-SPClientFolder' {
         }
 
         It 'Removes a folder by id' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderByServerRelativeUrl("$($TestConfig.FolderUrl)/TestFolder0")
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderByServerRelativeUrl("$($SPClient.TestConfig.FolderUrl)/TestFolder0")
             $SPClient.ClientContext.Load($Folder)
             $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
@@ -55,8 +55,8 @@ Describe 'Remove-SPClientFolder' {
         }
 
         It 'Removes a folder by name' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderByServerRelativeUrl($TestConfig.FolderUrl)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
                 ParentFolder = $Folder
                 Name = "TestFolder0"
@@ -66,10 +66,10 @@ Describe 'Remove-SPClientFolder' {
         }
 
         It 'Removes a folder by url' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentWeb = $Web
-                Url = "$($TestConfig.FolderUrl)/TestFolder0"
+                Url = "$($SPClient.TestConfig.FolderUrl)/TestFolder0"
             }
             $Result = Remove-SPClientFolder @Params
             $Result | Should BeNullOrEmpty
@@ -81,7 +81,7 @@ Describe 'Remove-SPClientFolder' {
 
         It 'Throws an error when the folder could not be found by id' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentWeb = $Web
                     Identity = '031B8E12-4B3C-46E8-B4C5-3EDFC73D23BF'
@@ -94,8 +94,8 @@ Describe 'Remove-SPClientFolder' {
 
         It 'Throws an error when the folder could not be found by name' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $Folder = $Web.GetFolderByServerRelativeUrl($TestConfig.FolderUrl)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
                 $Params = @{
                     ParentFolder = $Folder
                     Name = "TestFolder0"
@@ -108,10 +108,10 @@ Describe 'Remove-SPClientFolder' {
 
         It 'Throws an error when the folder could not be found by url' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentWeb = $Web
-                    Url = "$($TestConfig.FolderUrl)/TestFolder0"
+                    Url = "$($SPClient.TestConfig.FolderUrl)/TestFolder0"
                 }
                 $Result = Remove-SPClientFolder @Params
                 $Result | Should Not BeNullOrEmpty

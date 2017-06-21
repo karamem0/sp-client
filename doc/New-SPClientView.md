@@ -207,9 +207,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.List
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.View
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientView.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientView.md)
 

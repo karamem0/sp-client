@@ -163,9 +163,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.Web[]
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientWeb.md](https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientWeb.md)
 

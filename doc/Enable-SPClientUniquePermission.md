@@ -7,7 +7,7 @@ Enables unique permissions.
 
 ```
 Enable-SPClientUniquePermission [-ClientContext <ClientContext>] [-ClientObject] <SecurableObject>
- [-CopyRoleAssignments] [-ClearSubscopes]
+ [-CopyRoleAssignments] [-ClearSubscopes] [-PassThru]
 ```
 
 ## DESCRIPTION
@@ -84,11 +84,32 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -PassThru
+If specified, returns input object.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.SecurableObject
+
 ## OUTPUTS
+
+### None
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Enable-SPClientUniquePermission.md](https://github.com/karamem0/SPClient/blob/master/doc/Enable-SPClientUniquePermission.md)
 

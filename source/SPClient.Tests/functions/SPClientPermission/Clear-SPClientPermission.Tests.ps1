@@ -8,7 +8,7 @@ Describe 'Clear-SPClientPermission' {
 
         BeforeEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = New-Object Microsoft.SharePoint.Client.ListCreationInformation
                 $List.Title = 'TestList0'
                 $List.TemplateType = 100
@@ -24,7 +24,7 @@ Describe 'Clear-SPClientPermission' {
 
         AfterEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetByTitle('Test List 0')
                 $List.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
@@ -34,11 +34,12 @@ Describe 'Clear-SPClientPermission' {
         }
 
         It 'Clears permissions' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetByTitle('Test List 0')
             $List.BreakRoleInheritance($false, $false)
             $Params = @{
                 ClientObject = $List
+                PassThru = $true
             }
             $Result = Clear-SPClientPermission @Params
             $Result | Should Not BeNullOrEmpty
@@ -50,10 +51,11 @@ Describe 'Clear-SPClientPermission' {
 
         It 'Throws an error when has not unique permission' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
                     ClientObject = $List
+                    PassThru = $true
                 }
                 $Result = Clear-SPClientPermission @Params
                 $Result | Should Not BeNullOrEmpty

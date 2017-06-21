@@ -7,8 +7,8 @@ Describe 'Get-SPClientListItem' {
     Context 'Success' {
 
         It 'Returns all list items' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
             }
@@ -18,11 +18,11 @@ Describe 'Get-SPClientListItem' {
         }
 
         It 'Returns list items with folder url' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
-                FolderUrl = "$($TestConfig.WebUrl)/$($TestConfig.ListInternalName)"
+                FolderUrl = "$($SPClient.TestConfig.WebUrl)/$($SPClient.TestConfig.ListInternalName)"
             }
             $Result = Get-SPClientListItem @Params
             $Result | Should Not BeNullOrEmpty
@@ -30,8 +30,8 @@ Describe 'Get-SPClientListItem' {
         }
 
         It 'Returns list items with scope' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 Scope = 'Recursive'
@@ -42,8 +42,8 @@ Describe 'Get-SPClientListItem' {
         }
 
         It 'Returns list items with view fields' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 ViewFields = @('ID', 'FileRef')
@@ -54,8 +54,8 @@ Describe 'Get-SPClientListItem' {
         }
 
         It 'Returns list items with row limit' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 RowLimit = 2
@@ -67,8 +67,8 @@ Describe 'Get-SPClientListItem' {
         }
 
         It 'Returns list items with position' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 RowLimit = 2
@@ -89,8 +89,8 @@ Describe 'Get-SPClientListItem' {
         }
 
         It 'Returns list items with simple query' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 Query = `
@@ -109,8 +109,8 @@ Describe 'Get-SPClientListItem' {
         }
 
         It 'Returns list items with complexed query' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
                 Query = `
@@ -130,11 +130,11 @@ Describe 'Get-SPClientListItem' {
         }
 
         It 'Returns a list item by id' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
-                Identity = $TestConfig.ListItemId
+                Identity = $SPClient.TestConfig.ListItemId
             }
             $Result = Get-SPClientListItem @Params
             $Result | Should Not BeNullOrEmpty
@@ -142,11 +142,11 @@ Describe 'Get-SPClientListItem' {
         }
 
         It 'Returns a list item by guid' {
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentList = $List
-                IdentityGuid = $TestConfig.ListItemUniqueId
+                IdentityGuid = $SPClient.TestConfig.ListItemUniqueId
             }
             $Result = Get-SPClientListItem @Params
             $Result | Should Not BeNullOrEmpty
@@ -159,8 +159,8 @@ Describe 'Get-SPClientListItem' {
 
         It 'Throws an error when the list could not be found by id' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
                     ParentList = $List
                     Identity = -1
@@ -173,8 +173,8 @@ Describe 'Get-SPClientListItem' {
 
         It 'Throws an error when the list could not be found by guid' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
                     ParentList = $List
                     IdentityGuid = '95BBF208-A139-4E6B-BB8C-B7D1BC7CFB60'

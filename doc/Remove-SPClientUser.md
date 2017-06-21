@@ -43,12 +43,12 @@ Remove-SPClientUser -Identity 7
 
 ### -------------------------- Example 3 --------------------------
 ```
-Remove-SPClientUser -Name "i:0#.f|membership|john@example.com"
+Remove-SPClientUser -Name "i:0#.f|membership|admin@example.com"
 ```
 
 ### -------------------------- Example 4 --------------------------
 ```
-Remove-SPClientUser -Email "john@example.com"
+Remove-SPClientUser -Email "admin@example.com"
 ```
 
 ## PARAMETERS
@@ -131,9 +131,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.User
+
 ## OUTPUTS
+
+### None
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientUser.md](https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientUser.md)
 

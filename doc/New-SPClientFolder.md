@@ -85,9 +85,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.Folder
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.Folder
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFolder.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFolder.md)
 

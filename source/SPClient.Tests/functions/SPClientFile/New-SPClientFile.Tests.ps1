@@ -8,8 +8,8 @@ Describe 'New-SPClientFile' {
 
         AfterEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $File = $Web.GetFileByServerRelativeUrl("$($TestConfig.FolderUrl)/TestFile0.txt")
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $File = $Web.GetFileByServerRelativeUrl("$($SPClient.TestConfig.FolderUrl)/TestFile0.txt")
                 $File.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
             } catch {
@@ -20,8 +20,8 @@ Describe 'New-SPClientFile' {
         It 'Creates a new file by stream' {
             $Buffer = [System.Text.Encoding]::UTF8.GetBytes('TestFile0')
             $Stream = New-Object System.IO.MemoryStream(@(, $Buffer))
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderByServerRelativeUrl($TestConfig.FolderUrl)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
                 ParentFolder = $Folder
                 ContentStream = $Stream
@@ -37,8 +37,8 @@ Describe 'New-SPClientFile' {
             $FolderPath = [System.IO.Path]::GetTempPath()
             $FilePath = [System.IO.Path]::Combine($FolderPath, 'TestFile0.txt')
             [System.IO.File]::WriteAllText($FilePath, 'TestFile0')
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderByServerRelativeUrl($TestConfig.FolderUrl)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
                 ParentFolder = $Folder
                 ContentPath = $FilePath
@@ -52,8 +52,8 @@ Describe 'New-SPClientFile' {
         It 'Creates a new file by path and file name' {
             $FilePath = [System.IO.Path]::GetTempFileName()
             [System.IO.File]::WriteAllText($FilePath, 'TestFile0')
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $Folder = $Web.GetFolderByServerRelativeUrl($TestConfig.FolderUrl)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
                 ParentFolder = $Folder
                 ContentPath = $FilePath

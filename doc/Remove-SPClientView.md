@@ -145,9 +145,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.View or Microsoft.SharePoint.Client.List
+
 ## OUTPUTS
+
+### None
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientView.md](https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientView.md)
 

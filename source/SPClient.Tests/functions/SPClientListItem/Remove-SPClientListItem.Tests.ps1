@@ -8,8 +8,8 @@ Describe 'Remove-SPClientListItem' {
 
         BeforeEach {
             try {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $ListItem = New-Object Microsoft.SharePoint.Client.ListItemCreationInformation
                 $ListItem = $List.AddItem($ListItem)
                 $ListItem['Title'] = 'Test List Item 0'
@@ -34,8 +34,8 @@ Describe 'Remove-SPClientListItem' {
                 '</Where>' + `
                 '</Query>' + `
                 '</View>'
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $ListItems = $List.GetItems($Caml)
             $SPClient.ClientContext.Load($ListItems)
             $SPClient.ClientContext.ExecuteQuery()
@@ -60,8 +60,8 @@ Describe 'Remove-SPClientListItem' {
                 '</Where>' + `
                 '</Query>' + `
                 '</View>'
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $ListItems = $List.GetItems($Caml)
             $SPClient.ClientContext.Load($ListItems)
             $SPClient.ClientContext.ExecuteQuery()
@@ -87,8 +87,8 @@ Describe 'Remove-SPClientListItem' {
                 '</Where>' + `
                 '</Query>' + `
                 '</View>'
-            $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-            $List = $Web.Lists.GetById($TestConfig.ListId)
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $ListItems = $List.GetItems($Caml)
             $SPClient.ClientContext.Load($ListItems)
             $SPClient.ClientContext.ExecuteQuery()
@@ -107,8 +107,8 @@ Describe 'Remove-SPClientListItem' {
 
         It 'Throws an error when the list could not be found by id' {
             $Throw = {
-                $Web = $SPClient.ClientContext.Site.OpenWebById($TestConfig.WebId)
-                $List = $Web.Lists.GetById($TestConfig.ListId)
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
                     ParentList = $List
                     Identity = -1

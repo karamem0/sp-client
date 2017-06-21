@@ -29,7 +29,7 @@ New-SPClientFile $folder -Name "CustomFile.xlsx" -ContentStream $stream
 
 ### -------------------------- Example 2 --------------------------
 ```
-New-SPClientFile $folder -ContentPath "C:\Users\John\Documents\CustomFile.xlsx"
+New-SPClientFile $folder -ContentPath "C:\Users\admin\Documents\CustomFile.xlsx"
 ```
 
 ## PARAMETERS
@@ -139,9 +139,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
+### None or Microsoft.SharePoint.Client.Folder
+
 ## OUTPUTS
+
+### Microsoft.SharePoint.Client.File
 
 ## NOTES
 
 ## RELATED LINKS
+
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFile.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientFile.md)
 
