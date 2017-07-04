@@ -47,7 +47,7 @@ Describe 'Remove-SPClientFolder' {
             $SPClient.ClientContext.Load($Folder)
             $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
-                ParentWeb = $Web
+                Web = $Web
                 Identity = $Folder.UniqueId
             }
             $Result = Remove-SPClientFolder @Params
@@ -58,7 +58,7 @@ Describe 'Remove-SPClientFolder' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
-                ParentFolder = $Folder
+                ParentObject = $Folder
                 Name = "TestFolder0"
             }
             $Result = Remove-SPClientFolder @Params
@@ -68,7 +68,7 @@ Describe 'Remove-SPClientFolder' {
         It 'Removes a folder by url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                Web = $Web
                 Url = "$($SPClient.TestConfig.FolderUrl)/TestFolder0"
             }
             $Result = Remove-SPClientFolder @Params
@@ -83,7 +83,7 @@ Describe 'Remove-SPClientFolder' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    Web = $Web
                     Identity = '031B8E12-4B3C-46E8-B4C5-3EDFC73D23BF'
                 }
                 $Result = Remove-SPClientFolder @Params
@@ -97,7 +97,7 @@ Describe 'Remove-SPClientFolder' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
                 $Params = @{
-                    ParentFolder = $Folder
+                    ParentObject = $Folder
                     Name = "TestFolder0"
                 }
                 $Result = Remove-SPClientFolder @Params
@@ -110,7 +110,7 @@ Describe 'Remove-SPClientFolder' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    Web = $Web
                     Url = "$($SPClient.TestConfig.FolderUrl)/TestFolder0"
                 }
                 $Result = Remove-SPClientFolder @Params

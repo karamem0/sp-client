@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Remove-SPClientFile {
@@ -30,17 +15,17 @@ function Remove-SPClientFile {
 .SYNOPSIS
   Deletes the file.
 .DESCRIPTION
-  The Remove-SPClientFile function deletes the file from the folder.
+  The Remove-SPClientFile function removes the file from the folder.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the file to delete.
-.PARAMETER ParentFolder
+.PARAMETER ParentObject
   Indicates the folder which the files are contained.
-.PARAMETER ParentWeb
-  Indicates the web which the files are contained.
 .PARAMETER Name
   Indicates the file name including the extension.
+.PARAMETER Web
+  Indicates the site which the files are contained.
 .PARAMETER Identity
   Indicates the file GUID.
 .PARAMETER Url
@@ -50,11 +35,11 @@ function Remove-SPClientFile {
 .EXAMPLE
   Remove-SPClientFile $folder -Name "CustomFile.xlsx"
 .EXAMPLE
-  Remove-SPClientFile $web -Identity "185C6C6E-7E79-4C80-88D8-7392B4CA47CB"
+  Remove-SPClientFile -Web $web -Identity "185C6C6E-7E79-4C80-88D8-7392B4CA47CB"
 .EXAMPLE
-  Remove-SPClientFile $web -Url "http://example.com/DocLib1/CustomFile.xlsx"
+  Remove-SPClientFile -Web $web -Url "http://example.com/DocLib1/CustomFile.xlsx"
 .INPUTS
-  None or Microsoft.SharePoint.Client.File or Microsoft.SharePoint.Client.Folder or Microsoft.SharePoint.Client.Web
+  None or SPClient.SPClientFileParentParameter
 .OUTPUTS
   None
 .LINK
@@ -70,16 +55,16 @@ function Remove-SPClientFile {
         [Microsoft.SharePoint.Client.File]
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [Microsoft.SharePoint.Client.Folder]
-        $ParentFolder,
-        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Url')]
-        [Microsoft.SharePoint.Client.Web]
-        $ParentWeb,
+        [SPClient.SPClientFileParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
         [Alias('Title')]
         [string]
         $Name,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
+        [Microsoft.SharePoint.Client.Web]
+        $Web,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -95,39 +80,39 @@ function Remove-SPClientFile {
         }
         if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
             if (-not $ClientObject.IsPropertyAvailable('ServerRelativeUrl')) {
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'UniqueId,ServerRelativeUrl'
+                    -Retrieval 'UniqueId,ServerRelativeUrl'
             }
         } else {
-            if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-                $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
-                    $ClientContext, `
-                    $ParentWeb.Path, `
-                    'GetFileById', `
-                    [object[]]$Identity)
-                $ClientObject = New-Object Microsoft.SharePoint.Client.File($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
-                    -ClientContext $ClientContext `
-                    -ClientObject $ClientObject `
-                    -Retrievals 'UniqueId,ServerRelativeUrl'
-                trap {
-                    throw 'The specified file could not be found.'
-                }
-            }
             if ($PSCmdlet.ParameterSetName -eq 'Name') {
-                $ClientObjectCollection = $ParentFolder.Files
+                $ClientObjectCollection = $ParentObject.ClientObject.Files
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ClientObjectCollection.Path, `
                     'GetByUrl', `
                     [object[]]$Name)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.File($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'UniqueId,ServerRelativeUrl'
+                    -Retrieval 'UniqueId,ServerRelativeUrl'
+                trap {
+                    throw 'The specified file could not be found.'
+                }
+            }
+            if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+                $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                    $ClientContext, `
+                    $Web.Path, `
+                    'GetFileById', `
+                    [object[]]$Identity)
+                $ClientObject = New-Object Microsoft.SharePoint.Client.File($ClientContext, $PathMethod)
+                Invoke-ClientContextLoad `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject `
+                    -Retrieval 'UniqueId,ServerRelativeUrl'
                 trap {
                     throw 'The specified file could not be found.'
                 }
@@ -135,14 +120,14 @@ function Remove-SPClientFile {
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
-                    $ParentWeb.Path, `
+                    $Web.Path, `
                     'GetFileByServerRelativeUrl', `
                     [object[]]$Url)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.File($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'UniqueId,ServerRelativeUrl'
+                    -Retrieval 'UniqueId,ServerRelativeUrl'
                 trap {
                     throw 'The specified file could not be found.'
                 }

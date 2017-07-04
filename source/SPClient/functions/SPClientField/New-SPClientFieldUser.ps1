@@ -5,51 +5,36 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function New-SPClientFieldUser {
 
 <#
 .SYNOPSIS
-  Creates a new user field.
+  Creates a new user column.
 .DESCRIPTION
-  The New-SPClientFieldUser function adds a new field to the web or list. The
-  field allows the user to one or more user lookup values.
+  The New-SPClientFieldUser function adds a new column to the site or list.
+  The column allows the user to one or more user lookup values.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentObject
-  Indicates the web or list which a field to be created.
+  Indicates the site or list which a column to be created.
 .PARAMETER Name
   Indicates the internal name.
 .PARAMETER Title
   Indicates the title.
 .PARAMETER Identity
-  Indicates the field GUID.
+  Indicates the column GUID.
 .PARAMETER Description
   Indicates the description.
 .PARAMETER Required
-  Indicates a value whether the field is required.
+  Indicates a value whether the column is required.
 .PARAMETER EnforceUniqueValues
-  Indicates a value whether the field must to have unique value.
+  Indicates a value whether the column must to have unique value.
 .PARAMETER AllowMultipleValues
-  Indicates a value whether the field allows multiple values.
+  Indicates a value whether the column allows multiple values.
 .PARAMETER SelectionMode
   Indicates user selection mode.
     - PeopleOnly: users and groups
@@ -57,10 +42,10 @@ function New-SPClientFieldUser {
 .PARAMETER SelectionGroup
   Indicates the identifier of the SharePoint group whose members can be selected.
 .PARAMETER LookupField
-  Indicates the field internal name of the user lookup value.
+  Indicates the column internal name of the user lookup value.
 .PARAMETER AddToDefaultView
-  If true, the field is add to default view.
-.PARAMETER Retrievals
+  If true, the column is add to default view.
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   New-SPClientFieldUser $list -Name "CustomField" -Title "Custom Field"
@@ -116,7 +101,7 @@ function New-SPClientFieldUser {
         $AddToDefaultView,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -164,10 +149,10 @@ function New-SPClientFieldUser {
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
             -Field $ClientObject
-        Invoke-SPClientLoadQuery `
+        Invoke-ClientContextLoad `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
-            -Retrievals $Retrievals
+            -Retrieval $Retrieval
         Write-Output $ClientObject
     }
 

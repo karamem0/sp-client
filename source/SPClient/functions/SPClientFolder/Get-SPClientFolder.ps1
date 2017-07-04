@@ -5,58 +5,45 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 <#
 .SYNOPSIS
   Gets one or more folders.
 .DESCRIPTION
-  The Get-SPClientFolder function lists all folders or retrieves the specified
-  folder. If not specified filterable parameter, returns all sub folders in the
-  folder. Otherwise, returns a folder which matches the parameter.
+  The Get-SPClientFolder function lists all folders or retrieves the specified folder.
+  If not specified filterable parameter, returns all subfolders in the folder.
+  Otherwise, returns a folder which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ParentFolder
-  Indicates the folder which the folders are contained.
-.PARAMETER ParentWeb
-  Indicates the web which the folders are contained.
+.PARAMETER ParentObject
+  Indicates the folder which the subfolders are contained.
+.PARAMETER NoEnumerate
+  If specified, suppresses enumeration in output.
 .PARAMETER Name
   Indicates the folder name.
+.PARAMETER Web
+  Indicates the site which the folders are contained.
 .PARAMETER Identity
   Indicates the folder GUID.
 .PARAMETER Url
   Indicates the folder URL.
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   Get-SPClientFolder $folder
 .EXAMPLE
   Get-SPClientFolder $folder -Name "CustomFolder"
 .EXAMPLE
-  Get-SPClientFolder $web -Identity "7F3120E3-0B31-46E9-9621-55ADAC4612E7"
+  Get-SPClientFolder -Web $web -Identity "7F3120E3-0B31-46E9-9621-55ADAC4612E7"
 .EXAMPLE
-  Get-SPClientFolder $web -Url "http://example.com/DocLib1/CustomFolder"
+  Get-SPClientFolder -Web $web -Url "http://example.com/DocLib1/CustomFolder"
 .EXAMPLE
-  Get-SPClientFolder $folder -Retrievals "ServerRelativeUrl"
+  Get-SPClientFolder $folder -Retrieval "ServerRelativeUrl"
 .INPUTS
-  None or Microsoft.SharePoint.Client.Folder or Microsoft.SharePoint.Client.Web
+  None or SPClient.SPClientFolderParentParameter
 .OUTPUTS
   Microsoft.SharePoint.Client.FolderCollection or Microsoft.SharePoint.Client.Folder
 .LINK
@@ -72,15 +59,18 @@ function Get-SPClientFolder {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'All')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [Microsoft.SharePoint.Client.Folder]
-        $ParentFolder,
-        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Url')]
-        [Microsoft.SharePoint.Client.Web]
-        $ParentWeb,
+        [SPClient.SPClientFolderParentParameter]
+        $ParentObject,
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [switch]
+        $NoEnumerate,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
         [string]
         $Name,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
+        [Microsoft.SharePoint.Client.Web]
+        $Web,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -90,7 +80,7 @@ function Get-SPClientFolder {
         $Url,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -98,41 +88,41 @@ function Get-SPClientFolder {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $ClientObjectCollection = $ParentFolder.Folders
-            Invoke-SPClientLoadQuery `
+            $ClientObjectCollection = $ParentObject.ClientObject.Folders
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals $Retrievals
-            Write-Output @(, $ClientObjectCollection)
-        }
-        if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
-                $ClientContext, `
-                $ParentWeb.Path, `
-                'GetFolderById', `
-                [object[]]$Identity)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.Folder($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
-                -ClientContext $ClientContext `
-                -ClientObject $ClientObject `
-                -Retrievals $Retrievals
-            Write-Output $ClientObject
-            trap {
-                throw 'The specified folder could not be found.'
-            }
+                -Retrieval $Retrieval
+            Write-Output $ClientObjectCollection -NoEnumerate:$NoEnumerate
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
-            $ClientObjectCollection = $ParentFolder.Folders
+            $ClientObjectCollection = $ParentObject.ClientObject.Folders
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
                 $ClientObjectCollection.Path, `
                 'GetByUrl', `
                 [object[]]$Name)
             $ClientObject = New-Object Microsoft.SharePoint.Client.Folder($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
+            Write-Output $ClientObject
+            trap {
+                throw 'The specified folder could not be found.'
+            }
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $Web.Path, `
+                'GetFolderById', `
+                [object[]]$Identity)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.Folder($ClientContext, $PathMethod)
+            Invoke-ClientContextLoad `
+                -ClientContext $ClientContext `
+                -ClientObject $ClientObject `
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified folder could not be found.'
@@ -141,14 +131,14 @@ function Get-SPClientFolder {
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
-                $ParentWeb.Path, `
+                $Web.Path, `
                 'GetFolderByServerRelativeUrl', `
                 [object[]]$Url)
             $ClientObject = New-Object Microsoft.SharePoint.Client.Folder($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified folder could not be found.'

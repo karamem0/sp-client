@@ -1,7 +1,7 @@
 # Remove-SPClientWeb
 
 ## SYNOPSIS
-Deletes the web.
+Deletes the site.
 
 ## SYNTAX
 
@@ -21,7 +21,7 @@ Remove-SPClientWeb [-ClientContext <ClientContext>] -Url <String>
 ```
 
 ## DESCRIPTION
-The Remove-SPClientWeb function deletes the web from the site.
+The Remove-SPClientWeb function removes the subsite from the site.
 
 ## EXAMPLES
 
@@ -59,7 +59,7 @@ Accept wildcard characters: False
 ```
 
 ### -ClientObject
-Indicates the web to delete.
+Indicates the site to delete.
 
 ```yaml
 Type: Web
@@ -74,7 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -Identity
-Indicates the web GUID.
+Indicates the site GUID.
 
 ```yaml
 Type: Guid
@@ -89,7 +89,7 @@ Accept wildcard characters: False
 ```
 
 ### -Url
-Indicates the web URL.
+Indicates the site URL.
 
 ```yaml
 Type: String

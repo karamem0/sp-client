@@ -6,13 +6,14 @@ Creates a new list.
 ## SYNTAX
 
 ```
-New-SPClientList [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Name <String> [-Title <String>]
- [-Description <String>] [-Template <Int32>] [-EnableAttachments <Boolean>] [-EnableFolderCreation <Boolean>]
- [-EnableVersioning <Boolean>] [-NoCrawl <Boolean>] [-OnQuickLaunch <Boolean>] [-Retrievals <String>]
+New-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter> -Name <String>
+ [-Title <String>] [-Description <String>] [-Template <Int32>] [-EnableAttachments <Boolean>]
+ [-EnableFolderCreation <Boolean>] [-EnableVersioning <Boolean>] [-NoCrawl <Boolean>]
+ [-OnQuickLaunch <Boolean>] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientList function adds a new list to the web.
+The New-SPClientList function adds a new list to the site.
 
 ## EXAMPLES
 
@@ -39,11 +40,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentWeb
-Indicates the web which a list to be created.
+### -ParentObject
+Indicates the site which a list to be created.
 
 ```yaml
-Type: Web
+Type: SPClientListParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -191,7 +192,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -208,7 +209,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Web
+### None or SPClient.SPClientListParentParameter
 
 ## OUTPUTS
 

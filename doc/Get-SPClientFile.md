@@ -7,23 +7,24 @@ Gets one or more files.
 
 ### All (Default)
 ```
-Get-SPClientFile [-ClientContext <ClientContext>] [-ParentFolder] <Folder> [-Retrievals <String>]
+Get-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentParameter> [-NoEnumerate]
+ [-Retrieval <String>]
 ```
 
 ### Name
 ```
-Get-SPClientFile [-ClientContext <ClientContext>] [-ParentFolder] <Folder> -Name <String>
- [-Retrievals <String>]
+Get-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentParameter> -Name <String>
+ [-Retrieval <String>]
 ```
 
 ### Url
 ```
-Get-SPClientFile [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Url <String> [-Retrievals <String>]
+Get-SPClientFile [-ClientContext <ClientContext>] -Web <Web> -Url <String> [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientFile [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Identity <Guid> [-Retrievals <String>]
+Get-SPClientFile [-ClientContext <ClientContext>] -Web <Web> -Identity <Guid> [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
@@ -45,17 +46,17 @@ Get-SPClientFile $folder -Name "CustomFile.xlsx"
 
 ### -------------------------- Example 3 --------------------------
 ```
-Get-SPClientFile $web -Identity "185C6C6E-7E79-4C80-88D8-7392B4CA47CB"
+Get-SPClientFile -Web $web -Identity "185C6C6E-7E79-4C80-88D8-7392B4CA47CB"
 ```
 
 ### -------------------------- Example 4 --------------------------
 ```
-Get-SPClientFile $web -Url "http://example.com/DocLib1/CustomFile.xlsx"
+Get-SPClientFile -Web $web -Url "http://example.com/DocLib1/CustomFile.xlsx"
 ```
 
 ### -------------------------- Example 5 --------------------------
 ```
-Get-SPClientFile $folder -Retrievals "ServerRelativeUrl"
+Get-SPClientFile $folder -Retrieval "ServerRelativeUrl"
 ```
 
 ## PARAMETERS
@@ -76,11 +77,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentFolder
+### -ParentObject
 Indicates the folder which the files are contained.
 
 ```yaml
-Type: Folder
+Type: SPClientFileParentParameter
 Parameter Sets: All, Name
 Aliases: 
 
@@ -91,18 +92,18 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ParentWeb
-Indicates the web which the files are contained.
+### -NoEnumerate
+If specified, suppresses enumeration in output.
 
 ```yaml
-Type: Web
-Parameter Sets: Url, Identity
+Type: SwitchParameter
+Parameter Sets: All
 Aliases: 
 
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -112,6 +113,21 @@ Indicates the file name including the extension.
 ```yaml
 Type: String
 Parameter Sets: Name
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Web
+Indicates the site which the files are contained.
+
+```yaml
+Type: Web
+Parameter Sets: Url, Identity
 Aliases: 
 
 Required: True
@@ -151,7 +167,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -168,7 +184,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Folder or Microsoft.SharePoint.Client.Web
+### None or SPClient.SPClientFileParentParameter
 
 ## OUTPUTS
 

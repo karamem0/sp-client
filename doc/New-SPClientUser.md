@@ -7,7 +7,7 @@ Creates a new user.
 
 ```
 New-SPClientUser [[-ClientContext] <ClientContext>] [-Name] <String> [[-Title] <String>] [[-Email] <String>]
- [[-IsSiteAdmin] <Boolean>] [[-Retrievals] <String>]
+ [[-IsSiteAdmin] <Boolean>] [[-Retrieval] <String>]
 ```
 
 ## DESCRIPTION
@@ -98,7 +98,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml

@@ -1,4 +1,4 @@
-# Remove-SPClientListItemAttachment
+# Remove-SPClientAttachment
 
 ## SYNOPSIS
 Deletes the attachment.
@@ -7,29 +7,28 @@ Deletes the attachment.
 
 ### ClientObject (Default)
 ```
-Remove-SPClientListItemAttachment [-ClientContext <ClientContext>] [-ClientObject] <Attachment>
+Remove-SPClientAttachment [-ClientContext <ClientContext>] [-ClientObject] <Attachment>
 ```
 
 ### FileName
 ```
-Remove-SPClientListItemAttachment [-ClientContext <ClientContext>] [-ParentListItem] <ListItem>
+Remove-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentParameter>
  -FileName <String>
 ```
 
 ## DESCRIPTION
-The Remove-SPClientListItemAttachment function deletes the attachment from the
-list item.
+The Remove-SPClientAttachment function removes the attachment from the list item.
 
 ## EXAMPLES
 
 ### -------------------------- Example 1 --------------------------
 ```
-Remove-SPClientListItemAttachment $attachment
+Remove-SPClientAttachment $attachment
 ```
 
 ### -------------------------- Example 2 --------------------------
 ```
-Remove-SPClientListItemAttachment $item -FileName "CustomAttachment.xlsx"
+Remove-SPClientAttachment $item -FileName "CustomAttachment.xlsx"
 ```
 
 ## PARAMETERS
@@ -65,11 +64,11 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ParentListItem
+### -ParentObject
 Indicates the list item which the attachment is contained.
 
 ```yaml
-Type: ListItem
+Type: SPClientAttachmentParentParameter
 Parameter Sets: FileName
 Aliases: 
 
@@ -97,7 +96,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Attachment or Microsoft.SharePoint.Client.ListItem
+### None or Microsoft.SharePoint.Client.Attachment or SPClient.SPClientAttachmentParentParameter
 
 ## OUTPUTS
 
@@ -107,5 +106,5 @@ Accept wildcard characters: False
 
 ## RELATED LINKS
 
-[https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientListItemAttachment.md](https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientListItemAttachment.md)
+[https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientAttachment.md](https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientAttachment.md)
 

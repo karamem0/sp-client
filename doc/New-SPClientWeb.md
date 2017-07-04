@@ -1,17 +1,18 @@
 # New-SPClientWeb
 
 ## SYNOPSIS
-Creates a new web.
+Creates a new subsite.
 
 ## SYNTAX
 
 ```
-New-SPClientWeb [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Url <String> [-Title <String>]
- [-Description <String>] [-Language <String>] [-Template <String>] [-UniquePermissions] [-Retrievals <String>]
+New-SPClientWeb [-ClientContext <ClientContext>] [-ParentObject] <SPClientWebParentParameter> -Url <String>
+ [-Title <String>] [-Description <String>] [-Language <String>] [-Template <String>] [-UniquePermissions]
+ [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientWeb function adds a new web to the site.
+The New-SPClientWeb function adds a new subsite to the site.
 
 ## EXAMPLES
 
@@ -38,11 +39,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentWeb
-Indicates the web which a web to be created.
+### -ParentObject
+Indicates the site which a subsite to be created.
 
 ```yaml
-Type: Web
+Type: SPClientWebParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -70,7 +71,7 @@ Accept wildcard characters: False
 
 ### -Title
 Indicates the title.
-If not specified, uses default title of the web template.
+If not specified, uses default title of the site template.
 
 ```yaml
 Type: String
@@ -101,8 +102,7 @@ Accept wildcard characters: False
 
 ### -Language
 Indicates the locale ID in which the language is used.
-If not specified, uses
-the parent web language.
+If not specified, uses the parent site language.
 
 ```yaml
 Type: String
@@ -132,7 +132,7 @@ Accept wildcard characters: False
 ```
 
 ### -UniquePermissions
-If specified, the web uses unique permissions.
+If specified, the site uses unique permissions.
 
 ```yaml
 Type: SwitchParameter
@@ -146,7 +146,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -163,7 +163,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Web
+### None or SPClient.SPClientWebParentParameter
 
 ## OUTPUTS
 

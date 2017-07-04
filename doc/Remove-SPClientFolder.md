@@ -12,21 +12,22 @@ Remove-SPClientFolder [-ClientContext <ClientContext>] [-ClientObject] <Folder>
 
 ### Name
 ```
-Remove-SPClientFolder [-ClientContext <ClientContext>] [-ParentFolder] <Folder> -Name <String>
+Remove-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentParameter>
+ -Name <String>
 ```
 
 ### Url
 ```
-Remove-SPClientFolder [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Url <String>
+Remove-SPClientFolder [-ClientContext <ClientContext>] -Web <Web> -Url <String>
 ```
 
 ### Identity
 ```
-Remove-SPClientFolder [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Identity <Guid>
+Remove-SPClientFolder [-ClientContext <ClientContext>] -Web <Web> -Identity <Guid>
 ```
 
 ## DESCRIPTION
-The Remove-SPClientFolder function deletes the folder from the folder.
+The Remove-SPClientFolder function removes the subfolder from the folder.
 
 ## EXAMPLES
 
@@ -42,7 +43,7 @@ Remove-SPClientFolder $folder -Name "Folder"
 
 ### -------------------------- Example 3 --------------------------
 ```
-Remove-SPClientFolder $web -Url "http://example.com/DocLib1/Folder"
+Remove-SPClientFolder -Web $web -Url "http://example.com/DocLib1/Folder"
 ```
 
 ## PARAMETERS
@@ -78,27 +79,12 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ParentFolder
+### -ParentObject
 Indicates the folder which the folders are contained.
 
 ```yaml
-Type: Folder
+Type: SPClientFolderParentParameter
 Parameter Sets: Name
-Aliases: 
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -ParentWeb
-Indicates the web which the folders are contained.
-
-```yaml
-Type: Web
-Parameter Sets: Url, Identity
 Aliases: 
 
 Required: True
@@ -115,6 +101,21 @@ Indicates the folder name.
 Type: String
 Parameter Sets: Name
 Aliases: Title
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Web
+Indicates the site which the folders are contained.
+
+```yaml
+Type: Web
+Parameter Sets: Url, Identity
+Aliases: 
 
 Required: True
 Position: Named
@@ -155,7 +156,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Folder or Microsoft.SharePoint.Client.Web
+### None or SPClient.SPClientFolderParentParameter
 
 ## OUTPUTS
 

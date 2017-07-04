@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Remove-SPClientList {
@@ -30,13 +15,13 @@ function Remove-SPClientList {
 .SYNOPSIS
   Deletes the list.
 .DESCRIPTION
-  The Remove-SPClientList function deletes the list from the web.
+  The Remove-SPClientList function removes the list from the site.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the list to delete.
-.PARAMETER ParentWeb
-  Indicates the web which the list is contained.
+.PARAMETER ParentObject
+  Indicates the site which the list is contained.
 .PARAMETER Identity
   Indicates the list GUID.
 .PARAMETER Url
@@ -52,7 +37,7 @@ function Remove-SPClientList {
 .EXAMPLE
   Remove-SPClientList $web -Name "Custom List"
 .INPUTS
-  None or Microsoft.SharePoint.Client.List or Microsoft.SharePoint.Client.Web
+  None or Microsoft.SharePoint.Client.List or SPClient.SPClientListParentParameter
 .OUTPUTS
   None
 .LINK
@@ -70,8 +55,8 @@ function Remove-SPClientList {
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Url')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [Microsoft.SharePoint.Client.Web]
-        $ParentWeb,
+        [SPClient.SPClientListParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -91,13 +76,13 @@ function Remove-SPClientList {
         }
         if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
             if (-not $ClientObject.IsPropertyAvailable('Id')) {
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
             }
         } else {
-            $ClientObjectCollection = $ParentWeb.Lists
+            $ClientObjectCollection = $ParentObject.ClientObject.Lists
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
@@ -105,10 +90,10 @@ function Remove-SPClientList {
                     'GetById', `
                     [object[]]$Identity)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
                 trap {
                     throw 'The specified list could not be found.'
                 }
@@ -116,14 +101,14 @@ function Remove-SPClientList {
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
-                    $ParentWeb.Path, `
+                    $ParentObject.ClientObject.Path, `
                     'GetList', `
                     [object[]]$Url)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
                 trap {
                     throw 'The specified list could not be found.'
                 }
@@ -136,15 +121,15 @@ function Remove-SPClientList {
                         'GetByTitle', `
                         [object[]]$Name)
                     $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
-                    Invoke-SPClientLoadQuery `
+                    Invoke-ClientContextLoad `
                         -ClientContext $ClientContext `
                         -ClientObject $ClientObject `
-                        -Retrievals 'Id'
+                        -Retrieval 'Id'
                 } catch {
-                    Invoke-SPClientLoadQuery `
+                    Invoke-ClientContextLoad `
                         -ClientContext $ClientContext `
                         -ClientObject $ClientObjectCollection `
-                        -Retrievals 'Include(RootFolder.Name)'
+                        -Retrieval 'Include(RootFolder.Name)'
                     $ClientObject = $ClientObjectCollection | Where-Object { $_.RootFolder.Name -eq $Name }
                     if ($ClientObject -eq $null) {
                         throw 'The specified list could not be found.'

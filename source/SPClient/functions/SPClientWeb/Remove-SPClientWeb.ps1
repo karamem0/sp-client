@@ -5,40 +5,25 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Remove-SPClientWeb {
 
 <#
 .SYNOPSIS
-  Deletes the web.
+  Deletes the site.
 .DESCRIPTION
-  The Remove-SPClientWeb function deletes the web from the site.
+  The Remove-SPClientWeb function removes the subsite from the site.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
-  Indicates the web to delete.
+  Indicates the site to delete.
 .PARAMETER Identity
-  Indicates the web GUID.
+  Indicates the site GUID.
 .PARAMETER Url
-  Indicates the web URL.
+  Indicates the site URL.
 .EXAMPLE
   Remove-SPClientWeb $web
 .EXAMPLE
@@ -76,10 +61,10 @@ function Remove-SPClientWeb {
         }
         if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
             if (-not $ClientObject.IsPropertyAvailable('Id')) {
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
             }
             $ClientContext.ExecuteQuery()
         } else {
@@ -90,10 +75,10 @@ function Remove-SPClientWeb {
                     'OpenWebById', `
                     [object[]]$Identity)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
             }
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
@@ -102,13 +87,13 @@ function Remove-SPClientWeb {
                     'OpenWeb', `
                     [object[]]$Url)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.Web($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
             }
             trap {
-                throw 'The specified web could not be found.'
+                throw 'The specified site could not be found.'
             }
         }
         $ClientObject.DeleteObject()

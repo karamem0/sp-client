@@ -5,56 +5,41 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function New-SPClientFieldMultiLineText {
 
 <#
 .SYNOPSIS
-  Creates a new multi-line text field.
+  Creates a new multi-line text column.
 .DESCRIPTION
-  The New-SPClientFieldMultiLineText function adds a new field to the web or
-  list. The field allows the user to enter multiple lines of text.
+  The New-SPClientFieldMultiLineText function adds a new column to the site or list.
+  The column allows the user to enter multiple lines of text.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentObject
-  Indicates the web or list which a field to be created.
+  Indicates the site or list which a column to be created.
 .PARAMETER Name
   Indicates the internal name.
 .PARAMETER Title
   Indicates the title.
 .PARAMETER Identity
-  Indicates the field GUID.
+  Indicates the column GUID.
 .PARAMETER Description
   Indicates the description.
 .PARAMETER Required
-  Indicates a value whether the field is required.
+  Indicates a value whether the column is required.
 .PARAMETER NumberOfLines
   Indicates the maximum number of lines.
 .PARAMETER RichText
-  Indicates a value whether the field supports rich formatting.
+  Indicates a value whether the column supports rich formatting.
 .PARAMETER DefaultValue
   Indicates the default value.
 .PARAMETER AddToDefaultView
-  If true, the field is add to default view.
-.PARAMETER Retrievals
+  If true, the column is add to default view.
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   New-SPClientFieldMultiLineText $list -Name "CustomField" -Title "Custom Field"
@@ -103,7 +88,7 @@ function New-SPClientFieldMultiLineText {
         $AddToDefaultView,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -140,10 +125,10 @@ function New-SPClientFieldMultiLineText {
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
             -Field $ClientObject
-        Invoke-SPClientLoadQuery `
+        Invoke-ClientContextLoad `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
-            -Retrievals $Retrievals
+            -Retrieval $Retrieval
         Write-Output $ClientObject
     }
 

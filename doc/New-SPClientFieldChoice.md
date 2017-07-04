@@ -1,7 +1,7 @@
 # New-SPClientFieldChoice
 
 ## SYNOPSIS
-Creates a new choice field.
+Creates a new choice column.
 
 ## SYNTAX
 
@@ -9,13 +9,12 @@ Creates a new choice field.
 New-SPClientFieldChoice [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentParameter>]
  -Name <String> [-Title <String>] [-Identity <Guid>] [-Description <String>] [-Required <Boolean>]
  [-EnforceUniqueValues <Boolean>] [-Choices <String[]>] [-EditFormat <String>] [-FillInChoice <Boolean>]
- [-DefaultValue <String>] [-AddToDefaultView <Boolean>] [-Retrievals <String>]
+ [-DefaultValue <String>] [-AddToDefaultView <Boolean>] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientFieldChoice function adds a new field to the web or list.
-The
-field allows the user to select one or mode values.
+The New-SPClientFieldChoice function adds a new column to the site or list.
+The column allows the user to select one or mode values.
 
 ## EXAMPLES
 
@@ -43,7 +42,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentObject
-Indicates the web or list which a field to be created.
+Indicates the site or list which a column to be created.
 
 ```yaml
 Type: SPClientFieldParentParameter
@@ -88,7 +87,7 @@ Accept wildcard characters: False
 ```
 
 ### -Identity
-Indicates the field GUID.
+Indicates the column GUID.
 
 ```yaml
 Type: Guid
@@ -118,7 +117,7 @@ Accept wildcard characters: False
 ```
 
 ### -Required
-Indicates a value whether the field is required.
+Indicates a value whether the column is required.
 
 ```yaml
 Type: Boolean
@@ -133,7 +132,7 @@ Accept wildcard characters: False
 ```
 
 ### -EnforceUniqueValues
-Indicates a value whether the field must to have unique value.
+Indicates a value whether the column must to have unique value.
 
 ```yaml
 Type: Boolean
@@ -148,7 +147,7 @@ Accept wildcard characters: False
 ```
 
 ### -Choices
-Indicates values that are available for selection in the field.
+Indicates values that are available for selection in the column.
 
 ```yaml
 Type: String[]
@@ -181,7 +180,7 @@ Accept wildcard characters: False
 ```
 
 ### -FillInChoice
-Indicates a value whether the field can accept values other than those specified in Choices.
+Indicates a value whether the column can accept values other than those specified in Choices.
 
 ```yaml
 Type: Boolean
@@ -211,7 +210,7 @@ Accept wildcard characters: False
 ```
 
 ### -AddToDefaultView
-If true, the field is add to default view.
+If true, the column is add to default view.
 
 ```yaml
 Type: Boolean
@@ -225,7 +224,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml

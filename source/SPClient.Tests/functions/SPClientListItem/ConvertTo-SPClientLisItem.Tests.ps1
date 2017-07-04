@@ -10,7 +10,7 @@ Describe 'ConvertTo-SPClientListItem' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $File = $Web.GetFileById($SPClient.TestConfig.FileId)
             $Params = @{
-                File = $File
+                InputObject = $File
             }
             $Result = ConvertTo-SPClientListItem @Params
             $Result | Should Not BeNullOrEmpty
@@ -21,7 +21,7 @@ Describe 'ConvertTo-SPClientListItem' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
             $Params = @{
-                Folder = $Folder
+                InputObject = $Folder
             }
             $Result = ConvertTo-SPClientListItem @Params
             $Result | Should Not BeNullOrEmpty

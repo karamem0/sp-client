@@ -1,7 +1,7 @@
 # New-SPClientFieldLookup
 
 ## SYNOPSIS
-Creates a new field lookup field.
+Creates a new column lookup column.
 
 ## SYNTAX
 
@@ -9,13 +9,12 @@ Creates a new field lookup field.
 New-SPClientFieldLookup [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentParameter>]
  -Name <String> [-Title <String>] [-Identity <Guid>] [-Description <String>] [-Required <Boolean>]
  [-EnforceUniqueValues <Boolean>] [-AllowMultipleValues <Boolean>] -LookupList <Guid> -LookupField <String>
- [-RelationshipDeleteBehavior <String>] [-AddToDefaultView <Boolean>] [-Retrievals <String>]
+ [-RelationshipDeleteBehavior <String>] [-AddToDefaultView <Boolean>] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientFieldLookup function adds a new field to the web or list.
-The
-field allows the user to enter one or more field lookup values.
+The New-SPClientFieldLookup function adds a new column to the site or list.
+The column allows the user to enter one or more column lookup values.
 
 ## EXAMPLES
 
@@ -43,7 +42,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentObject
-Indicates the web or list which a field to be created.
+Indicates the site or list which a column to be created.
 
 ```yaml
 Type: SPClientFieldParentParameter
@@ -88,7 +87,7 @@ Accept wildcard characters: False
 ```
 
 ### -Identity
-Indicates the field GUID.
+Indicates the column GUID.
 
 ```yaml
 Type: Guid
@@ -118,7 +117,7 @@ Accept wildcard characters: False
 ```
 
 ### -Required
-Indicates a value whether the field is required.
+Indicates a value whether the column is required.
 
 ```yaml
 Type: Boolean
@@ -133,7 +132,7 @@ Accept wildcard characters: False
 ```
 
 ### -EnforceUniqueValues
-Indicates a value whether the field must to have unique value.
+Indicates a value whether the column must to have unique value.
 
 ```yaml
 Type: Boolean
@@ -148,7 +147,7 @@ Accept wildcard characters: False
 ```
 
 ### -AllowMultipleValues
-Indicates a value whether the field allows multiple values.
+Indicates a value whether the column allows multiple values.
 
 ```yaml
 Type: Boolean
@@ -178,7 +177,7 @@ Accept wildcard characters: False
 ```
 
 ### -LookupField
-Indicates the internal field name of the user lookup value.
+Indicates the internal column name of the user lookup value.
 
 ```yaml
 Type: String
@@ -208,7 +207,7 @@ Accept wildcard characters: False
 ```
 
 ### -AddToDefaultView
-If true, the field is add to default view.
+If true, the column is add to default view.
 
 ```yaml
 Type: Boolean
@@ -222,7 +221,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml

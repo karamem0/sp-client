@@ -1,34 +1,32 @@
 # Get-SPClientField
 
 ## SYNOPSIS
-Gets one or more fields.
+Gets one or more columns.
 
 ## SYNTAX
 
 ### All (Default)
 ```
 Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
- [-Retrievals <String>]
-```
-
-### Name
-```
-Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
- -Name <String> [-Retrievals <String>]
+ [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Identity
 ```
 Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
- -Identity <Guid> [-Retrievals <String>]
+ -Identity <Guid> [-Retrieval <String>]
+```
+
+### Name
+```
+Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
+ -Name <String> [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The Get-SPClientField function lists all fields or retrieves the specified
-field.
-If not specified filterable parameter, returns all fields of the web or
-list.
-Otherwise, returns a field which matches the parameter.
+The Get-SPClientField function lists all columns or retrieves the specified column.
+If not specified filterable parameter, returns all columns of the site or list.
+Otherwise, returns a column which matches the parameter.
 
 ## EXAMPLES
 
@@ -49,7 +47,7 @@ Get-SPClientField $list -Name "Custom Field"
 
 ### -------------------------- Example 4 --------------------------
 ```
-Get-SPClientField $list -Retrievals "Title"
+Get-SPClientField $list -Retrieval "Title"
 ```
 
 ## PARAMETERS
@@ -71,7 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentObject
-Indicates the web or list which the fields are contained.
+Indicates the site or list which the columns are contained.
 
 ```yaml
 Type: SPClientFieldParentParameter
@@ -85,8 +83,23 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
+### -NoEnumerate
+If specified, suppresses enumeration in output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Identity
-Indicates the field GUID.
+Indicates the column GUID.
 
 ```yaml
 Type: Guid
@@ -101,7 +114,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Indicates the field title or internal name.
+Indicates the column title or internal name.
 
 ```yaml
 Type: String
@@ -115,7 +128,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml

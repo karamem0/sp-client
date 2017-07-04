@@ -1,4 +1,13 @@
-﻿namespace SPClient {
+﻿/*
+ * SPClientContentTypeParentParameter.cs
+ *
+ * Copyright (c) 2017 karamem0
+ *
+ * This software is released under the MIT License.
+ * https://github.com/karamem0/SPClient/blob/master/LICENSE
+ */
+
+namespace SPClient {
 
     /// <summary>
     /// Represents the SPClientContentType functions parameter.

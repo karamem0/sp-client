@@ -9,7 +9,7 @@ Describe 'Get-SPClientList' {
         It 'Returns all lists' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
             }
             $Result = Get-SPClientList @Params
             $Result | Should Not BeNullOrEmpty
@@ -19,7 +19,7 @@ Describe 'Get-SPClientList' {
         It 'Returns a list by id' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
                 Identity = $SPClient.TestConfig.ListId
             }
             $Result = Get-SPClientList @Params
@@ -31,9 +31,9 @@ Describe 'Get-SPClientList' {
         It 'Returns a list by url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
                 Url = $SPClient.TestConfig.ListUrl
-                Retrievals = 'Title,RootFolder.ServerRelativeUrl'
+                Retrieval = 'Title,RootFolder.ServerRelativeUrl'
             }
             $Result = Get-SPClientList @Params
             $Result | Should Not BeNullOrEmpty
@@ -44,7 +44,7 @@ Describe 'Get-SPClientList' {
         It 'Returns a list by title' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
                 Name = $SPClient.TestConfig.ListTitle
             }
             $Result = Get-SPClientList @Params
@@ -56,9 +56,9 @@ Describe 'Get-SPClientList' {
         It 'Returns a list by internal name' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
                 Name = $SPClient.TestConfig.ListName
-                Retrievals = 'Title,RootFolder.Name'
+                Retrieval = 'Title,RootFolder.Name'
             }
             $Result = Get-SPClientList @Params
             $Result | Should Not BeNullOrEmpty
@@ -74,7 +74,7 @@ Describe 'Get-SPClientList' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    ParentObject = $Web
                     Identity = '080F7947-C4F0-4796-A055-D3FDEE1E9D82'
                 }
                 $Result = Get-SPClientList @Params
@@ -87,7 +87,7 @@ Describe 'Get-SPClientList' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    ParentObject = $Web
                     Url = "$($SPClient.TestConfig.WebUrl)/Lists/TestList0"
                 }
                 $Result = Get-SPClientList @Params
@@ -100,7 +100,7 @@ Describe 'Get-SPClientList' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    ParentObject = $Web
                     Name = 'TestList0'
                 }
                 $Result = Get-SPClientList @Params

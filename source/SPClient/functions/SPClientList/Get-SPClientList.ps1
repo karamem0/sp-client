@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Get-SPClientList {
@@ -31,19 +16,21 @@ function Get-SPClientList {
   Gets one or more lists.
 .DESCRIPTION
   The Get-SPClientList function lists all lists or retrieve the specified list.
-  If not specified filterable parameter, returns all lists of the web.
+  If not specified filterable parameter, returns all lists of the site.
   Otherwise, returns a list which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ParentWeb
-  Indicates the web which the lists are contained.
+.PARAMETER ParentObject
+  Indicates the site which the lists are contained.
+.PARAMETER NoEnumerate
+  If specified, suppresses enumeration in output.
 .PARAMETER Identity
   Indicates the list GUID.
 .PARAMETER Url
   Indicates the list URL.
 .PARAMETER Name
   Indicates the list title or internal name.
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   Get-SPClientList $web
@@ -54,9 +41,9 @@ function Get-SPClientList {
 .EXAMPLE
   Get-SPClientList $web -Name "Custom List"
 .EXAMPLE
-  Get-SPClientList $web -Retrievals "Title"
+  Get-SPClientList $web -Retrieval "Title"
 .INPUTS
-  None or Microsoft.SharePoint.Client.Web
+  None or SPClient.SPClientListParentParameter
 .OUTPUTS
   Microsoft.SharePoint.Client.ListCollection or Microsoft.SharePoint.Client.List
 .LINK
@@ -65,15 +52,15 @@ function Get-SPClientList {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.Web]
-        $ParentWeb,
+        [SPClient.SPClientListParentParameter]
+        $ParentObject,
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [switch]
+        $NoEnumerate,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -87,20 +74,20 @@ function Get-SPClientList {
         $Name,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObjectCollection = $ParentWeb.Lists
+        $ClientObjectCollection = $ParentObject.ClientObject.Lists
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals $Retrievals
-            Write-Output @(, $ClientObjectCollection)
+                -Retrieval $Retrieval
+            Write-Output $ClientObjectCollection -NoEnumerate:$NoEnumerate
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
@@ -109,10 +96,10 @@ function Get-SPClientList {
                 'GetById', `
                 [object[]]$Identity)
             $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified list could not be found.'
@@ -121,14 +108,14 @@ function Get-SPClientList {
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
-                $ParentWeb.Path, `
+                $ParentObject.ClientObject.Path, `
                 'GetList', `
                 [object[]]$Url)
             $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified list could not be found.'
@@ -142,23 +129,23 @@ function Get-SPClientList {
                     'GetByTitle', `
                     [object[]]$Name)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.List($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals $Retrievals
+                    -Retrieval $Retrieval
             } catch {
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObjectCollection `
-                    -Retrievals 'Include(RootFolder.Name)'
+                    -Retrieval 'Include(RootFolder.Name)'
                 $ClientObject = $ClientObjectCollection | Where-Object { $_.RootFolder.Name -eq $Name }
                 if ($ClientObject -eq $null) {
                     throw 'The specified list could not be found.'
                 }
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals $Retrievals
+                    -Retrieval $Retrieval
             }
             Write-Output $ClientObject
         }

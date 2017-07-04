@@ -10,7 +10,7 @@ Describe 'Get-SPClientFile' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
-                ParentFolder = $Folder
+                ParentObject = $Folder
             }
             $Result = Get-SPClientFile @Params
             $Result | Should Not BeNullOrEmpty
@@ -20,7 +20,7 @@ Describe 'Get-SPClientFile' {
         It 'Returns a file by id' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                Web = $Web
                 Identity = $SPClient.TestConfig.FileId
             }
             $Result = Get-SPClientFile @Params
@@ -32,7 +32,7 @@ Describe 'Get-SPClientFile' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
-                ParentFolder = $Folder
+                ParentObject = $Folder
                 Name = $SPClient.TestConfig.FileName
             }
             $Result = Get-SPClientFile @Params
@@ -43,7 +43,7 @@ Describe 'Get-SPClientFile' {
         It 'Returns a file by url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                Web = $Web
                 Url = $SPClient.TestConfig.FileUrl
             }
             $Result = Get-SPClientFile @Params
@@ -59,7 +59,7 @@ Describe 'Get-SPClientFile' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Throw = {
                 $Params = @{
-                    ParentWeb = $Web
+                    Web = $Web
                     Identity = '450E73AC-B10F-46F2-B219-9CB975557942'
                 }
                 $Result = Get-SPClientFile @Params
@@ -73,7 +73,7 @@ Describe 'Get-SPClientFile' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
                 $Params = @{
-                    ParentFolder = $Folder
+                    ParentObject = $Folder
                     Name = 'TestFile0.txt'
                 }
                 $Result = Get-SPClientFile @Params
@@ -86,7 +86,7 @@ Describe 'Get-SPClientFile' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Throw = {
                 $Params = @{
-                    ParentWeb = $Web
+                    Web = $Web
                     Url = "$($SPClient.TestConfig.FolderUrl)/TestFile0.txt"
                 }
                 $Result = Get-SPClientFile @Params

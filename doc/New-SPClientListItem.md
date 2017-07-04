@@ -6,8 +6,8 @@ Creates a new list item.
 ## SYNTAX
 
 ```
-New-SPClientListItem [-ClientContext <ClientContext>] [-ParentList] <List> [-FieldValues <Hashtable>]
- [-Retrievals <String>]
+New-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
+ [-FieldValues <Hashtable>] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
@@ -38,11 +38,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentList
+### -ParentObject
 Indicates the list which a list item to be created.
 
 ```yaml
-Type: List
+Type: SPClientListItemParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -54,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -FieldValues
-Indicates the field key/value collection.
+Indicates the column key/value collection.
 
 ```yaml
 Type: Hashtable
@@ -68,7 +68,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -85,7 +85,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.List
+### None or SPClient.SPClientListItemParentParameter
 
 ## OUTPUTS
 

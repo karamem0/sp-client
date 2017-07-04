@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 <#
@@ -33,30 +18,32 @@
   Otherwise, returns a file which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ParentFolder
+.PARAMETER ParentObject
   Indicates the folder which the files are contained.
-.PARAMETER ParentWeb
-  Indicates the web which the files are contained.
+.PARAMETER NoEnumerate
+  If specified, suppresses enumeration in output.
 .PARAMETER Name
   Indicates the file name including the extension.
+.PARAMETER Web
+  Indicates the site which the files are contained.
 .PARAMETER Identity
   Indicates the file GUID.
 .PARAMETER Url
   Indicates the file URL.
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   Get-SPClientFile $folder
 .EXAMPLE
   Get-SPClientFile $folder -Name "CustomFile.xlsx"
 .EXAMPLE
-  Get-SPClientFile $web -Identity "185C6C6E-7E79-4C80-88D8-7392B4CA47CB"
+  Get-SPClientFile -Web $web -Identity "185C6C6E-7E79-4C80-88D8-7392B4CA47CB"
 .EXAMPLE
-  Get-SPClientFile $web -Url "http://example.com/DocLib1/CustomFile.xlsx"
+  Get-SPClientFile -Web $web -Url "http://example.com/DocLib1/CustomFile.xlsx"
 .EXAMPLE
-  Get-SPClientFile $folder -Retrievals "ServerRelativeUrl"
+  Get-SPClientFile $folder -Retrieval "ServerRelativeUrl"
 .INPUTS
-  None or Microsoft.SharePoint.Client.Folder or Microsoft.SharePoint.Client.Web
+  None or SPClient.SPClientFileParentParameter
 .OUTPUTS
   Microsoft.SharePoint.Client.FileCollection or Microsoft.SharePoint.Client.File
 .LINK
@@ -72,15 +59,18 @@ function Get-SPClientFile {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'All')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [Microsoft.SharePoint.Client.Folder]
-        $ParentFolder,
-        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Url')]
-        [Microsoft.SharePoint.Client.Web]
-        $ParentWeb,
+        [SPClient.SPClientFileParentParameter]
+        $ParentObject,
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [switch]
+        $NoEnumerate,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
         [string]
         $Name,
+        [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
+        [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
+        [Microsoft.SharePoint.Client.Web]
+        $Web,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -90,7 +80,7 @@ function Get-SPClientFile {
         $Url,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -98,41 +88,41 @@ function Get-SPClientFile {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            $ClientObjectCollection = $ParentFolder.Files
-            Invoke-SPClientLoadQuery `
+            $ClientObjectCollection = $ParentObject.ClientObject.Files
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals $Retrievals
-            Write-Output @(, $ClientObjectCollection)
-        }
-        if ($PSCmdlet.ParameterSetName -eq 'Identity') {
-            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
-                $ClientContext, `
-                $ParentWeb.Path, `
-                'GetFileById', `
-                [object[]]$Identity)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.File($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
-                -ClientContext $ClientContext `
-                -ClientObject $ClientObject `
-                -Retrievals $Retrievals
-            Write-Output $ClientObject
-            trap {
-                throw 'The specified file could not be found.'
-            }
+                -Retrieval $Retrieval
+            Write-Output $ClientObjectCollection -NoEnumerate:$NoEnumerate
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
-            $ClientObjectCollection = $ParentFolder.Files
+            $ClientObjectCollection = $ParentObject.ClientObject.Files
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
                 $ClientObjectCollection.Path, `
                 'GetByUrl', `
                 [object[]]$Name)
             $ClientObject = New-Object Microsoft.SharePoint.Client.File($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
+            Write-Output $ClientObject
+            trap {
+                throw 'The specified file could not be found.'
+            }
+        }
+        if ($PSCmdlet.ParameterSetName -eq 'Identity') {
+            $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
+                $ClientContext, `
+                $Web.Path, `
+                'GetFileById', `
+                [object[]]$Identity)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.File($ClientContext, $PathMethod)
+            Invoke-ClientContextLoad `
+                -ClientContext $ClientContext `
+                -ClientObject $ClientObject `
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified file could not be found.'
@@ -141,14 +131,14 @@ function Get-SPClientFile {
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
-                $ParentWeb.Path, `
+                $Web.Path, `
                 'GetFileByServerRelativeUrl', `
                 [object[]]$Url)
             $ClientObject = New-Object Microsoft.SharePoint.Client.File($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified file could not be found.'

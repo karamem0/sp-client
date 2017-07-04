@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\TestInitialize.ps1"
 
-Describe 'Convert-SPClientIncludeExpression' {
+Describe 'Convert-RetrievalIncludeExpression' {
 
     Context 'Success' {
 
@@ -12,7 +12,7 @@ Describe 'Convert-SPClientIncludeExpression' {
                 InputString = 'Include(Id,Title)'
                 Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
             }
-            $Result = Convert-SPClientIncludeExpression @Params
+            $Result = Convert-RetrievalIncludeExpression @Params
             $Result | Should Not BeNullOrEmpty
         }
 
@@ -22,7 +22,7 @@ Describe 'Convert-SPClientIncludeExpression' {
                 InputString = 'Include(RootFolder.Name)'
                 Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
             }
-            $Result = Convert-SPClientIncludeExpression @Params
+            $Result = Convert-RetrievalIncludeExpression @Params
             $Result | Should Not BeNullOrEmpty
         }
 
@@ -32,7 +32,7 @@ Describe 'Convert-SPClientIncludeExpression' {
                 InputString = 'Include(RootFolder.Name,RootFolder.ServerRelativeUrl)'
                 Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
             }
-            $Result = Convert-SPClientIncludeExpression @Params
+            $Result = Convert-RetrievalIncludeExpression @Params
             $Result | Should Not BeNullOrEmpty
         }
 
@@ -42,7 +42,7 @@ Describe 'Convert-SPClientIncludeExpression' {
                 InputString = 'Include(RootFolder.Files.Include(Name,Title))'
                 Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
             } 
-            $Result = Convert-SPClientIncludeExpression @Params
+            $Result = Convert-RetrievalIncludeExpression @Params
             $Result | Should Not BeNullOrEmpty
         }
 

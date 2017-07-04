@@ -10,8 +10,7 @@ Disable-SPClientUniquePermission [-ClientContext <ClientContext>] [-ClientObject
 ```
 
 ## DESCRIPTION
-The Disable-SPClientUniquePermission function disables unique role assignments
-to the specified object.
+The Disable-SPClientUniquePermission function disables unique role assignments to the specified object.
 
 ## EXAMPLES
 
@@ -39,7 +38,7 @@ Accept wildcard characters: False
 ```
 
 ### -ClientObject
-Indicates the web, list or item.
+Indicates the site, list or item.
 
 ```yaml
 Type: SecurableObject

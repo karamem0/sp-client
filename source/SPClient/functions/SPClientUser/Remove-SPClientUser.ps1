@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Remove-SPClientUser {
@@ -30,7 +15,7 @@ function Remove-SPClientUser {
 .SYNOPSIS
   Deletes the user.
 .DESCRIPTION
-  The Remove-SPClientUser function deletes the user from the site.
+  The Remove-SPClientUser function removes the user from the site.
   If the user could not be found, throws exception.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
@@ -86,10 +71,10 @@ function Remove-SPClientUser {
         $ClientObjectCollection = $ClientContext.Site.RootWeb.SiteUsers
         if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
             if (-not $ClientObject.IsPropertyAvailable('Id')) {
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
             }
         } else {
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
@@ -99,10 +84,10 @@ function Remove-SPClientUser {
                     'GetById', `
                     [object[]]$Identity)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
                 trap {
                     throw 'The specified user could not be found.'
                 }
@@ -114,10 +99,10 @@ function Remove-SPClientUser {
                     'GetByLoginName', `
                     [object[]]$Name)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
                 trap {
                     throw 'The specified user could not be found.'
                 }
@@ -129,10 +114,10 @@ function Remove-SPClientUser {
                     'GetByEmail', `
                     [object[]]$Email)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.User($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
                 trap {
                     throw 'The specified user could not be found.'
                 }

@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function New-SPClientFile {
@@ -33,7 +18,7 @@ function New-SPClientFile {
   The New-SPClientFile function adds a new file to the folder.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ParentFolder
+.PARAMETER ParentObject
   Indicates the folder which a file to be created.
 .PARAMETER ContentPath
   Indicates the content file path.
@@ -41,14 +26,14 @@ function New-SPClientFile {
   Indicates the content stream.
 .PARAMETER Name
   Indicates the file name.
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   New-SPClientFile $folder -Name "CustomFile.xlsx" -ContentStream $stream
 .EXAMPLE
   New-SPClientFile $folder -ContentPath "C:\Users\admin\Documents\CustomFile.xlsx"
 .INPUTS
-  None or Microsoft.SharePoint.Client.Folder
+  None or SPClient.SPClientFileParentParameter
 .OUTPUTS
   Microsoft.SharePoint.Client.File
 .LINK
@@ -61,8 +46,8 @@ function New-SPClientFile {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.Folder]
-        $ParentFolder,
+        [SPClient.SPClientFileParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'ContentStream')]
         [System.IO.Stream]
         $ContentStream,
@@ -75,7 +60,7 @@ function New-SPClientFile {
         $Name,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -98,11 +83,11 @@ function New-SPClientFile {
                 $Creation.Url = [System.IO.Path]::GetFileName($ContentPath)
             }
         }
-        $ClientObject = $ParentFolder.Files.Add($Creation)
-        Invoke-SPClientLoadQuery `
+        $ClientObject = $ParentObject.ClientObject.Files.Add($Creation)
+        Invoke-ClientContextLoad `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
-            -Retrievals $Retrievals
+            -Retrieval $Retrieval
         Write-Output $ClientObject
     }
 

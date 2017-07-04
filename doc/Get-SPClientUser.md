@@ -7,32 +7,31 @@ Gets one or more users.
 
 ### All (Default)
 ```
-Get-SPClientUser [-ClientContext <ClientContext>] [-Retrievals <String>]
-```
-
-### Current
-```
-Get-SPClientUser [-ClientContext <ClientContext>] [-Current] [-Retrievals <String>]
-```
-
-### Email
-```
-Get-SPClientUser [-ClientContext <ClientContext>] -Email <String> [-Retrievals <String>]
-```
-
-### Name
-```
-Get-SPClientUser [-ClientContext <ClientContext>] -Name <String> [-Retrievals <String>]
+Get-SPClientUser [-ClientContext <ClientContext>] [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientUser [-ClientContext <ClientContext>] -Identity <Int32> [-Retrievals <String>]
+Get-SPClientUser [-ClientContext <ClientContext>] -Identity <Int32> [-Retrieval <String>]
+```
+
+### Name
+```
+Get-SPClientUser [-ClientContext <ClientContext>] -Name <String> [-Retrieval <String>]
+```
+
+### Email
+```
+Get-SPClientUser [-ClientContext <ClientContext>] -Email <String> [-Retrieval <String>]
+```
+
+### Current
+```
+Get-SPClientUser [-ClientContext <ClientContext>] [-Current] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The Get-SPClientUser function lists all site users or retrieves the specified
-site user.
+The Get-SPClientUser function lists all site users or retrieves the specified site user.
 If not specified filterable parameter, returns site all users.
 Otherwise, returns a user which matches the parameter.
 
@@ -60,7 +59,7 @@ Get-SPClientUser -Email "admin@example.com"
 
 ### -------------------------- Example 5 --------------------------
 ```
-Get-SPClientUser -Retrievals "Title"
+Get-SPClientUser -Retrieval "Title"
 ```
 
 ## PARAMETERS
@@ -77,6 +76,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: $SPClient.ClientContext
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NoEnumerate
+If specified, suppresses enumeration in output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -141,7 +155,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml

@@ -1,55 +1,39 @@
 ﻿#Requires -Version 3.0
 
 <#
-  Remove-SPClientListItemAttachment.ps1
+  Remove-SPClientAttachment.ps1
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
-function Remove-SPClientListItemAttachment {
+function Remove-SPClientAttachment {
 
 <#
 .SYNOPSIS
   Deletes the attachment.
 .DESCRIPTION
-  The Remove-SPClientListItemAttachment function deletes the attachment from the
-  list item.
+  The Remove-SPClientAttachment function removes the attachment from the list item.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the attachment to delete.
-.PARAMETER ParentListItem
+.PARAMETER ParentObject
   Indicates the list item which the attachment is contained.
 .PARAMETER FileName
   Indicates the attachment file name.
 .EXAMPLE
-  Remove-SPClientListItemAttachment $attachment
+  Remove-SPClientAttachment $attachment
 .EXAMPLE
-  Remove-SPClientListItemAttachment $item -FileName "CustomAttachment.xlsx"
+  Remove-SPClientAttachment $item -FileName "CustomAttachment.xlsx"
 .INPUTS
-  None or Microsoft.SharePoint.Client.Attachment or Microsoft.SharePoint.Client.ListItem
+  None or Microsoft.SharePoint.Client.Attachment or SPClient.SPClientAttachmentParentParameter
 .OUTPUTS
   None
 .LINK
-  https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientListItemAttachment.md
+  https://github.com/karamem0/SPClient/blob/master/doc/Remove-SPClientAttachment.md
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ClientObject')]
@@ -61,8 +45,8 @@ function Remove-SPClientListItemAttachment {
         [Microsoft.SharePoint.Client.Attachment]
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'FileName')]
-        [Microsoft.SharePoint.Client.ListItem]
-        $ParentListItem,
+        [SPClient.SPClientAttachmentParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'FileName')]
         [string]
         $FileName
@@ -74,13 +58,13 @@ function Remove-SPClientListItemAttachment {
         }
         if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
             if (-not $ClientObject.IsPropertyAvailable('FileName')) {
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'FileName'
+                    -Retrieval 'FileName'
             }
         } else {
-            $ClientObjectCollection = $ParentListItem.AttachmentFiles
+            $ClientObjectCollection = $ParentObject.ClientObject.AttachmentFiles
             if ($PSCmdlet.ParameterSetName -eq 'FileName') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
@@ -88,10 +72,10 @@ function Remove-SPClientListItemAttachment {
                     'GetByFileName', `
                     [object[]]$FileName)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.Attachment($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'FileName'
+                    -Retrieval 'FileName'
                 trap {
                     throw 'The specified attachment could not be found.'
                 }

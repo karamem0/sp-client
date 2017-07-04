@@ -9,7 +9,7 @@ Describe 'New-SPClientFolder' {
         AfterEach {
             try {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
-                $Folder = $Web.GetFolderByServerRelativeUrl("$($SPClient.TestConfig.FolderUrl)/TestFolder")
+                $Folder = $Web.GetFolderByServerRelativeUrl("$($SPClient.TestConfig.FolderUrl)/TestFolder0")
                 $Folder.DeleteObject()
                 $SPClient.ClientContext.ExecuteQuery()
             } catch {
@@ -21,7 +21,7 @@ Describe 'New-SPClientFolder' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
-                ParentFolder = $Folder
+                ParentObject = $Folder
                 Name = 'TestFolder0'
             }
             $Result = New-SPClientFolder @Params

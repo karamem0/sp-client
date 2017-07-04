@@ -10,7 +10,7 @@ Describe 'Get-SPClientView' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
             }
             $Result = Get-SPClientView @Params
             $Result | Should Not BeNullOrEmpty
@@ -21,7 +21,7 @@ Describe 'Get-SPClientView' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 Identity = $SPClient.TestConfig.ViewId
             }
             $Result = Get-SPClientView @Params
@@ -33,7 +33,7 @@ Describe 'Get-SPClientView' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 Url = $SPClient.TestConfig.ViewUrl
             }
             $Result = Get-SPClientView @Params
@@ -45,7 +45,7 @@ Describe 'Get-SPClientView' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 Title = $SPClient.TestConfig.ViewTitle
             }
             $Result = Get-SPClientView @Params
@@ -57,7 +57,7 @@ Describe 'Get-SPClientView' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 Default = $true
             }
             $Result = Get-SPClientView @Params
@@ -74,7 +74,7 @@ Describe 'Get-SPClientView' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
-                    ParentList = $List
+                    ParentObject = $List
                     Identity = [guid]::Empty
                 }
                 $Result = Get-SPClientView @Params
@@ -88,7 +88,7 @@ Describe 'Get-SPClientView' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
-                    ParentList = $List
+                    ParentObject = $List
                     Url = "$($SPClient.TestConfig.ListUrl)/TestView0.aspx"
                 }
                 $Result = Get-SPClientView @Params
@@ -102,7 +102,7 @@ Describe 'Get-SPClientView' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
-                    ParentList = $List
+                    ParentObject = $List
                     Title = 'Test View 0'
                 }
                 $Result = Get-SPClientView @Params

@@ -6,7 +6,8 @@ Converts list item to folder.
 ## SYNTAX
 
 ```
-ConvertTo-SPClientFolder [-ClientContext <ClientContext>] [-ListItem] <ListItem> [-Retrievals <String>]
+ConvertTo-SPClientFolder [-ClientContext <ClientContext>] [-InputObject] <SPClientFolderConvertParameter>
+ [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
@@ -37,11 +38,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ListItem
+### -InputObject
 Indicates the list item.
 
 ```yaml
-Type: ListItem
+Type: SPClientFolderConvertParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -52,7 +53,7 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -69,7 +70,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.ListItem
+### None or SPClient.SPClientFolderConvertParameter
 
 ## OUTPUTS
 

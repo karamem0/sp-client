@@ -1,4 +1,4 @@
-# Get-SPClientListItemAttachment
+# Get-SPClientAttachment
 
 ## SYNOPSIS
 Gets one or more attachments.
@@ -7,39 +7,36 @@ Gets one or more attachments.
 
 ### All (Default)
 ```
-Get-SPClientListItemAttachment [-ClientContext <ClientContext>] [-ParentListItem] <ListItem>
- [-Retrievals <String>]
+Get-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentParameter>
+ [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Name
 ```
-Get-SPClientListItemAttachment [-ClientContext <ClientContext>] [-ParentListItem] <ListItem> -Name <String>
- [-Retrievals <String>]
+Get-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentParameter>
+ -Name <String> [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The Get-SPClientListItemAttachment function lists all attachments or retrieves
-the specified attachment.
-If not specified filterable parameter, returns all
-attachments of the list item.
-Otherwise, returns a attachment which matches
-the parameter.
+The Get-SPClientAttachment function lists all attachments or retrieves the specified attachment.
+If not specified filterable parameter, returns all attachments of the list item.
+Otherwise, returns a attachment which matches the parameter.
 
 ## EXAMPLES
 
 ### -------------------------- Example 1 --------------------------
 ```
-Get-SPClientListItemAttachment $item
+Get-SPClientAttachment $item
 ```
 
 ### -------------------------- Example 2 --------------------------
 ```
-Get-SPClientListItemAttachment $item -FileName "CustomAttachment.xlsx"
+Get-SPClientAttachment $item -FileName "CustomAttachment.xlsx"
 ```
 
 ### -------------------------- Example 3 --------------------------
 ```
-Get-SPClientListItemAttachment $item -Retrievals "FileName"
+Get-SPClientAttachment $item -Retrieval "FileName"
 ```
 
 ## PARAMETERS
@@ -60,11 +57,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentListItem
+### -ParentObject
 Indicates the list item which the attachments are contained.
 
 ```yaml
-Type: ListItem
+Type: SPClientAttachmentParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -72,6 +69,21 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -NoEnumerate
+If specified, suppresses enumeration in output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -90,7 +102,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -107,7 +119,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.ListItem
+### None or SPClient.SPClientAttachmentParentParameter
 
 ## OUTPUTS
 
@@ -117,5 +129,5 @@ Accept wildcard characters: False
 
 ## RELATED LINKS
 
-[https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientListItemAttachment.md](https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientListItemAttachment.md)
+[https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientAttachment.md](https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientAttachment.md)
 

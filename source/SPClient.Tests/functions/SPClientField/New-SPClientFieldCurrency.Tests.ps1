@@ -24,7 +24,7 @@ Describe 'New-SPClientFieldCurrency' {
                 }
             }
 
-            It 'Creates a new field with mandatory parameters' {
+            It 'Creates a new column with mandatory parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $SPClient.ClientContext.Load($Web)
                 $SPClient.ClientContext.Load($Web.RegionalSettings)
@@ -48,7 +48,7 @@ Describe 'New-SPClientFieldCurrency' {
                 $Result.DefaultValue | Should BeNullOrEmpty
             }
 
-            It 'Creates a new field with all parameters' {
+            It 'Creates a new column with all parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -101,7 +101,7 @@ Describe 'New-SPClientFieldCurrency' {
                 }
             }
 
-            It 'Creates a new field with mandatory parameters' {
+            It 'Creates a new column with mandatory parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $SPClient.ClientContext.Load($Web)
                 $SPClient.ClientContext.Load($Web.RegionalSettings)
@@ -126,7 +126,7 @@ Describe 'New-SPClientFieldCurrency' {
                 $Result.DefaultValue | Should BeNullOrEmpty
             }
 
-            It 'Creates a new field with all parameters' {
+            It 'Creates a new column with all parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{

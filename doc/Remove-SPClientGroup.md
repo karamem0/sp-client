@@ -21,7 +21,7 @@ Remove-SPClientGroup [-ClientContext <ClientContext>] -Name <String>
 ```
 
 ## DESCRIPTION
-The Remove-SPClientGroup function deletes the group from the site.
+The Remove-SPClientGroup function removes the group from the site.
 
 ## EXAMPLES
 

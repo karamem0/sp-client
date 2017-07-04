@@ -23,7 +23,7 @@ Remove-SPClientContentType [-ClientContext <ClientContext>]
 ```
 
 ## DESCRIPTION
-The Remove-SPClientContentType function deletes the content type from the web.
+The Remove-SPClientContentType function removes the content type from the site.
 
 ## EXAMPLES
 
@@ -76,7 +76,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentObject
-Indicates the web or list which the content type is contained.
+Indicates the site or list which the content type is contained.
 
 ```yaml
 Type: SPClientContentTypeParentParameter

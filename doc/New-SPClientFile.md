@@ -7,14 +7,14 @@ Creates a new file.
 
 ### ContentStream (Default)
 ```
-New-SPClientFile [-ClientContext <ClientContext>] [-ParentFolder] <Folder> -ContentStream <Stream>
- -Name <String> [-Retrievals <String>]
+New-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentParameter>
+ -ContentStream <Stream> -Name <String> [-Retrieval <String>]
 ```
 
 ### ContentPath
 ```
-New-SPClientFile [-ClientContext <ClientContext>] [-ParentFolder] <Folder> -ContentPath <String>
- [-Name <String>] [-Retrievals <String>]
+New-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentParameter>
+ -ContentPath <String> [-Name <String>] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
@@ -50,11 +50,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentFolder
+### -ParentObject
 Indicates the folder which a file to be created.
 
 ```yaml
-Type: Folder
+Type: SPClientFileParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -122,7 +122,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -139,7 +139,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Folder
+### None or SPClient.SPClientFileParentParameter
 
 ## OUTPUTS
 

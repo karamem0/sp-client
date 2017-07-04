@@ -7,21 +7,21 @@ Gets one or more list items.
 
 ### All (Default)
 ```
-Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentList] <List> [-FolderUrl <String>]
- [-Scope <String>] [-ViewFields <String[]>] [-Query <String>] [-RowLimit <Int32>]
- [-Position <ListItemCollectionPosition>] [-Retrievals <String>]
-```
-
-### IdentityGuid
-```
-Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentList] <List> -IdentityGuid <Guid>
- [-Retrievals <String>]
+Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
+ [-FolderUrl <String>] [-Scope <String>] [-ViewFields <String[]>] [-Query <String>] [-RowLimit <Int32>]
+ [-Position <ListItemCollectionPosition>] [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentList] <List> -Identity <Int32>
- [-Retrievals <String>]
+Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
+ -Identity <Int32> [-Retrieval <String>]
+```
+
+### IdentityGuid
+```
+Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
+ -IdentityGuid <Guid> [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
@@ -51,7 +51,7 @@ Get-SPClientListItem -IdentityGuid "77DF0F67-9B13-4499-AC14-25EB18E1D3DA"
 
 ### -------------------------- Example 5 --------------------------
 ```
-Get-SPClientListItem -Retrievals "Title"
+Get-SPClientListItem -Retrieval "Title"
 ```
 
 ## PARAMETERS
@@ -72,11 +72,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentList
+### -ParentObject
 Indicates the list which the list items are contained.
 
 ```yaml
-Type: List
+Type: SPClientListItemParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -122,7 +122,7 @@ Accept wildcard characters: False
 ```
 
 ### -ViewFields
-Indicates the collection of view fields.
+Indicates the collection of view columns.
 
 ```yaml
 Type: String[]
@@ -183,6 +183,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -NoEnumerate
+If specified, suppresses enumeration in output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Identity
 Indicates the list item ID.
 
@@ -213,7 +228,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -230,7 +245,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.List
+### None or SPClient.SPClientListItemParentParameter
 
 ## OUTPUTS
 

@@ -39,10 +39,10 @@
   - [Get-SPClientListItem](Get-SPClientListItem.md)
   - [New-SPClientListItem](New-SPClientListItem.md)
   - [Remove-SPClientListItem](Remove-SPClientListItem.md)
-- List Item Attachment
-  - [Get-SPClientListItemAttachment](Get-SPClientListItemAttachment.md)
-  - [New-SPClientListItemAttachment](New-SPClientListItemAttachment.md)
-  - [Remove-SPClientListItemAttachment](Remove-SPClientListItemAttachment.md)
+- Attachment
+  - [Get-SPClientAttachment](Get-SPClientAttachment.md)
+  - [New-SPClientAttachment](New-SPClientAttachment.md)
+  - [Remove-SPClientAttachment](Remove-SPClientAttachment.md)
 - File
   - [ConvertTo-SPClientFile](ConvertTo-SPClientFile.md)
   - [Get-SPClientFile](Get-SPClientFile.md)

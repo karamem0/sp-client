@@ -7,24 +7,22 @@ Gets one or more groups.
 
 ### All (Default)
 ```
-Get-SPClientGroup [-ClientContext <ClientContext>] [-Retrievals <String>]
-```
-
-### Name
-```
-Get-SPClientGroup [-ClientContext <ClientContext>] -Name <String> [-Retrievals <String>]
+Get-SPClientGroup [-ClientContext <ClientContext>] [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientGroup [-ClientContext <ClientContext>] -Identity <Int32> [-Retrievals <String>]
+Get-SPClientGroup [-ClientContext <ClientContext>] -Identity <Int32> [-Retrieval <String>]
+```
+
+### Name
+```
+Get-SPClientGroup [-ClientContext <ClientContext>] -Name <String> [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The Get-SPClientGroup function lists all site groups or retrieves the
-specified site group.
-If not specified filterable parameter, returns site all
-groups.
+The Get-SPClientGroup function lists all site groups or retrieves the specified site group.
+If not specified filterable parameter, returns site all groups.
 Otherwise, returns a group which matches the parameter.
 
 ## EXAMPLES
@@ -46,7 +44,7 @@ Get-SPClientGroup -Name "Custom Group"
 
 ### -------------------------- Example 4 --------------------------
 ```
-Get-SPClientGroup -Retrievals "Title"
+Get-SPClientGroup -Retrieval "Title"
 ```
 
 ## PARAMETERS
@@ -63,6 +61,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: $SPClient.ClientContext
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NoEnumerate
+If specified, suppresses enumeration in output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -97,7 +110,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml

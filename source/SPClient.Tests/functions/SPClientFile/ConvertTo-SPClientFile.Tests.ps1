@@ -27,7 +27,7 @@ Describe 'ConvertTo-SPClientFile' {
             $SPClient.ClientContext.ExecuteQuery()
             $ListItem = $ListItems[0]
             $Params = @{
-                ListItem = $ListItem
+                InputObject = $ListItem
             }
             $Result = ConvertTo-SPClientFile @Params
             $Result | Should Not BeNullOrEmpty
@@ -61,7 +61,7 @@ Describe 'ConvertTo-SPClientFile' {
                 $SPClient.ClientContext.ExecuteQuery()
                 $ListItem = $ListItems[0]
                 $Params = @{
-                    ListItem = $ListItem
+                    InputObject = $ListItem
                 }
                 $Result = ConvertTo-SPClientFile @Params
                 $Result | Should Not BeNullOrEmpty
@@ -75,7 +75,7 @@ Describe 'ConvertTo-SPClientFile' {
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
                 $Params = @{
-                    ListItem = $ListItem
+                    InputObject = $ListItem
                 }
                 $Result = ConvertTo-SPClientFile @Params
                 $Result | Should Not BeNullOrEmpty

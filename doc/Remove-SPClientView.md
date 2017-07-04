@@ -12,21 +12,24 @@ Remove-SPClientView [-ClientContext <ClientContext>] [-ClientObject] <View>
 
 ### Title
 ```
-Remove-SPClientView [-ClientContext <ClientContext>] [-ParentList] <List> -Title <String>
+Remove-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter>
+ -Title <String>
 ```
 
 ### Url
 ```
-Remove-SPClientView [-ClientContext <ClientContext>] [-ParentList] <List> -Url <String>
+Remove-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter>
+ -Url <String>
 ```
 
 ### Identity
 ```
-Remove-SPClientView [-ClientContext <ClientContext>] [-ParentList] <List> -Identity <Guid>
+Remove-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter>
+ -Identity <Guid>
 ```
 
 ## DESCRIPTION
-The Remove-SPClientView function deletes the view from the list.
+The Remove-SPClientView function removes the view from the list.
 
 ## EXAMPLES
 
@@ -83,11 +86,11 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ParentList
+### -ParentObject
 Indicates the list which the view is contained.
 
 ```yaml
-Type: List
+Type: SPClientViewParentParameter
 Parameter Sets: Title, Url, Identity
 Aliases: 
 
@@ -145,7 +148,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.View or Microsoft.SharePoint.Client.List
+### None or Microsoft.SharePoint.Client.View or SPClient.SPClientViewParentParameter
 
 ## OUTPUTS
 

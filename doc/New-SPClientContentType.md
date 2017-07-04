@@ -8,11 +8,11 @@ Creates a new content type.
 ```
 New-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
  -Name <String> [-Description <String>] [-Group <String>] [-ParentContentType <ContentType>]
- [-Retrievals <String>]
+ [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientContentType function adds a new content type to the web.
+The New-SPClientContentType function adds a new content type to the site.
 
 ## EXAMPLES
 
@@ -40,7 +40,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentObject
-Indicates the web or list which a content type to be created.
+Indicates the site or list which a content type to be created.
 
 ```yaml
 Type: SPClientContentTypeParentParameter
@@ -114,7 +114,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml

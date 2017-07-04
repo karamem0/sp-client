@@ -6,7 +6,7 @@ Describe 'Convert-SPClientField' {
 
     Context 'Success' {
 
-        It 'Converts "Text" field to "FieldText"' {
+        It 'Converts "Text" column to "FieldText"' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField1')
@@ -18,7 +18,7 @@ Describe 'Convert-SPClientField' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.FieldText'
         }
 
-        It 'Converts "Note" field to "FieldMultilineText"' {
+        It 'Converts "Note" column to "FieldMultilineText"' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField2')
@@ -30,7 +30,7 @@ Describe 'Convert-SPClientField' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.FieldMultilineText'
         }
 
-        It 'Converts "Choice" field to "FieldChoice"' {
+        It 'Converts "Choice" column to "FieldChoice"' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField3')
@@ -42,7 +42,7 @@ Describe 'Convert-SPClientField' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.FieldChoice'
         }
 
-        It 'Converts "MultiChoice" field to "FieldMultiChoice"' {
+        It 'Converts "MultiChoice" column to "FieldMultiChoice"' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField4')
@@ -54,7 +54,7 @@ Describe 'Convert-SPClientField' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.FieldMultiChoice'
         }
 
-        It 'Converts "Number" field to "FieldNumber"' {
+        It 'Converts "Number" column to "FieldNumber"' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField5')
@@ -66,7 +66,7 @@ Describe 'Convert-SPClientField' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.FieldNumber'
         }
 
-        It 'Converts "Currency" field to "FieldCurrency"' {
+        It 'Converts "Currency" column to "FieldCurrency"' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField6')
@@ -78,7 +78,7 @@ Describe 'Convert-SPClientField' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.FieldCurrency'
         }
 
-        It 'Converts "DateTime" field to "FieldDateTime"' {
+        It 'Converts "DateTime" column to "FieldDateTime"' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField7')
@@ -90,7 +90,7 @@ Describe 'Convert-SPClientField' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.FieldDateTime'
         }
 
-        It 'Converts "Boolean" field to "FieldNumber"' {
+        It 'Converts "Boolean" column to "FieldNumber"' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField10')
@@ -102,7 +102,7 @@ Describe 'Convert-SPClientField' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.FieldNumber'
         }
 
-        It 'Converts "URL" field to "FieldUrl"' {
+        It 'Converts "URL" column to "FieldUrl"' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField13')
@@ -114,7 +114,7 @@ Describe 'Convert-SPClientField' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.FieldUrl'
         }
 
-        It 'Converts "Calculated" field to "FieldCalculated"' {
+        It 'Converts "Calculated" column to "FieldCalculated"' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Field = $List.Fields.GetByInternalNameOrTitle('TestField14')

@@ -30,7 +30,7 @@ Describe 'New-SPClientView' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 Name = 'TestView0'
             }
             $Result = New-SPClientView @Params
@@ -47,7 +47,7 @@ Describe 'New-SPClientView' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 Name = 'TestView0'
                 Title = 'Test View 0'
                 ViewFields = @('ID', 'Title')

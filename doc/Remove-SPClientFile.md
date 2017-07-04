@@ -12,21 +12,22 @@ Remove-SPClientFile [-ClientContext <ClientContext>] [-ClientObject] <File>
 
 ### Name
 ```
-Remove-SPClientFile [-ClientContext <ClientContext>] [-ParentFolder] <Folder> -Name <String>
+Remove-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentParameter>
+ -Name <String>
 ```
 
 ### Url
 ```
-Remove-SPClientFile [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Url <String>
+Remove-SPClientFile [-ClientContext <ClientContext>] -Web <Web> -Url <String>
 ```
 
 ### Identity
 ```
-Remove-SPClientFile [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Identity <Guid>
+Remove-SPClientFile [-ClientContext <ClientContext>] -Web <Web> -Identity <Guid>
 ```
 
 ## DESCRIPTION
-The Remove-SPClientFile function deletes the file from the folder.
+The Remove-SPClientFile function removes the file from the folder.
 
 ## EXAMPLES
 
@@ -42,12 +43,12 @@ Remove-SPClientFile $folder -Name "CustomFile.xlsx"
 
 ### -------------------------- Example 3 --------------------------
 ```
-Remove-SPClientFile $web -Identity "185C6C6E-7E79-4C80-88D8-7392B4CA47CB"
+Remove-SPClientFile -Web $web -Identity "185C6C6E-7E79-4C80-88D8-7392B4CA47CB"
 ```
 
 ### -------------------------- Example 4 --------------------------
 ```
-Remove-SPClientFile $web -Url "http://example.com/DocLib1/CustomFile.xlsx"
+Remove-SPClientFile -Web $web -Url "http://example.com/DocLib1/CustomFile.xlsx"
 ```
 
 ## PARAMETERS
@@ -83,27 +84,12 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ParentFolder
+### -ParentObject
 Indicates the folder which the files are contained.
 
 ```yaml
-Type: Folder
+Type: SPClientFileParentParameter
 Parameter Sets: Name
-Aliases: 
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -ParentWeb
-Indicates the web which the files are contained.
-
-```yaml
-Type: Web
-Parameter Sets: Url, Identity
 Aliases: 
 
 Required: True
@@ -120,6 +106,21 @@ Indicates the file name including the extension.
 Type: String
 Parameter Sets: Name
 Aliases: Title
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Web
+Indicates the site which the files are contained.
+
+```yaml
+Type: Web
+Parameter Sets: Url, Identity
+Aliases: 
 
 Required: True
 Position: Named
@@ -160,7 +161,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.File or Microsoft.SharePoint.Client.Folder or Microsoft.SharePoint.Client.Web
+### None or SPClient.SPClientFileParentParameter
 
 ## OUTPUTS
 

@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
-Describe 'New-SPClientListItemAttachment' {
+Describe 'New-SPClientAttachment' {
 
     Context 'Success' {
 
@@ -26,11 +26,11 @@ Describe 'New-SPClientListItemAttachment' {
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Params = @{
-                ParentListItem = $ListItem
+                ParentObject = $ListItem
                 ContentStream = $Stream
                 Name = 'TestAttachment0.txt'
             }
-            $Result = New-SPClientListItemAttachment @Params
+            $Result = New-SPClientAttachment @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Attachment'
             $Result.FileName | Should Be 'TestAttachment0.txt'
@@ -44,10 +44,10 @@ Describe 'New-SPClientListItemAttachment' {
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Params = @{
-                ParentListItem = $ListItem
+                ParentObject = $ListItem
                 ContentPath = $FilePath
             }
-            $Result = New-SPClientListItemAttachment @Params
+            $Result = New-SPClientAttachment @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Attachment'
             $Result.FileName | Should Be 'TestAttachment0.txt'
@@ -60,11 +60,11 @@ Describe 'New-SPClientListItemAttachment' {
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Params = @{
-                ParentListItem = $ListItem
+                ParentObject = $ListItem
                 ContentPath = $FilePath
                 Name = 'TestAttachment0.txt'
             }
-            $Result = New-SPClientListItemAttachment @Params
+            $Result = New-SPClientAttachment @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Attachment'
             $Result.FileName | Should Be 'TestAttachment0.txt'

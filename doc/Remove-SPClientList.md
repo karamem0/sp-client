@@ -12,21 +12,24 @@ Remove-SPClientList [-ClientContext <ClientContext>] [-ClientObject] <List>
 
 ### Name
 ```
-Remove-SPClientList [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Name <String>
+Remove-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter>
+ -Name <String>
 ```
 
 ### Url
 ```
-Remove-SPClientList [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Url <String>
+Remove-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter>
+ -Url <String>
 ```
 
 ### Identity
 ```
-Remove-SPClientList [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Identity <Guid>
+Remove-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter>
+ -Identity <Guid>
 ```
 
 ## DESCRIPTION
-The Remove-SPClientList function deletes the list from the web.
+The Remove-SPClientList function removes the list from the site.
 
 ## EXAMPLES
 
@@ -83,11 +86,11 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ParentWeb
-Indicates the web which the list is contained.
+### -ParentObject
+Indicates the site which the list is contained.
 
 ```yaml
-Type: Web
+Type: SPClientListParentParameter
 Parameter Sets: Name, Url, Identity
 Aliases: 
 
@@ -145,7 +148,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.List or Microsoft.SharePoint.Client.Web
+### None or Microsoft.SharePoint.Client.List or SPClient.SPClientListParentParameter
 
 ## OUTPUTS
 

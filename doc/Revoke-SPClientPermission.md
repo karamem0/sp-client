@@ -18,8 +18,7 @@ Revoke-SPClientPermission [-ClientContext <ClientContext>] [-ClientObject] <Secu
 ```
 
 ## DESCRIPTION
-The Revoke-SPClientPermission function revokes role assignments to the
-specified object.
+The Revoke-SPClientPermission function revokes role assignments to the specified object.
 
 ## EXAMPLES
 
@@ -47,7 +46,7 @@ Accept wildcard characters: False
 ```
 
 ### -ClientObject
-Indicates the web, list or item.
+Indicates the site, list or item.
 
 ```yaml
 Type: SecurableObject

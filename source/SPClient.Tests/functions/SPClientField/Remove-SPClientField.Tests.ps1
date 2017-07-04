@@ -21,7 +21,7 @@ Describe 'Remove-SPClientField' {
                 }
             }
 
-            It 'Removes a field by loaded client object' {
+            It 'Removes a column by loaded client object' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Field = $Web.Fields.GetByInternalNameOrTitle('Test Field 0')
                 $SPClient.ClientContext.Load($Field)
@@ -33,7 +33,7 @@ Describe 'Remove-SPClientField' {
                 $Result | Should BeNullOrEmpty
             }
 
-            It 'Removes a field by unloaded client object' {
+            It 'Removes a column by unloaded client object' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Field = $Web.Fields.GetByInternalNameOrTitle('Test Field 0')
                 $Params = @{
@@ -43,7 +43,7 @@ Describe 'Remove-SPClientField' {
                 $Result | Should BeNullOrEmpty
             }
 
-            It 'Removes a field by id' {
+            It 'Removes a column by id' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -53,7 +53,7 @@ Describe 'Remove-SPClientField' {
                 $Result | Should BeNullOrEmpty
             }
 
-            It 'Removes a field by title' {
+            It 'Removes a column by title' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -63,7 +63,7 @@ Describe 'Remove-SPClientField' {
                 $Result | Should BeNullOrEmpty
             }
 
-            It 'Removes a field by internal name' {
+            It 'Removes a column by internal name' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -91,7 +91,7 @@ Describe 'Remove-SPClientField' {
                 }
             }
 
-            It 'Removes a field by loaded client object' {
+            It 'Removes a column by loaded client object' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Field = $List.Fields.GetByInternalNameOrTitle('Test Field 0')
@@ -104,7 +104,7 @@ Describe 'Remove-SPClientField' {
                 $Result | Should BeNullOrEmpty
             }
 
-            It 'Removes a field by unloaded client object' {
+            It 'Removes a column by unloaded client object' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Field = $List.Fields.GetByInternalNameOrTitle('Test Field 0')
@@ -115,7 +115,7 @@ Describe 'Remove-SPClientField' {
                 $Result | Should BeNullOrEmpty
             }
 
-            It 'Removes a field by id' {
+            It 'Removes a column by id' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -126,7 +126,7 @@ Describe 'Remove-SPClientField' {
                 $Result | Should BeNullOrEmpty
             }
 
-            It 'Removes a field by title' {
+            It 'Removes a column by title' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -137,7 +137,7 @@ Describe 'Remove-SPClientField' {
                 $Result | Should BeNullOrEmpty
             }
 
-            It 'Removes a field by internal name' {
+            It 'Removes a column by internal name' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -154,7 +154,7 @@ Describe 'Remove-SPClientField' {
 
     Context 'Failure' {
 
-        It 'Throws an error when the field could not be found by id' {
+        It 'Throws an error when the column could not be found by id' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
@@ -165,10 +165,10 @@ Describe 'Remove-SPClientField' {
                 $Result = Remove-SPClientField @Params
                 $Result | Should Not BeNullOrEmpty
             }
-            $Throw | Should Throw 'The specified field could not be found.'
+            $Throw | Should Throw 'The specified column could not be found.'
         }
 
-        It 'Throws an error when the field could not be found by name' {
+        It 'Throws an error when the column could not be found by name' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
@@ -179,7 +179,7 @@ Describe 'Remove-SPClientField' {
                 $Result = Remove-SPClientField @Params
                 $Result | Should Not BeNullOrEmpty
             }
-            $Throw | Should Throw 'The specified field could not be found.'
+            $Throw | Should Throw 'The specified column could not be found.'
         }
 
     }

@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
-Describe 'Remove-SPClientListItemAttachment' {
+Describe 'Remove-SPClientAttachment' {
 
     Context 'Success' {
 
@@ -34,7 +34,7 @@ Describe 'Remove-SPClientListItemAttachment' {
             $Params = @{
                 ClientObject = $Attachment
             }
-            $Result = Remove-SPClientListItemAttachment @Params
+            $Result = Remove-SPClientAttachment @Params
             $Result | Should BeNullOrEmpty
         }
 
@@ -46,7 +46,7 @@ Describe 'Remove-SPClientListItemAttachment' {
             $Params = @{
                 ClientObject = $Attachment
             }
-            $Result = Remove-SPClientListItemAttachment @Params
+            $Result = Remove-SPClientAttachment @Params
             $Result | Should BeNullOrEmpty
         }
 
@@ -55,10 +55,10 @@ Describe 'Remove-SPClientListItemAttachment' {
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Params = @{
-                ParentListItem = $ListItem
+                ParentObject = $ListItem
                 FileName = 'TestAttachment0.txt'
             }
-            $Result = Remove-SPClientListItemAttachment @Params
+            $Result = Remove-SPClientAttachment @Params
             $Result | Should BeNullOrEmpty
         }
 
@@ -72,10 +72,10 @@ Describe 'Remove-SPClientListItemAttachment' {
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
                 $Params = @{
-                    ParentListItem = $ListItem
+                    ParentObject = $ListItem
                     FileName = 'TestAttachment0.txt'
                 }
-                $Result = Remove-SPClientListItemAttachment @Params
+                $Result = Remove-SPClientAttachment @Params
                 $Result | Should Not BeNullOrEmpty
             }
             $Throw | Should Throw 'The specified attachment could not be found.'

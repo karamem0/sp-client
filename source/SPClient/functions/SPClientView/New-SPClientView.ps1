@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function New-SPClientView {
@@ -33,14 +18,14 @@ function New-SPClientView {
   The New-SPClientView function adds a new view to the list.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ParentList
+.PARAMETER ParentObject
   Indicates the list which a view to be created.
 .PARAMETER Name
   Indicates the internal name.
 .PARAMETER Title
   Indicates the title. If not specified, uses the internal name.
 .PARAMETER ViewFields
-  Indicates the collection of view fields.
+  Indicates the collection of view columns.
 .PARAMETER Query
   Indicates the XML representation of the query.
 .PARAMETER RowLimit
@@ -53,12 +38,12 @@ function New-SPClientView {
   Indicates the type of the view.
 .PARAMETER PersonalView
   Indicates a value whether the view is a personal view. 
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   New-SPClientView -Name "CustomView" -Title "Custom View" -ViewFields "ID", "Title"
 .INPUTS
-  None or Microsoft.SharePoint.Client.List
+  None or SPClient.SPClientViewParentParameter
 .OUTPUTS
   Microsoft.SharePoint.Client.View
 .LINK
@@ -71,8 +56,8 @@ function New-SPClientView {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.List]
-        $ParentList,
+        [SPClient.SPClientViewParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true)]
         [string]
         $Name,
@@ -103,7 +88,7 @@ function New-SPClientView {
         $PersonalView,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -128,13 +113,13 @@ function New-SPClientView {
         $Creation.SetAsDefaultView = $SetAsDefaultView
         $Creation.ViewTypeKind = $ViewType
         $Creation.PersonalView = $PersonalView
-        $ClientObject = $ParentList.Views.Add($Creation)
+        $ClientObject = $ParentObject.ClientObject.Views.Add($Creation)
         $ClientObject.Title = $Title
         $ClientObject.Update()
-        Invoke-SPClientLoadQuery `
+        Invoke-ClientContextLoad `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
-            -Retrievals $Retrievals
+            -Retrieval $Retrieval
         Write-Output $ClientObject
     }
 

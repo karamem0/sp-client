@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\TestInitialize.ps1"
 
-Describe 'Convert-SPClientMemberAccessExpression' {
+Describe 'Convert-RetrievalMemberAccessExpression' {
 
     Context 'Success' {
 
@@ -12,7 +12,7 @@ Describe 'Convert-SPClientMemberAccessExpression' {
                 InputString = 'Title'
                 Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
             }
-            $Result = Convert-SPClientMemberAccessExpression @Params
+            $Result = Convert-RetrievalMemberAccessExpression @Params
             $Result | Should Not BeNullOrEmpty
         }
 
@@ -22,7 +22,7 @@ Describe 'Convert-SPClientMemberAccessExpression' {
                 InputString = 'RootFolder.Name'
                 Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
             }
-            $Result = Convert-SPClientMemberAccessExpression @Params
+            $Result = Convert-RetrievalMemberAccessExpression @Params
             $Result | Should Not BeNullOrEmpty
         }
 
@@ -32,7 +32,7 @@ Describe 'Convert-SPClientMemberAccessExpression' {
                 InputString = 'Fields.Include(Title)'
                 Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
             }
-            $Result = Convert-SPClientMemberAccessExpression @Params
+            $Result = Convert-RetrievalMemberAccessExpression @Params
             $Result | Should Not BeNullOrEmpty
         }
 
@@ -42,7 +42,7 @@ Describe 'Convert-SPClientMemberAccessExpression' {
                 InputString = '*'
                 Expression = [System.Linq.Expressions.Expression]::Parameter($Type, $Type.Name)
             }
-            $Result = Convert-SPClientMemberAccessExpression @Params
+            $Result = Convert-RetrievalMemberAccessExpression @Params
             $Result | Should Not BeNullOrEmpty
         }
 

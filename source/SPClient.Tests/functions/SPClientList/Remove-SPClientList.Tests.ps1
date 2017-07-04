@@ -50,7 +50,7 @@ Describe 'Remove-SPClientList' {
             $SPClient.ClientContext.Load($List)
             $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
                 Identity = $List.Id
             }
             $Result = Remove-SPClientList @Params
@@ -60,7 +60,7 @@ Describe 'Remove-SPClientList' {
         It 'Removes a list by url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
                 Url = "$($SPClient.TestConfig.WebUrl)/Lists/TestList0"
             }
             $Result = Remove-SPClientList @Params
@@ -70,7 +70,7 @@ Describe 'Remove-SPClientList' {
         It 'Removes a list by title' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
                 Name = 'Test List 0'
             }
             $Result = Remove-SPClientList @Params
@@ -80,7 +80,7 @@ Describe 'Remove-SPClientList' {
         It 'Removes a list by internal name' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
                 Name = 'TestList0'
             }
             $Result = Remove-SPClientList @Params
@@ -95,7 +95,7 @@ Describe 'Remove-SPClientList' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    ParentObject = $Web
                     Identity = '080F7947-C4F0-4796-A055-D3FDEE1E9D82'
                 }
                 $Result = Remove-SPClientList @Params
@@ -108,7 +108,7 @@ Describe 'Remove-SPClientList' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    ParentObject = $Web
                     Url = "$($SPClient.TestConfig.WebUrl)/Lists/TestList0"
                 }
                 $Result = Remove-SPClientList @Params
@@ -121,7 +121,7 @@ Describe 'Remove-SPClientList' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    ParentObject = $Web
                     Name = 'TestList0'
                 }
                 $Result = Remove-SPClientList @Params

@@ -24,7 +24,7 @@ Describe 'New-SPClientFieldLookup' {
                 }
             }
 
-            It 'Creates a new field with mandatory parameters' {
+            It 'Creates a new column with mandatory parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -46,7 +46,7 @@ Describe 'New-SPClientFieldLookup' {
                 $Result.RelationshipDeleteBehavior | Should Be 'None'
             }
 
-            It 'Creates a new field with all parameters' {
+            It 'Creates a new column with all parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -77,7 +77,7 @@ Describe 'New-SPClientFieldLookup' {
                 $Result.RelationshipDeleteBehavior | Should Be 'None'
             }
 
-            It 'Creates a new field which allows multiple value' {
+            It 'Creates a new column which allows multiple value' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -123,7 +123,7 @@ Describe 'New-SPClientFieldLookup' {
                 }
             }
 
-            It 'Creates a new field with mandatory parameters' {
+            It 'Creates a new column with mandatory parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -146,7 +146,7 @@ Describe 'New-SPClientFieldLookup' {
                 $Result.RelationshipDeleteBehavior | Should Be 'None'
             }
 
-            It 'Creates a new field with all parameters' {
+            It 'Creates a new column with all parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -178,7 +178,7 @@ Describe 'New-SPClientFieldLookup' {
                 $Result.RelationshipDeleteBehavior | Should Be 'Cascade'
             }
 
-            It 'Creates a new field which allows multiple value' {
+            It 'Creates a new column which allows multiple value' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{

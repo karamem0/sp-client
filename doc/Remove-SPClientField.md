@@ -1,7 +1,7 @@
 # Remove-SPClientField
 
 ## SYNOPSIS
-Deletes the field.
+Deletes the column.
 
 ## SYNTAX
 
@@ -23,7 +23,7 @@ Remove-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientF
 ```
 
 ## DESCRIPTION
-The Remove-SPClientField function deletes the field from the list.
+The Remove-SPClientField function removes the column from the list.
 
 ## EXAMPLES
 
@@ -61,7 +61,7 @@ Accept wildcard characters: False
 ```
 
 ### -ClientObject
-Indicates the field to delete.
+Indicates the column to delete.
 
 ```yaml
 Type: Field
@@ -76,7 +76,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentObject
-Indicates the list which the field is contained.
+Indicates the list which the column is contained.
 
 ```yaml
 Type: SPClientFieldParentParameter
@@ -91,7 +91,7 @@ Accept wildcard characters: False
 ```
 
 ### -Identity
-Indicates the field GUID.
+Indicates the column GUID.
 
 ```yaml
 Type: Guid
@@ -106,7 +106,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Indicates the field title or internal name.
+Indicates the column title or internal name.
 
 ```yaml
 Type: String

@@ -39,7 +39,7 @@ Describe 'New-SPClientListItem' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 FieldValues = @{
                     Title = 'Test List Item 0'
                 }
@@ -53,7 +53,7 @@ Describe 'New-SPClientListItem' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 FieldValues = @{
                     Title = 'Test List Item 0'
                     TestField1 = 'Test List Item 0'

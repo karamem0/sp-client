@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Get-SPClientView {
@@ -35,8 +20,10 @@ function Get-SPClientView {
   Otherwise, returns a view which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ParentList
+.PARAMETER ParentObject
   Indicates the list which the views are contained.
+.PARAMETER NoEnumerate
+  If specified, suppresses enumeration in output.
 .PARAMETER Identity
   Indicates the view GUID.
 .PARAMETER Url
@@ -45,7 +32,7 @@ function Get-SPClientView {
   Indicates the view title.
 .PARAMETER Default
   If specified, returns the default view.
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   Get-SPClientView $list
@@ -58,9 +45,9 @@ function Get-SPClientView {
 .EXAMPLE
   Get-SPClientView $list -Default
 .EXAMPLE
-  Get-SPClientView $list -Retrievals "Title"
+  Get-SPClientView $list -Retrieval "Title"
 .INPUTS
-  None or Microsoft.SharePoint.Client.List
+  None or SPClient.SPClientViewParentParameter
 .OUTPUTS
   Microsoft.SharePoint.Client.ViewCollection or Microsoft.SharePoint.Client.View
 .LINK
@@ -69,16 +56,15 @@ function Get-SPClientView {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Url')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Title')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Default')]
+        [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.List]
-        $ParentList,
+        [SPClient.SPClientViewParentParameter]
+        $ParentObject,
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [switch]
+        $NoEnumerate,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -94,20 +80,20 @@ function Get-SPClientView {
         $Default,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObjectCollection = $ParentList.Views
+        $ClientObjectCollection = $ParentObject.ClientObject.Views
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals $Retrievals
-            Write-Output @(, $ClientObjectCollection)
+                -Retrieval $Retrieval
+            Write-Output $ClientObjectCollection -NoEnumerate:$NoEnumerate
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
@@ -116,28 +102,28 @@ function Get-SPClientView {
                 'GetById', `
                 [object[]]$Identity)
             $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified view could not be found.'
             }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals 'ServerRelativeUrl'
+                -Retrieval 'ServerRelativeUrl'
             $ClientObject = $ClientObjectCollection | Where-Object { $_.ServerRelativeUrl -eq $Url }
             if ($ClientObject -eq $null) {
                 throw 'The specified view could not be found.'
             }
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
         }
         if ($PSCmdlet.ParameterSetName -eq 'Title') {
@@ -147,21 +133,21 @@ function Get-SPClientView {
                 'GetByTitle', `
                 [object[]]$Title)
             $ClientObject = New-Object Microsoft.SharePoint.Client.View($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified view could not be found.'
             }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Default') {
-            $ClientObject = $ParentList.DefaultView
-            Invoke-SPClientLoadQuery `
+            $ClientObject = $ParentObject.ClientObject.DefaultView
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
         }
     }

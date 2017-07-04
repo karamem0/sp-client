@@ -1,7 +1,7 @@
 # New-SPClientFieldCalculated
 
 ## SYNOPSIS
-Creates a new calclated field.
+Creates a new calclated column.
 
 ## SYNTAX
 
@@ -9,12 +9,12 @@ Creates a new calclated field.
 New-SPClientFieldCalculated [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentParameter>]
  -Name <String> [-Title <String>] [-Identity <Guid>] [-Description <String>] -Formula <String>
  -FieldRefs <String[]> -OutputType <String> [-Decimals <Int32>] [-Percentage <Boolean>] [-LocaleId <Int32>]
- [-DateFormat <String>] [-AddToDefaultView <Boolean>] [-Retrievals <String>]
+ [-DateFormat <String>] [-AddToDefaultView <Boolean>] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientFieldCalculated function adds a new field to the web or list.
-The value of the field is calculated based on other columns.
+The New-SPClientFieldCalculated function adds a new column to the site or list.
+The value of the column is calculated based on other columns.
 
 ## EXAMPLES
 
@@ -42,7 +42,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentObject
-Indicates the web or list which a field to be created.
+Indicates the site or list which a column to be created.
 
 ```yaml
 Type: SPClientFieldParentParameter
@@ -87,7 +87,7 @@ Accept wildcard characters: False
 ```
 
 ### -Identity
-Indicates the field GUID.
+Indicates the column GUID.
 
 ```yaml
 Type: Guid
@@ -132,7 +132,7 @@ Accept wildcard characters: False
 ```
 
 ### -FieldRefs
-Indicates the collection of fields which used in formula.
+Indicates the collection of columns which used in formula.
 
 ```yaml
 Type: String[]
@@ -184,7 +184,7 @@ Accept wildcard characters: False
 ```
 
 ### -Percentage
-Indicates a value whether the field shows as percentage.
+Indicates a value whether the column shows as percentage.
 This parameter is
 used when OutputType is 'Number'.
 
@@ -235,7 +235,7 @@ Accept wildcard characters: False
 ```
 
 ### -AddToDefaultView
-If true, the field is add to default view.
+If true, the column is add to default view.
 
 ```yaml
 Type: Boolean
@@ -249,7 +249,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml

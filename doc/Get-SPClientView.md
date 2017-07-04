@@ -7,27 +7,32 @@ Gets one or more views.
 
 ### All (Default)
 ```
-Get-SPClientView [-ClientContext <ClientContext>] [-ParentList] <List> [-Retrievals <String>]
-```
-
-### Default
-```
-Get-SPClientView [-ClientContext <ClientContext>] [-ParentList] <List> [-Default] [-Retrievals <String>]
-```
-
-### Title
-```
-Get-SPClientView [-ClientContext <ClientContext>] [-ParentList] <List> -Title <String> [-Retrievals <String>]
-```
-
-### Url
-```
-Get-SPClientView [-ClientContext <ClientContext>] [-ParentList] <List> -Url <String> [-Retrievals <String>]
+Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter> [-NoEnumerate]
+ [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientView [-ClientContext <ClientContext>] [-ParentList] <List> -Identity <Guid> [-Retrievals <String>]
+Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter>
+ -Identity <Guid> [-Retrieval <String>]
+```
+
+### Url
+```
+Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter> -Url <String>
+ [-Retrieval <String>]
+```
+
+### Title
+```
+Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter> -Title <String>
+ [-Retrieval <String>]
+```
+
+### Default
+```
+Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter> [-Default]
+ [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
@@ -64,7 +69,7 @@ Get-SPClientView $list -Default
 
 ### -------------------------- Example 6 --------------------------
 ```
-Get-SPClientView $list -Retrievals "Title"
+Get-SPClientView $list -Retrieval "Title"
 ```
 
 ## PARAMETERS
@@ -85,11 +90,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentList
+### -ParentObject
 Indicates the list which the views are contained.
 
 ```yaml
-Type: List
+Type: SPClientViewParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -97,6 +102,21 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -NoEnumerate
+If specified, suppresses enumeration in output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -160,7 +180,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -177,7 +197,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.List
+### None or SPClient.SPClientViewParentParameter
 
 ## OUTPUTS
 

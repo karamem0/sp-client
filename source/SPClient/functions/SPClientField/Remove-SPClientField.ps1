@@ -5,42 +5,27 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Remove-SPClientField {
 
 <#
 .SYNOPSIS
-  Deletes the field.
+  Deletes the column.
 .DESCRIPTION
-  The Remove-SPClientField function deletes the field from the list. 
+  The Remove-SPClientField function removes the column from the list. 
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
-  Indicates the field to delete.
+  Indicates the column to delete.
 .PARAMETER ParentObject
-  Indicates the list which the field is contained.
+  Indicates the list which the column is contained.
 .PARAMETER Identity
-  Indicates the field GUID.
+  Indicates the column GUID.
 .PARAMETER Name
-  Indicates the field title or internal name.
+  Indicates the column title or internal name.
 .EXAMPLE
   Remove-SPClientField $field
 .EXAMPLE
@@ -83,10 +68,10 @@ function Remove-SPClientField {
         }
         if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
             if (-not $ClientObject.IsPropertyAvailable('Id')) {
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id,SchemaXml'
+                    -Retrieval 'Id,SchemaXml'
             }
         } else {
             $ClientObjectCollection = $ParentObject.ClientObject.Fields
@@ -97,12 +82,12 @@ function Remove-SPClientField {
                     'GetById', `
                     [object[]]$Identity)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id,SchemaXml'
+                    -Retrieval 'Id,SchemaXml'
                 trap {
-                    throw 'The specified field could not be found.'
+                    throw 'The specified column could not be found.'
                 }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Name') {
@@ -112,12 +97,12 @@ function Remove-SPClientField {
                     'GetByInternalNameOrTitle', `
                     [object[]]$Name)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id,SchemaXml'
+                    -Retrieval 'Id,SchemaXml'
                 trap {
-                    throw 'The specified field could not be found.'
+                    throw 'The specified column could not be found.'
                 }
             }
         }

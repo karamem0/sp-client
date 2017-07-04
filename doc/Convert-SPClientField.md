@@ -1,7 +1,7 @@
 # Convert-SPClientField
 
 ## SYNOPSIS
-Converts the field to its derived type.
+Converts the column to its derived type.
 
 ## SYNTAX
 
@@ -10,7 +10,7 @@ Convert-SPClientField [-ClientContext <ClientContext>] [[-Field] <Field>]
 ```
 
 ## DESCRIPTION
-The Convert-SPClientField function converts the field to its derived type.
+The Convert-SPClientField function converts the column to its derived type.
 
 ## EXAMPLES
 
@@ -38,7 +38,7 @@ Accept wildcard characters: False
 ```
 
 ### -Field
-Indicates the field.
+Indicates the column.
 
 ```yaml
 Type: Field

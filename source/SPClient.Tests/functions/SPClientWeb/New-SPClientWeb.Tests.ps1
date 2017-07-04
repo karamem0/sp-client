@@ -16,10 +16,10 @@ Describe 'New-SPClientWeb' {
             }
         }
 
-        It 'Creates a new web with mandatory parameters' {
+        It 'Creates a new site with mandatory parameters' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
                 Url = 'TestWeb0'
             }
             $Result = New-SPClientWeb @Params
@@ -32,10 +32,10 @@ Describe 'New-SPClientWeb' {
             $Result.Configuration | Should Be 0
         }
 
-        It 'Creates a new web with all parameters' {
+        It 'Creates a new site with all parameters' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                ParentObject = $Web
                 Url = 'TestWeb0'
                 Title = 'Test Web 0'
                 Description = 'Test Web 0'

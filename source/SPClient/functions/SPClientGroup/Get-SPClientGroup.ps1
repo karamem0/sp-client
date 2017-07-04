@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Get-SPClientGroup {
@@ -30,16 +15,18 @@ function Get-SPClientGroup {
 .SYNOPSIS
   Gets one or more groups.
 .DESCRIPTION
-  The Get-SPClientGroup function lists all site groups or retrieves the
-  specified site group. If not specified filterable parameter, returns site all
-  groups. Otherwise, returns a group which matches the parameter.
+  The Get-SPClientGroup function lists all site groups or retrieves the specified site group.
+  If not specified filterable parameter, returns site all groups.
+  Otherwise, returns a group which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
+.PARAMETER NoEnumerate
+  If specified, suppresses enumeration in output.
 .PARAMETER Identity
   Indicates the group ID.
 .PARAMETER Name
   Indicates the group name.
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   Get-SPClientGroup
@@ -48,7 +35,7 @@ function Get-SPClientGroup {
 .EXAMPLE
   Get-SPClientGroup -Name "Custom Group"
 .EXAMPLE
-  Get-SPClientGroup -Retrievals "Title"
+  Get-SPClientGroup -Retrieval "Title"
 .INPUTS
   None
 .OUTPUTS
@@ -59,11 +46,12 @@ function Get-SPClientGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [switch]
+        $NoEnumerate,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [int]
@@ -74,7 +62,7 @@ function Get-SPClientGroup {
         $Name,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -83,11 +71,11 @@ function Get-SPClientGroup {
         }
         $ClientObjectCollection = $ClientContext.Site.RootWeb.SiteGroups
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals $Retrievals
-            Write-Output @(, $ClientObjectCollection)
+                -Retrieval $Retrieval
+            Write-Output $ClientObjectCollection -NoEnumerate:$NoEnumerate
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
@@ -96,10 +84,10 @@ function Get-SPClientGroup {
                 'GetById', `
                 [object[]]$Identity)
             $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified group could not be found.'
@@ -112,10 +100,10 @@ function Get-SPClientGroup {
                 'GetByName', `
                 [object[]]$Name)
             $ClientObject = New-Object Microsoft.SharePoint.Client.Group($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified group could not be found.'

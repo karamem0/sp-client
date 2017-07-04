@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function ConvertTo-SPClientFolder {
@@ -33,14 +18,14 @@ function ConvertTo-SPClientFolder {
   The ConvertTo-SPClientFolder function converts the list item to folder.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ListItem
+.PARAMETER InputObject
   Indicates the list item.
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   ConvertTo-SPClientFolder $item
 .INPUTS
-  None or Microsoft.SharePoint.Client.ListItem
+  None or SPClient.SPClientFolderConvertParameter
 .OUTPUTS
   Microsoft.SharePoint.Client.Folder
 .LINK
@@ -53,22 +38,22 @@ function ConvertTo-SPClientFolder {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.ListItem]
-        $ListItem,
+        [SPClient.SPClientFolderConvertParameter]
+        $InputObject,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObject = $ListItem.Folder
-        Invoke-SPClientLoadQuery `
+        $ClientObject = $InputObject.ClientObject.Folder
+        Invoke-ClientContextLoad `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
-            -Retrievals $Retrievals
+            -Retrieval $Retrieval
         if ($ClientObject.ServerObjectIsNull) {
             throw 'Cannot convert list item to folder because it is not a folder.'
         }

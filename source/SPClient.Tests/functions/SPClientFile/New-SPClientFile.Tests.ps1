@@ -23,7 +23,7 @@ Describe 'New-SPClientFile' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
-                ParentFolder = $Folder
+                ParentObject = $Folder
                 ContentStream = $Stream
                 Name = 'TestFile0.txt'
             }
@@ -40,7 +40,7 @@ Describe 'New-SPClientFile' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
-                ParentFolder = $Folder
+                ParentObject = $Folder
                 ContentPath = $FilePath
             }
             $Result = New-SPClientFile @Params
@@ -55,7 +55,7 @@ Describe 'New-SPClientFile' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Folder = $Web.GetFolderByServerRelativeUrl($SPClient.TestConfig.FolderUrl)
             $Params = @{
-                ParentFolder = $Folder
+                ParentObject = $Folder
                 ContentPath = $FilePath
                 Name = 'TestFile0.txt'
             }

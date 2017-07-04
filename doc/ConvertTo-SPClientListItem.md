@@ -5,14 +5,9 @@ Converts file or folder to list item.
 
 ## SYNTAX
 
-### File
 ```
-ConvertTo-SPClientListItem [-ClientContext <ClientContext>] [-File] <File> [-Retrievals <String>]
-```
-
-### Folder
-```
-ConvertTo-SPClientListItem [-ClientContext <ClientContext>] [-Folder] <Folder> [-Retrievals <String>]
+ConvertTo-SPClientListItem [-ClientContext <ClientContext>] [-InputObject] <SPClientListItemConvertParameter>
+ [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
@@ -48,12 +43,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -File
-Indicates the file.
+### -InputObject
+Indicates the file or folder.
 
 ```yaml
-Type: File
-Parameter Sets: File
+Type: SPClientListItemConvertParameter
+Parameter Sets: (All)
 Aliases: 
 
 Required: True
@@ -63,22 +58,7 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Folder
-Indicates the folder.
-
-```yaml
-Type: Folder
-Parameter Sets: Folder
-Aliases: 
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -95,7 +75,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.File or Microsoft.SharePoint.Client.Folder
+### None or SPClient.SPClientListItemConvertParameter
 
 ## OUTPUTS
 

@@ -27,8 +27,7 @@ Connect-SPClientContext [-Online] -Url <String> -UserName <String> -Password <Se
 ```
 
 ## DESCRIPTION
-The Connect-SPClientContext function creates a new client context and sets to
-current.
+The Connect-SPClientContext function creates a new client context and sets to current.
 
 ## EXAMPLES
 

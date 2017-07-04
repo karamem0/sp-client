@@ -6,9 +6,9 @@ Creates a new view.
 ## SYNTAX
 
 ```
-New-SPClientView [-ClientContext <ClientContext>] [-ParentList] <List> -Name <String> [-Title <String>]
- [-ViewFields <String[]>] [-Query <String>] [-RowLimit <Int32>] [-Paged <Boolean>]
- [-SetAsDefaultView <Boolean>] [-ViewType <String>] [-PersonalView <Boolean>] [-Retrievals <String>]
+New-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter> -Name <String>
+ [-Title <String>] [-ViewFields <String[]>] [-Query <String>] [-RowLimit <Int32>] [-Paged <Boolean>]
+ [-SetAsDefaultView <Boolean>] [-ViewType <String>] [-PersonalView <Boolean>] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
@@ -39,11 +39,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentList
+### -ParentObject
 Indicates the list which a view to be created.
 
 ```yaml
-Type: List
+Type: SPClientViewParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -86,7 +86,7 @@ Accept wildcard characters: False
 ```
 
 ### -ViewFields
-Indicates the collection of view fields.
+Indicates the collection of view columns.
 
 ```yaml
 Type: String[]
@@ -190,7 +190,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -207,7 +207,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.List
+### None or SPClient.SPClientViewParentParameter
 
 ## OUTPUTS
 

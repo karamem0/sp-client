@@ -10,8 +10,7 @@ Resolve-SPClientUser [[-ClientContext] <ClientContext>] [-Name] <String>
 ```
 
 ## DESCRIPTION
-The Resolve-SPClientUser function checks whether the specified login name
-belongs to a valid user.
+The Resolve-SPClientUser function checks whether the specified login name belongs to a valid user.
 
 ## EXAMPLES
 

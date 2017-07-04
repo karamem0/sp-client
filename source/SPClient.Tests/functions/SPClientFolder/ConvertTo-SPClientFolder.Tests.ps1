@@ -27,7 +27,7 @@ Describe 'ConvertTo-SPClientFolder' {
             $SPClient.ClientContext.ExecuteQuery()
             $ListItem = $ListItems[0]
             $Params = @{
-                ListItem = $ListItem
+                InputObject = $ListItem
             }
             $Result = ConvertTo-SPClientFolder @Params
             $Result | Should Not BeNullOrEmpty
@@ -61,7 +61,7 @@ Describe 'ConvertTo-SPClientFolder' {
                 $SPClient.ClientContext.ExecuteQuery()
                 $ListItem = $ListItems[0]
                 $Params = @{
-                    ListItem = $ListItem
+                    InputObject = $ListItem
                 }
                 $Result = ConvertTo-SPClientFolder @Params
                 $Result | Should Not BeNullOrEmpty

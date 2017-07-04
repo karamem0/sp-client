@@ -8,7 +8,7 @@ Describe 'Get-SPClientField' {
 
         Context 'Site Column' {
 
-            It 'Returns all fields' {
+            It 'Returns all columns' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -18,7 +18,7 @@ Describe 'Get-SPClientField' {
                 $Result | Should BeOfType 'Microsoft.SharePoint.Client.Field'
             }
 
-            It 'Returns a field by id' {
+            It 'Returns a column by id' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -30,7 +30,7 @@ Describe 'Get-SPClientField' {
                 $Result.Id | Should Be $Params.Identity
             }
 
-            It 'Returns a field by title' {
+            It 'Returns a column by title' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -42,7 +42,7 @@ Describe 'Get-SPClientField' {
                 $Result.Title | Should Be $Params.Name
             }
 
-            It 'Returns a field by internal name' {
+            It 'Returns a column by internal name' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -58,7 +58,7 @@ Describe 'Get-SPClientField' {
 
         Context 'List Column' {
 
-            It 'Returns all fields' {
+            It 'Returns all columns' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -69,7 +69,7 @@ Describe 'Get-SPClientField' {
                 $Result | Should BeOfType 'Microsoft.SharePoint.Client.Field'
             }
 
-            It 'Returns a field by id' {
+            It 'Returns a column by id' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -82,7 +82,7 @@ Describe 'Get-SPClientField' {
                 $Result.Id | Should Be $Params.Identity
             }
 
-            It 'Returns a field by title' {
+            It 'Returns a column by title' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -95,7 +95,7 @@ Describe 'Get-SPClientField' {
                 $Result.Title | Should Be $Params.Name
             }
 
-            It 'Returns a field by internal name' {
+            It 'Returns a column by internal name' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -114,7 +114,7 @@ Describe 'Get-SPClientField' {
 
     Context 'Failure' {
 
-        It 'Throws an error when the field could not be found by id' {
+        It 'Throws an error when the column could not be found by id' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
@@ -125,10 +125,10 @@ Describe 'Get-SPClientField' {
                 $Result = Get-SPClientField @Params
                 $Result | Should Not BeNullOrEmpty
             }
-            $Throw | Should Throw 'The specified field could not be found.'
+            $Throw | Should Throw 'The specified column could not be found.'
         }
 
-        It 'Throws an error when the field could not be found by name' {
+        It 'Throws an error when the column could not be found by name' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
@@ -139,7 +139,7 @@ Describe 'Get-SPClientField' {
                 $Result = Get-SPClientField @Params
                 $Result | Should Not BeNullOrEmpty
             }
-            $Throw | Should Throw 'The specified field could not be found.'
+            $Throw | Should Throw 'The specified column could not be found.'
         }
 
     }

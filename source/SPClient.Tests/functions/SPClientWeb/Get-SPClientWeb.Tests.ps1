@@ -6,13 +6,19 @@ Describe 'Get-SPClientWeb' {
 
     Context 'Success' {
 
-        It 'Gets all webs' {
-            $Result = Get-SPClientWeb
+        It 'Gets all sites' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Params = @{
+                ParentObject = $Web
+            }
+            $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result[0].Title | Should Be 'Test Web 2'
+            $Result[1].Title | Should Be 'Test Web 3'
         }
 
-        It 'Gets a web by id' {
+        It 'Gets a site by id' {
             $Params = @{
                 Identity = $SPClient.TestConfig.WebId
             }
@@ -22,7 +28,7 @@ Describe 'Get-SPClientWeb' {
             $Result.Id | Should Be $Params.Identity
         }
 
-        It 'Gets a web by url' {
+        It 'Gets a site by url' {
             $Params = @{
                 Url = $SPClient.TestConfig.WebUrl
             }
@@ -32,7 +38,7 @@ Describe 'Get-SPClientWeb' {
             $Result.ServerRelativeUrl | Should Be $Params.Url
         }
 
-        It 'Gets the default web' {
+        It 'Gets the default site' {
             $Params = @{
                 Default = $true
             }
@@ -41,7 +47,7 @@ Describe 'Get-SPClientWeb' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
         }
 
-        It 'Gets the root web' {
+        It 'Gets the root site' {
             $Params = @{
                 Root = $true
             }
@@ -51,11 +57,20 @@ Describe 'Get-SPClientWeb' {
             $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.SiteUrl
         }
 
+        It 'Gets default site and its descendants' {
+            $Params = @{
+                RecursiveAll = $true
+            }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+        }
+
     }
 
     Context 'Failure' {
 
-        It 'Throws an error when the web could not be found by id' {
+        It 'Throws an error when the site could not be found by id' {
             $Throw = {
                 $Params = @{
                     Identity = 'C89E2D46-4542-4A29-9FBC-01FFA1FBECDD'
@@ -63,10 +78,10 @@ Describe 'Get-SPClientWeb' {
                 $Result = Get-SPClientWeb @Params
                 $Result | Should Not BeNullOrEmpty
             }
-            $Throw | Should Throw 'The specified web could not be found.'
+            $Throw | Should Throw 'The specified site could not be found.'
         }
 
-        It 'Throws an error when the web could not be found by url' {
+        It 'Throws an error when the site could not be found by url' {
             $Throw = {
                 $Params = @{
                     Url = '/TestWeb0'
@@ -74,7 +89,7 @@ Describe 'Get-SPClientWeb' {
                 $Result = Get-SPClientWeb @Params
                 $Result | Should Not BeNullOrEmpty
             }
-            $Throw | Should Throw 'The specified web could not be found.'
+            $Throw | Should Throw 'The specified site could not be found.'
         }
 
     }

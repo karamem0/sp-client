@@ -26,7 +26,7 @@ Remove-SPClientUser [-ClientContext <ClientContext>] -Email <String>
 ```
 
 ## DESCRIPTION
-The Remove-SPClientUser function deletes the user from the site.
+The Remove-SPClientUser function removes the user from the site.
 If the user could not be found, throws exception.
 
 ## EXAMPLES

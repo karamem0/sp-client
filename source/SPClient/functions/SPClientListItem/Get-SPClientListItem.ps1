@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Get-SPClientListItem {
@@ -33,7 +18,7 @@ function Get-SPClientListItem {
   The Get-SPClientListItem function retrieves list items using CAML query.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ParentList
+.PARAMETER ParentObject
   Indicates the list which the list items are contained.
 .PARAMETER FolderUrl
   Indicates the folder URL.
@@ -44,18 +29,20 @@ function Get-SPClientListItem {
     - RecursiveAll: All files and all subfolders of all folders.
   If not specified, only the files and subfolders of a specific folder.
 .PARAMETER ViewFields
-  Indicates the collection of view fields.
+  Indicates the collection of view columns.
 .PARAMETER Query
   Indicates the XML representation of query.
 .PARAMETER RowLimit
   Indicates the number of items. This parameter is used for item pagination.
 .PARAMETER Position
   Indicates the starting position. This parameter is used for item pagination.
+.PARAMETER NoEnumerate
+  If specified, suppresses enumeration in output.
 .PARAMETER Identity
   Indicates the list item ID.
 .PARAMETER IdentityGuid
   Indicates the list item GUID.
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   Get-SPClientListItem
@@ -66,9 +53,9 @@ function Get-SPClientListItem {
 .EXAMPLE
   Get-SPClientListItem -IdentityGuid "77DF0F67-9B13-4499-AC14-25EB18E1D3DA"
 .EXAMPLE
-  Get-SPClientListItem -Retrievals "Title"
+  Get-SPClientListItem -Retrieval "Title"
 .INPUTS
-  None or Microsoft.SharePoint.Client.List
+  None or SPClient.SPClientListItemParentParameter
 .OUTPUTS
   Microsoft.SharePoint.Client.ListItemCollection or Microsoft.SharePoint.Client.ListItem
 .LINK
@@ -77,14 +64,12 @@ function Get-SPClientListItem {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'IdentityGuid')]
+        [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.List]
-        $ParentList,
+        [SPClient.SPClientListItemParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [string]
         $FolderUrl,
@@ -104,6 +89,9 @@ function Get-SPClientListItem {
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [Microsoft.SharePoint.Client.ListItemCollectionPosition]
         $Position,
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [switch]
+        $NoEnumerate,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [int]
@@ -114,7 +102,7 @@ function Get-SPClientListItem {
         $IdentityGuid,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -153,24 +141,24 @@ function Get-SPClientListItem {
                 $Caml.ListItemCollectionPosition = $Position
             }
             $Caml.ViewXml = $XmlDocument.InnerXml
-            $ClientObjectCollection = $ParentList.GetItems($Caml)
-            Invoke-SPClientLoadQuery `
+            $ClientObjectCollection = $ParentObject.ClientObject.GetItems($Caml)
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals $Retrievals
-            Write-Output @(, $ClientObjectCollection)
+                -Retrieval $Retrieval
+            Write-Output $ClientObjectCollection -NoEnumerate:$NoEnumerate
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
-                $ParentList.Path, `
+                $ParentObject.ClientObject.Path, `
                 'GetItemById', `
                 [object[]]$Identity)
             $ClientObject = New-Object Microsoft.SharePoint.Client.ListItem($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
                 throw 'The specified list item could not be found.'
@@ -190,11 +178,11 @@ function Get-SPClientListItem {
                 '</Where>' + `
                 '</Query>' + `
                 '</View>'
-            $ClientObjectCollection = $ParentList.GetItems($Caml)
-            Invoke-SPClientLoadQuery `
+            $ClientObjectCollection = $ParentObject.ClientObject.GetItems($Caml)
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             if ($ClientObjectCollection.Count -eq 0) {
                 throw 'The specified list item could not be found.'
             }

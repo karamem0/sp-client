@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Get-SPClientContentType {
@@ -30,19 +15,20 @@ function Get-SPClientContentType {
 .SYNOPSIS
   Gets one or more content types.
 .DESCRIPTION
-  The Get-SPClientContentType function lists all content types or retrieves the
-  specified content type. If not specified filterable parameter, returns all
-  content types of the web or list. Otherwise, returns a content type which
-  matches the parameter.
+  The Get-SPClientContentType function lists all content types or retrieves the specified content type.
+  If not specified filterable parameter, returns all content types of the site or list.
+  Otherwise, returns a content type which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentObject
-  Indicates the web or list which the content types are contained.
+  Indicates the site or list which the content types are contained.
+.PARAMETER NoEnumerate
+  If specified, suppresses enumeration in output.
 .PARAMETER Identity
   Indicates the content type ID.
 .PARAMETER Name
   Indicates the content type name.
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   Get-SPClientContentType $web
@@ -51,7 +37,7 @@ function Get-SPClientContentType {
 .EXAMPLE
   Get-SPClientContentType $web -Name "Custom Content Type"
 .EXAMPLE
-  Get-SPClientContentType $web -Retrievals "Title"
+  Get-SPClientContentType $web -Retrieval "Title"
 .INPUTS
   None or SPClient.SPClientContentTypeParentParameter
 .OUTPUTS
@@ -62,14 +48,15 @@ function Get-SPClientContentType {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [SPClient.SPClientContentTypeParentParameter]
         $ParentObject,
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [switch]
+        $NoEnumerate,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [string]
@@ -79,7 +66,7 @@ function Get-SPClientContentType {
         $Name,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -88,11 +75,11 @@ function Get-SPClientContentType {
         }
         $ClientObjectCollection = $ParentObject.ClientObject.ContentTypes
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals $Retrievals
-            Write-Output @(, $ClientObjectCollection)
+                -Retrieval $Retrieval
+            Write-Output $ClientObjectCollection -NoEnumerate:$NoEnumerate
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
@@ -101,28 +88,28 @@ function Get-SPClientContentType {
                 'GetById', `
                 [object[]]$Identity)
             $ClientObject = New-Object Microsoft.SharePoint.Client.ContentType($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             if ($ClientObject.Id -eq $null) {
                 throw 'The specified content type could not be found.'
             }
             Write-Output $ClientObject
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals 'Include(Name)'
+                -Retrieval 'Include(Name)'
             $ClientObject = $ClientObjectCollection | Where-Object { $_.Name -eq $Name }
             if ($ClientObject -eq $null) {
                 throw 'The specified content type could not be found.'
             }
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
         }
     }

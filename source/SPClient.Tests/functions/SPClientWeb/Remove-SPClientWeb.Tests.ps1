@@ -25,7 +25,7 @@ Describe 'Remove-SPClientWeb' {
             }
         }
 
-        It 'Removes a web by loaded client object' {
+        It 'Removes a site by loaded client object' {
             $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
             $SPClient.ClientContext.Load($Web)
             $SPClient.ClientContext.ExecuteQuery()
@@ -36,7 +36,7 @@ Describe 'Remove-SPClientWeb' {
             $Result | Should BeNullOrEmpty
         }
 
-        It 'Removes a web by unloaded client object' {
+        It 'Removes a site by unloaded client object' {
             $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
             $Params = @{
                 ClientObject = $Web
@@ -45,7 +45,7 @@ Describe 'Remove-SPClientWeb' {
             $Result | Should BeNullOrEmpty
         }
 
-        It 'Removes a web by id' {
+        It 'Removes a site by id' {
             $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
             $SPClient.ClientContext.Load($Web)
             $SPClient.ClientContext.ExecuteQuery()
@@ -56,7 +56,7 @@ Describe 'Remove-SPClientWeb' {
             $Result | Should BeNullOrEmpty
         }
 
-        It 'Removes a web by url' {
+        It 'Removes a site by url' {
             $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
             $SPClient.ClientContext.Load($Web)
             $SPClient.ClientContext.ExecuteQuery()
@@ -71,7 +71,7 @@ Describe 'Remove-SPClientWeb' {
 
     Context 'Failure' {
 
-        It 'Throws an error when the web could not be found by id' {
+        It 'Throws an error when the site could not be found by id' {
             $Throw = {
                 $Params = @{
                     Identity = 'C89E2D46-4542-4A29-9FBC-01FFA1FBECDD'
@@ -79,10 +79,10 @@ Describe 'Remove-SPClientWeb' {
                 $Result = Remove-SPClientWeb @Params
                 $Result | Should Not BeNullOrEmpty
             }
-            $Throw | Should Throw 'The specified web could not be found.'
+            $Throw | Should Throw 'The specified site could not be found.'
         }
 
-        It 'Throws an error when the web could not be found by url' {
+        It 'Throws an error when the site could not be found by url' {
             $Throw = {
                 $Params = @{
                     Url = "$($SPClient.TestConfig.WebUrl)/TestWeb0"
@@ -90,7 +90,7 @@ Describe 'Remove-SPClientWeb' {
                 $Result = Remove-SPClientWeb @Params
                 $Result | Should Not BeNullOrEmpty
             }
-            $Throw | Should Throw 'The specified web could not be found.'
+            $Throw | Should Throw 'The specified site could not be found.'
         }
 
     }

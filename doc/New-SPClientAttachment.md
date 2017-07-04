@@ -1,4 +1,4 @@
-# New-SPClientListItemAttachment
+# New-SPClientAttachment
 
 ## SYNOPSIS
 Creates a new attachment.
@@ -7,30 +7,29 @@ Creates a new attachment.
 
 ### ContentStream (Default)
 ```
-New-SPClientListItemAttachment [-ClientContext <ClientContext>] [-ParentListItem] <ListItem>
- -ContentStream <Stream> -Name <String> [-Retrievals <String>]
+New-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentParameter>
+ -ContentStream <Stream> -Name <String> [-Retrieval <String>]
 ```
 
 ### ContentPath
 ```
-New-SPClientListItemAttachment [-ClientContext <ClientContext>] [-ParentListItem] <ListItem>
- -ContentPath <String> [-Name <String>] [-Retrievals <String>]
+New-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentParameter>
+ -ContentPath <String> [-Name <String>] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientListItemAttachment function adds a new attachment to the list
-item.
+The New-SPClientAttachment function adds a new attachment to the list item.
 
 ## EXAMPLES
 
 ### -------------------------- Example 1 --------------------------
 ```
-New-SPClientListItemAttachment $item -Name "CustomAttachment.xlsx" -ContentStream $stream
+New-SPClientAttachment $item -Name "CustomAttachment.xlsx" -ContentStream $stream
 ```
 
 ### -------------------------- Example 2 --------------------------
 ```
-New-SPClientListItemAttachment $item -ContentPath "C:\Users\admin\Documents\CustomAttachment.xlsx"
+New-SPClientAttachment $item -ContentPath "C:\Users\admin\Documents\CustomAttachment.xlsx"
 ```
 
 ## PARAMETERS
@@ -51,11 +50,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentListItem
+### -ParentObject
 Indicates the list item which a attachment to be created.
 
 ```yaml
-Type: ListItem
+Type: SPClientAttachmentParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -123,7 +122,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -140,7 +139,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.ListItem
+### None or SPClient.SPClientAttachmentParentParameter
 
 ## OUTPUTS
 
@@ -150,5 +149,5 @@ Accept wildcard characters: False
 
 ## RELATED LINKS
 
-[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientListItemAttachment.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientListItemAttachment.md)
+[https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientAttachment.md](https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientAttachment.md)
 

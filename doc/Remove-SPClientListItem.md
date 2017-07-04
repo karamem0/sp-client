@@ -12,11 +12,12 @@ Remove-SPClientListItem [-ClientContext <ClientContext>] [-ClientObject] <ListIt
 
 ### Identity
 ```
-Remove-SPClientListItem [-ClientContext <ClientContext>] [-ParentList] <List> -Identity <Int32>
+Remove-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
+ -Identity <Int32>
 ```
 
 ## DESCRIPTION
-The Remove-SPClientListItem function deletes the list item from the list.
+The Remove-SPClientListItem function removes the list item from the list.
 
 ## EXAMPLES
 
@@ -68,11 +69,11 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ParentList
+### -ParentObject
 Indicates the list which the list item is contained.
 
 ```yaml
-Type: List
+Type: SPClientListItemParentParameter
 Parameter Sets: Identity
 Aliases: 
 
@@ -100,7 +101,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.ListItem or Microsoft.SharePoint.Client.List
+### None or Microsoft.SharePoint.Client.ListItem or SPClient.SPClientListItemParentParameter
 
 ## OUTPUTS
 

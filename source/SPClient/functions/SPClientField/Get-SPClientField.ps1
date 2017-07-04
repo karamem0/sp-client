@@ -5,43 +5,30 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Get-SPClientField {
 
 <#
 .SYNOPSIS
-  Gets one or more fields.
+  Gets one or more columns.
 .DESCRIPTION
-  The Get-SPClientField function lists all fields or retrieves the specified
-  field. If not specified filterable parameter, returns all fields of the web or
-  list. Otherwise, returns a field which matches the parameter.
+  The Get-SPClientField function lists all columns or retrieves the specified column.
+  If not specified filterable parameter, returns all columns of the site or list.
+  Otherwise, returns a column which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentObject
-  Indicates the web or list which the fields are contained.
+  Indicates the site or list which the columns are contained.
+.PARAMETER NoEnumerate
+  If specified, suppresses enumeration in output.
 .PARAMETER Identity
-  Indicates the field GUID.
+  Indicates the column GUID.
 .PARAMETER Name
-  Indicates the field title or internal name.
-.PARAMETER Retrievals
+  Indicates the column title or internal name.
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   Get-SPClientField $list
@@ -50,7 +37,7 @@ function Get-SPClientField {
 .EXAMPLE
   Get-SPClientField $list -Name "Custom Field"
 .EXAMPLE
-  Get-SPClientField $list -Retrievals "Title"
+  Get-SPClientField $list -Retrieval "Title"
 .INPUTS
   None or SPClient.SPClientFieldParentParameter
 .OUTPUTS
@@ -61,14 +48,15 @@ function Get-SPClientField {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
-        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
-        [Parameter(Mandatory = $false, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [SPClient.SPClientFieldParentParameter]
         $ParentObject,
+        [Parameter(Mandatory = $false, ParameterSetName = 'All')]
+        [switch]
+        $NoEnumerate,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -79,7 +67,7 @@ function Get-SPClientField {
         $Name,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -88,11 +76,11 @@ function Get-SPClientField {
         }
         $ClientObjectCollection = $ParentObject.ClientObject.Fields
         if ($PSCmdlet.ParameterSetName -eq 'All') {
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `
-                -Retrievals $Retrievals
-            Write-Output @(, $ClientObjectCollection)
+                -Retrieval $Retrieval
+            Write-Output $ClientObjectCollection -NoEnumerate:$NoEnumerate
         }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
@@ -101,13 +89,13 @@ function Get-SPClientField {
                 'GetById', `
                 [object[]]$Identity)
             $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
-                throw 'The specified field could not be found.'
+                throw 'The specified column could not be found.'
             }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
@@ -117,13 +105,13 @@ function Get-SPClientField {
                 'GetByInternalNameOrTitle', `
                 [object[]]$Name)
             $ClientObject = New-Object Microsoft.SharePoint.Client.Field($ClientContext, $PathMethod)
-            Invoke-SPClientLoadQuery `
+            Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
-                -Retrievals $Retrievals
+                -Retrieval $Retrieval
             Write-Output $ClientObject
             trap {
-                throw 'The specified field could not be found.'
+                throw 'The specified column could not be found.'
             }
         }
     }

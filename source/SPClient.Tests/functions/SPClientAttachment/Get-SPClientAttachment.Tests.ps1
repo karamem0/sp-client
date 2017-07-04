@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\..\TestInitialize.ps1"
 
-Describe 'Get-SPClientListItemAttachment' {
+Describe 'Get-SPClientAttachment' {
 
     Context 'Success' {
 
@@ -11,9 +11,9 @@ Describe 'Get-SPClientListItemAttachment' {
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Params = @{
-                ParentListItem = $ListItem
+                ParentObject = $ListItem
             }
-            $Result = Get-SPClientListItemAttachment @Params
+            $Result = Get-SPClientAttachment @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Attachment'
         }
@@ -23,10 +23,10 @@ Describe 'Get-SPClientListItemAttachment' {
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
             $Params = @{
-                ParentListItem = $ListItem
+                ParentObject = $ListItem
                 Name = $SPClient.TestConfig.AttachmentFileName
             }
-            $Result = Get-SPClientListItemAttachment @Params
+            $Result = Get-SPClientAttachment @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Attachment'
         }
@@ -41,10 +41,10 @@ Describe 'Get-SPClientListItemAttachment' {
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)
                 $Params = @{
-                    ParentListItem = $ListItem
+                    ParentObject = $ListItem
                     Name = 'TestAttachment0.txt'
                 }
-                $Result = Get-SPClientListItemAttachment @Params
+                $Result = Get-SPClientAttachment @Params
                 $Result | Should Not BeNullOrEmpty
             }
             $Throw | Should Throw 'The specified attachment could not be found.'

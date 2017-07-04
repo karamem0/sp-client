@@ -7,30 +7,29 @@ Gets one or more folders.
 
 ### All (Default)
 ```
-Get-SPClientFolder [-ClientContext <ClientContext>] [-ParentFolder] <Folder> [-Retrievals <String>]
+Get-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentParameter>
+ [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Name
 ```
-Get-SPClientFolder [-ClientContext <ClientContext>] [-ParentFolder] <Folder> -Name <String>
- [-Retrievals <String>]
+Get-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentParameter>
+ -Name <String> [-Retrieval <String>]
 ```
 
 ### Url
 ```
-Get-SPClientFolder [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Url <String> [-Retrievals <String>]
+Get-SPClientFolder [-ClientContext <ClientContext>] -Web <Web> -Url <String> [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientFolder [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Identity <Guid> [-Retrievals <String>]
+Get-SPClientFolder [-ClientContext <ClientContext>] -Web <Web> -Identity <Guid> [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The Get-SPClientFolder function lists all folders or retrieves the specified
-folder.
-If not specified filterable parameter, returns all sub folders in the
-folder.
+The Get-SPClientFolder function lists all folders or retrieves the specified folder.
+If not specified filterable parameter, returns all subfolders in the folder.
 Otherwise, returns a folder which matches the parameter.
 
 ## EXAMPLES
@@ -47,17 +46,17 @@ Get-SPClientFolder $folder -Name "CustomFolder"
 
 ### -------------------------- Example 3 --------------------------
 ```
-Get-SPClientFolder $web -Identity "7F3120E3-0B31-46E9-9621-55ADAC4612E7"
+Get-SPClientFolder -Web $web -Identity "7F3120E3-0B31-46E9-9621-55ADAC4612E7"
 ```
 
 ### -------------------------- Example 4 --------------------------
 ```
-Get-SPClientFolder $web -Url "http://example.com/DocLib1/CustomFolder"
+Get-SPClientFolder -Web $web -Url "http://example.com/DocLib1/CustomFolder"
 ```
 
 ### -------------------------- Example 5 --------------------------
 ```
-Get-SPClientFolder $folder -Retrievals "ServerRelativeUrl"
+Get-SPClientFolder $folder -Retrieval "ServerRelativeUrl"
 ```
 
 ## PARAMETERS
@@ -78,11 +77,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentFolder
-Indicates the folder which the folders are contained.
+### -ParentObject
+Indicates the folder which the subfolders are contained.
 
 ```yaml
-Type: Folder
+Type: SPClientFolderParentParameter
 Parameter Sets: All, Name
 Aliases: 
 
@@ -93,18 +92,18 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ParentWeb
-Indicates the web which the folders are contained.
+### -NoEnumerate
+If specified, suppresses enumeration in output.
 
 ```yaml
-Type: Web
-Parameter Sets: Url, Identity
+Type: SwitchParameter
+Parameter Sets: All
 Aliases: 
 
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -114,6 +113,21 @@ Indicates the folder name.
 ```yaml
 Type: String
 Parameter Sets: Name
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Web
+Indicates the site which the folders are contained.
+
+```yaml
+Type: Web
+Parameter Sets: Url, Identity
 Aliases: 
 
 Required: True
@@ -153,7 +167,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -170,7 +184,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Folder or Microsoft.SharePoint.Client.Web
+### None or SPClient.SPClientFolderParentParameter
 
 ## OUTPUTS
 

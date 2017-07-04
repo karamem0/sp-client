@@ -17,7 +17,7 @@ Describe 'Resolve-SPClientUser' {
             }
         }
 
-        It 'Resolves a user exists on the web' {
+        It 'Resolves a user exists on the site' {
             $Params = @{
                 Name = "testuser1@$($Env:LoginDomain)"
             }
@@ -26,7 +26,7 @@ Describe 'Resolve-SPClientUser' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.User'
         }
 
-        It 'Resolves a user does not exist on the web' {
+        It 'Resolves a user does not exist on the site' {
             $Params = @{
                 Name = "testuser0@$($Env:LoginDomain)"
             }

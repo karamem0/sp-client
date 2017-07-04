@@ -23,7 +23,7 @@ Describe 'New-SPClientGroup' {
                 $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 Name = 'Test Group 0'
-                Retrievals = '*,Owner.Id,Users.Include(Id)'
+                Retrieval = '*,Owner.Id,Users.Include(Id)'
             }
             $Result = New-SPClientGroup @Params
             $Result | Should Not BeNullOrEmpty
@@ -41,7 +41,7 @@ Describe 'New-SPClientGroup' {
                 Description = 'Test Group 0'
                 Owner = $User
                 Users = $User
-                Retrievals = '*,Owner.Id,Users.Include(Id)'
+                Retrieval = '*,Owner.Id,Users.Include(Id)'
             }
             $Result = New-SPClientGroup @Params
             $Result | Should Not BeNullOrEmpty

@@ -11,8 +11,7 @@ Enable-SPClientUniquePermission [-ClientContext <ClientContext>] [-ClientObject]
 ```
 
 ## DESCRIPTION
-The Enable-SPClientUniquePermission function enables unique role assignments
-to the specified object.
+The Enable-SPClientUniquePermission function enables unique role assignments to the specified object.
 
 ## EXAMPLES
 
@@ -40,7 +39,7 @@ Accept wildcard characters: False
 ```
 
 ### -ClientObject
-Indicates the web, list or item.
+Indicates the site, list or item.
 
 ```yaml
 Type: SecurableObject

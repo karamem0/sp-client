@@ -7,27 +7,31 @@ Gets one or more lists.
 
 ### All (Default)
 ```
-Get-SPClientList [-ClientContext <ClientContext>] [-ParentWeb] <Web> [-Retrievals <String>]
-```
-
-### Name
-```
-Get-SPClientList [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Name <String> [-Retrievals <String>]
-```
-
-### Url
-```
-Get-SPClientList [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Url <String> [-Retrievals <String>]
+Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter> [-NoEnumerate]
+ [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientList [-ClientContext <ClientContext>] [-ParentWeb] <Web> -Identity <Guid> [-Retrievals <String>]
+Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter>
+ -Identity <Guid> [-Retrieval <String>]
+```
+
+### Url
+```
+Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter> -Url <String>
+ [-Retrieval <String>]
+```
+
+### Name
+```
+Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter> -Name <String>
+ [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
 The Get-SPClientList function lists all lists or retrieve the specified list.
-If not specified filterable parameter, returns all lists of the web.
+If not specified filterable parameter, returns all lists of the site.
 Otherwise, returns a list which matches the parameter.
 
 ## EXAMPLES
@@ -54,7 +58,7 @@ Get-SPClientList $web -Name "Custom List"
 
 ### -------------------------- Example 5 --------------------------
 ```
-Get-SPClientList $web -Retrievals "Title"
+Get-SPClientList $web -Retrieval "Title"
 ```
 
 ## PARAMETERS
@@ -75,11 +79,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentWeb
-Indicates the web which the lists are contained.
+### -ParentObject
+Indicates the site which the lists are contained.
 
 ```yaml
-Type: Web
+Type: SPClientListParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -87,6 +91,21 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -NoEnumerate
+If specified, suppresses enumeration in output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -135,7 +154,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -152,7 +171,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Web
+### None or SPClient.SPClientListParentParameter
 
 ## OUTPUTS
 

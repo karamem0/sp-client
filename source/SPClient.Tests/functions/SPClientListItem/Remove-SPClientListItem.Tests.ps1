@@ -94,7 +94,7 @@ Describe 'Remove-SPClientListItem' {
             $SPClient.ClientContext.ExecuteQuery()
             $ListItem = $ListItems[0]
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 Identity = $ListItem.Id
             }
             $Result = Remove-SPClientListItem @Params
@@ -110,7 +110,7 @@ Describe 'Remove-SPClientListItem' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
-                    ParentList = $List
+                    ParentObject = $List
                     Identity = -1
                 }
                 $Result = Remove-SPClientListItem @Params

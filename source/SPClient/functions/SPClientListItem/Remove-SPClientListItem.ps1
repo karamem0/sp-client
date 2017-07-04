@@ -5,23 +5,8 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function Remove-SPClientListItem {
@@ -30,12 +15,12 @@ function Remove-SPClientListItem {
 .SYNOPSIS
   Deletes the list item.
 .DESCRIPTION
-  The Remove-SPClientListItem function deletes the list item from the list.
+  The Remove-SPClientListItem function removes the list item from the list.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the list item to delete.
-.PARAMETER ParentList
+.PARAMETER ParentObject
   Indicates the list which the list item is contained.
 .PARAMETER Identity
   Indicates the list item ID.
@@ -46,7 +31,7 @@ function Remove-SPClientListItem {
 .EXAMPLE
   Remove-SPClientListItem $list -IdentityGuid "77DF0F67-9B13-4499-AC14-25EB18E1D3DA"
 .INPUTS
-  None or Microsoft.SharePoint.Client.ListItem or Microsoft.SharePoint.Client.List
+  None or Microsoft.SharePoint.Client.ListItem or SPClient.SPClientListItemParentParameter
 .OUTPUTS
   None
 .LINK
@@ -62,8 +47,8 @@ function Remove-SPClientListItem {
         [Microsoft.SharePoint.Client.ListItem]
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [Microsoft.SharePoint.Client.List]
-        $ParentList,
+        [SPClient.SPClientListItemParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [int]
@@ -76,23 +61,23 @@ function Remove-SPClientListItem {
         }
         if ($PSCmdlet.ParameterSetName -eq 'ClientObject') {
             if (-not $ClientObject.IsPropertyAvailable('Id')) {
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
             }
         } else {
             if ($PSCmdlet.ParameterSetName -eq 'Identity') {
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
-                    $ParentList.Path, `
+                    $ParentObject.ClientObject.Path, `
                     'GetItemById', `
                     [object[]]$Identity)
                 $ClientObject = New-Object Microsoft.SharePoint.Client.ListItem($ClientContext, $PathMethod)
-                Invoke-SPClientLoadQuery `
+                Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObject `
-                    -Retrievals 'Id'
+                    -Retrieval 'Id'
                 trap {
                     throw 'The specified list item could not be found.'
                 }

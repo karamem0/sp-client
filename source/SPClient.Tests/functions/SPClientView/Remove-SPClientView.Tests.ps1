@@ -54,7 +54,7 @@ Describe 'Remove-SPClientView' {
             $SPClient.ClientContext.Load($View)
             $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 Identity = $View.Id
             }
             $Result = Remove-SPClientView @Params
@@ -65,7 +65,7 @@ Describe 'Remove-SPClientView' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 Url = "$($SPClient.TestConfig.ListUrl)/TestView0.aspx"
             }
             $Result = Remove-SPClientView @Params
@@ -76,7 +76,7 @@ Describe 'Remove-SPClientView' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
-                ParentList = $List
+                ParentObject = $List
                 Title = 'Test View 0'
             }
             $Result = Remove-SPClientView @Params
@@ -92,7 +92,7 @@ Describe 'Remove-SPClientView' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
-                    ParentList = $List
+                    ParentObject = $List
                     Identity = '538BAEA3-24BE-4411-AA54-4700C5735AF7'
                 }
                 $Result = Remove-SPClientView @Params
@@ -106,7 +106,7 @@ Describe 'Remove-SPClientView' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
-                    ParentList = $List
+                    ParentObject = $List
                     Url = "$($SPClient.TestConfig.ListUrl)/TestView0.aspx"
                 }
                 $Result = Remove-SPClientView @Params
@@ -120,7 +120,7 @@ Describe 'Remove-SPClientView' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
-                    ParentList = $List
+                    ParentObject = $List
                     Title = 'Test View 0'
                 }
                 $Result = Remove-SPClientView @Params

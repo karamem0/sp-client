@@ -24,7 +24,7 @@ Describe 'New-SPClientFieldNumber' {
                 }
             }
 
-            It 'Creates a new field with mandatory parameters' {
+            It 'Creates a new column with mandatory parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -44,7 +44,7 @@ Describe 'New-SPClientFieldNumber' {
                 $Result.DefaultValue | Should BeNullOrEmpty
             }
 
-            It 'Creates a new field with all parameters' {
+            It 'Creates a new column with all parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -96,7 +96,7 @@ Describe 'New-SPClientFieldNumber' {
                 }
             }
 
-            It 'Creates a new field with mandatory parameters' {
+            It 'Creates a new column with mandatory parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -117,7 +117,7 @@ Describe 'New-SPClientFieldNumber' {
                 $Result.DefaultValue | Should BeNullOrEmpty
             }
 
-            It 'Creates a new field with all parameters' {
+            It 'Creates a new column with all parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{

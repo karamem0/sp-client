@@ -6,12 +6,12 @@ Creates a new folder.
 ## SYNTAX
 
 ```
-New-SPClientFolder [-ClientContext <ClientContext>] [-ParentFolder] <Folder> -Name <String>
- [-Retrievals <String>]
+New-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentParameter>
+ -Name <String> [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The New-SPClientFolder function adds a new folder to the folder.
+The New-SPClientFolder function adds a new subfolder to the folder.
 
 ## EXAMPLES
 
@@ -38,11 +38,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentFolder
-Indicates the folder which a folder to be created.
+### -ParentObject
+Indicates the folder which a subfolder to be created.
 
 ```yaml
-Type: Folder
+Type: SPClientFolderParentParameter
 Parameter Sets: (All)
 Aliases: 
 
@@ -68,7 +68,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -85,7 +85,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Folder
+### None or SPClient.SPClientFolderParentParameter
 
 ## OUTPUTS
 

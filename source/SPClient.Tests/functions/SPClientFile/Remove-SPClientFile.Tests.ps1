@@ -55,7 +55,7 @@ Describe 'Remove-SPClientFile' {
             $SPClient.ClientContext.Load($File)
             $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
-                ParentWeb = $Web
+                Web = $Web
                 Identity = $File.UniqueId
             }
             $Result = Remove-SPClientFile @Params
@@ -66,7 +66,7 @@ Describe 'Remove-SPClientFile' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
             $Params = @{
-                ParentFolder = $Folder
+                ParentObject = $Folder
                 Name = "TestFile0.txt"
             }
             $Result = Remove-SPClientFile @Params
@@ -76,7 +76,7 @@ Describe 'Remove-SPClientFile' {
         It 'Removes a file by url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
-                ParentWeb = $Web
+                Web = $Web
                 Url = "$($SPClient.TestConfig.FolderUrl)/TestFile0.txt"
             }
             $Result = Remove-SPClientFile @Params
@@ -91,7 +91,7 @@ Describe 'Remove-SPClientFile' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    Web = $Web
                     Identity = '7308CB07-2BB0-483B-8856-B9F540497C25'
                 }
                 $Result = Remove-SPClientFile @Params
@@ -105,7 +105,7 @@ Describe 'Remove-SPClientFile' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Folder = $Web.GetFolderById($SPClient.TestConfig.FolderId)
                 $Params = @{
-                    ParentFolder = $Folder
+                    ParentObject = $Folder
                     Name = "TestFile0.txt"
                 }
                 $Result = Remove-SPClientFile @Params
@@ -118,7 +118,7 @@ Describe 'Remove-SPClientFile' {
             $Throw = {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    ParentWeb = $Web
+                    Web = $Web
                     Url = "$($SPClient.TestConfig.FolderUrl)/TestFile0.txt"
                 }
                 $Result = Remove-SPClientFile @Params

@@ -7,7 +7,7 @@ Creates a new group.
 
 ```
 New-SPClientGroup [[-ClientContext] <ClientContext>] [-Name] <String> [[-Description] <String>]
- [[-Owner] <Principal>] [[-Users] <User[]>] [[-Retrievals] <String>]
+ [[-Owner] <Principal>] [[-Users] <User[]>] [[-Retrieval] <String>]
 ```
 
 ## DESCRIPTION
@@ -98,7 +98,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml

@@ -8,28 +8,25 @@ Gets one or more content types.
 ### All (Default)
 ```
 Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
- [-Retrievals <String>]
-```
-
-### Name
-```
-Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
- -Name <String> [-Retrievals <String>]
+ [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Identity
 ```
 Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
- -Identity <String> [-Retrievals <String>]
+ -Identity <String> [-Retrieval <String>]
+```
+
+### Name
+```
+Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
+ -Name <String> [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The Get-SPClientContentType function lists all content types or retrieves the
-specified content type.
-If not specified filterable parameter, returns all
-content types of the web or list.
-Otherwise, returns a content type which
-matches the parameter.
+The Get-SPClientContentType function lists all content types or retrieves the specified content type.
+If not specified filterable parameter, returns all content types of the site or list.
+Otherwise, returns a content type which matches the parameter.
 
 ## EXAMPLES
 
@@ -50,7 +47,7 @@ Get-SPClientContentType $web -Name "Custom Content Type"
 
 ### -------------------------- Example 4 --------------------------
 ```
-Get-SPClientContentType $web -Retrievals "Title"
+Get-SPClientContentType $web -Retrieval "Title"
 ```
 
 ## PARAMETERS
@@ -72,7 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentObject
-Indicates the web or list which the content types are contained.
+Indicates the site or list which the content types are contained.
 
 ```yaml
 Type: SPClientContentTypeParentParameter
@@ -83,6 +80,21 @@ Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -NoEnumerate
+If specified, suppresses enumeration in output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -116,7 +128,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml

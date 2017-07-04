@@ -1,40 +1,24 @@
 ﻿#Requires -Version 3.0
 
 <#
-  New-SPClientListItemAttachment.ps1
+  New-SPClientAttachment.ps1
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
-function New-SPClientListItemAttachment {
+function New-SPClientAttachment {
 
 <#
 .SYNOPSIS
   Creates a new attachment.
 .DESCRIPTION
-  The New-SPClientListItemAttachment function adds a new attachment to the list
-  item.
+  The New-SPClientAttachment function adds a new attachment to the list item.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
-.PARAMETER ParentListItem
+.PARAMETER ParentObject
   Indicates the list item which a attachment to be created.
 .PARAMETER ContentPath
   Indicates the content file path.
@@ -42,18 +26,18 @@ function New-SPClientListItemAttachment {
   Indicates the content stream.
 .PARAMETER FileName
   Indicates the file name.
-.PARAMETER Retrievals
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
-  New-SPClientListItemAttachment $item -Name "CustomAttachment.xlsx" -ContentStream $stream
+  New-SPClientAttachment $item -Name "CustomAttachment.xlsx" -ContentStream $stream
 .EXAMPLE
-  New-SPClientListItemAttachment $item -ContentPath "C:\Users\admin\Documents\CustomAttachment.xlsx"
+  New-SPClientAttachment $item -ContentPath "C:\Users\admin\Documents\CustomAttachment.xlsx"
 .INPUTS
-  None or Microsoft.SharePoint.Client.ListItem
+  None or SPClient.SPClientAttachmentParentParameter
 .OUTPUTS
   Microsoft.SharePoint.Client.Attachment
 .LINK
-  https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientListItemAttachment.md
+  https://github.com/karamem0/SPClient/blob/master/doc/New-SPClientAttachment.md
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'ContentStream')]
@@ -62,8 +46,8 @@ function New-SPClientListItemAttachment {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [Microsoft.SharePoint.Client.ListItem]
-        $ParentListItem,
+        [SPClient.SPClientAttachmentParentParameter]
+        $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'ContentStream')]
         [System.IO.Stream]
         $ContentStream,
@@ -76,7 +60,7 @@ function New-SPClientListItemAttachment {
         $Name,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -99,11 +83,11 @@ function New-SPClientListItemAttachment {
                 $Creation.FileName = [System.IO.Path]::GetFileName($ContentPath)
             }
         }
-        $ClientObject = $ParentListItem.AttachmentFiles.Add($Creation)
-        Invoke-SPClientLoadQuery `
+        $ClientObject = $ParentObject.ClientObject.AttachmentFiles.Add($Creation)
+        Invoke-ClientContextLoad `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
-            -Retrievals $Retrievals
+            -Retrieval $Retrieval
         Write-Output $ClientObject
     }
 

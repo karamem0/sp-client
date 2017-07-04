@@ -5,49 +5,34 @@
 
   Copyright (c) 2017 karamem0
 
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in all
-  copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-  SOFTWARE.
+  This software is released under the MIT License.
+  https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
 function New-SPClientFieldCalculated {
 
 <#
 .SYNOPSIS
-  Creates a new calclated field.
+  Creates a new calclated column.
 .DESCRIPTION
-  The New-SPClientFieldCalculated function adds a new field to the web or list.
-  The value of the field is calculated based on other columns.
+  The New-SPClientFieldCalculated function adds a new column to the site or list.
+  The value of the column is calculated based on other columns.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentObject
-  Indicates the web or list which a field to be created.
+  Indicates the site or list which a column to be created.
 .PARAMETER Name
   Indicates the internal name.
 .PARAMETER Title
   Indicates the title.
 .PARAMETER Identity
-  Indicates the field GUID.
+  Indicates the column GUID.
 .PARAMETER Description
   Indicates the description.
 .PARAMETER Fomula
   Indicates the formula.
 .PARAMETER FieldRefs
-  Indicates the collection of fields which used in formula.
+  Indicates the collection of columns which used in formula.
 .PARAMETER OutputType
   Indicates the data type of the return value.
     - Text
@@ -59,7 +44,7 @@ function New-SPClientFieldCalculated {
   Indicates the number of decimals. This parameter is used when OutputType is
   'Number' or 'Currency'.
 .PARAMETER Percentage
-  Indicates a value whether the field shows as percentage. This parameter is
+  Indicates a value whether the column shows as percentage. This parameter is
   used when OutputType is 'Number'.
 .PARAMETER LocaleId 
   Indicates the language code identifier (LCID). This parameter is used when
@@ -68,8 +53,8 @@ function New-SPClientFieldCalculated {
   Indicates the datetime display format. This parameter is used when OutputType
   is 'DateTime'.
 .PARAMETER AddToDefaultView
-  If true, the field is add to default view.
-.PARAMETER Retrievals
+  If true, the column is add to default view.
+.PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
   New-SPClientFieldCalculated $list -Name "CustomField" -Title "Custom Field" -Formula "=[Title]" -FieldRefs "Title" -OutputType "Text"
@@ -129,7 +114,7 @@ function New-SPClientFieldCalculated {
         $AddToDefaultView,
         [Parameter(Mandatory = $false)]
         [string]
-        $Retrievals
+        $Retrieval
     )
 
     process {
@@ -179,10 +164,10 @@ function New-SPClientFieldCalculated {
         $ClientObject = Convert-SPClientField `
             -ClientContext $ClientContext `
             -Field $ClientObject
-        Invoke-SPClientLoadQuery `
+        Invoke-ClientContextLoad `
             -ClientContext $ClientContext `
             -ClientObject $ClientObject `
-            -Retrievals $Retrievals
+            -Retrieval $Retrieval
         Write-Output $ClientObject
     }
 

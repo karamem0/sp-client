@@ -1,40 +1,45 @@
 # Get-SPClientWeb
 
 ## SYNOPSIS
-Gets one or more webs.
+Gets one or more sites.
 
 ## SYNTAX
 
 ### All (Default)
 ```
-Get-SPClientWeb [-ClientContext <ClientContext>] [-Retrievals <String>]
-```
-
-### Root
-```
-Get-SPClientWeb [-ClientContext <ClientContext>] [-Root] [-Retrievals <String>]
-```
-
-### Default
-```
-Get-SPClientWeb [-ClientContext <ClientContext>] [-Default] [-Retrievals <String>]
-```
-
-### Url
-```
-Get-SPClientWeb [-ClientContext <ClientContext>] -Url <String> [-Retrievals <String>]
+Get-SPClientWeb [-ClientContext <ClientContext>] [-ParentObject] <SPClientWebParentParameter> [-NoEnumerate]
+ [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientWeb [-ClientContext <ClientContext>] -Identity <Guid> [-Retrievals <String>]
+Get-SPClientWeb [-ClientContext <ClientContext>] -Identity <Guid> [-Retrieval <String>]
+```
+
+### Url
+```
+Get-SPClientWeb [-ClientContext <ClientContext>] -Url <String> [-Retrieval <String>]
+```
+
+### Default
+```
+Get-SPClientWeb [-ClientContext <ClientContext>] [-Default] [-Retrieval <String>]
+```
+
+### Root
+```
+Get-SPClientWeb [-ClientContext <ClientContext>] [-Root] [-Retrieval <String>]
+```
+
+### RecursiveAll
+```
+Get-SPClientWeb [-ClientContext <ClientContext>] [-RecursiveAll] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
-The Get-SPClientWeb function lists all webs or retrieve the specified web.
-If not specified filterable parameter, returns default web and its
-descendants.
-Otherwise, returns a web which matches the parameter.
+The Get-SPClientWeb function lists all sites or retrieve the specified site.
+If not specified filterable parameter, returns all subsites of the site.
+Otherwise, returns a site which matches the parameter.
 
 ## EXAMPLES
 
@@ -65,7 +70,7 @@ Get-SPClientWeb -Root
 
 ### -------------------------- Example 6 --------------------------
 ```
-Get-SPClientWeb -Retrievals "Title"
+Get-SPClientWeb -Retrieval "Title"
 ```
 
 ## PARAMETERS
@@ -86,8 +91,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ParentObject
+Indicates the site which the subsites are contained.
+
+```yaml
+Type: SPClientWebParentParameter
+Parameter Sets: All
+Aliases: 
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -NoEnumerate
+If specified, suppresses enumeration in output.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All
+Aliases: 
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Identity
-Indicates the web GUID.
+Indicates the site GUID.
 
 ```yaml
 Type: Guid
@@ -102,7 +137,7 @@ Accept wildcard characters: False
 ```
 
 ### -Url
-Indicates the web URL.
+Indicates the site URL.
 
 ```yaml
 Type: String
@@ -117,7 +152,7 @@ Accept wildcard characters: False
 ```
 
 ### -Default
-If specified, returns default web of the client context.
+If specified, returns the default site of the client context.
 
 ```yaml
 Type: SwitchParameter
@@ -132,7 +167,7 @@ Accept wildcard characters: False
 ```
 
 ### -Root
-If specified, returns root web.
+If specified, returns the root site.
 
 ```yaml
 Type: SwitchParameter
@@ -146,7 +181,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Retrievals
+### -RecursiveAll
+If specified, returns the default site and its descendants.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: RecursiveAll
+Aliases: 
+
+Required: True
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Retrieval
 Indicates the data retrieval expression.
 
 ```yaml
@@ -163,7 +213,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None
+### None or SPClient.SPClientWebParentParameter
 
 ## OUTPUTS
 

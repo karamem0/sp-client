@@ -10,8 +10,7 @@ Clear-SPClientPermission [-ClientContext <ClientContext>] [-ClientObject] <Secur
 ```
 
 ## DESCRIPTION
-The Clear-SPClientPermission function clears all role assignments from the
-specified object.
+The Clear-SPClientPermission function clears all role assignments from the specified object.
 
 ## EXAMPLES
 
@@ -39,7 +38,7 @@ Accept wildcard characters: False
 ```
 
 ### -ClientObject
-Indicates the web, list or item.
+Indicates the site, list or item.
 
 ```yaml
 Type: SecurableObject

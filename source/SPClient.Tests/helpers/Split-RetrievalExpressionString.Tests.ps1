@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\TestInitialize.ps1"
 
-Describe 'Split-SPClientExpressionString' {
+Describe 'Split-RetrievalExpressionString' {
 
     Context 'Success' {
 
@@ -11,7 +11,7 @@ Describe 'Split-SPClientExpressionString' {
                 InputString = 'RootFolder.Name'
                 Separator = '.'
             }
-            $Result = Split-SPClientExpressionString @Params
+            $Result = Split-RetrievalExpressionString @Params
             $Result | Should Not BeNullOrEmpty
             $Result[0] | Should Be 'RootFolder'
             $Result[1] | Should Be 'Name'
@@ -22,7 +22,7 @@ Describe 'Split-SPClientExpressionString' {
                 InputString = 'Web.Lists.Include(RootFolder.Name)'
                 Separator = '.'
             }
-            $Result = Split-SPClientExpressionString @Params
+            $Result = Split-RetrievalExpressionString @Params
             $Result | Should Not BeNullOrEmpty
             $Result[0] | Should Be 'Web'
             $Result[1] | Should Be 'Lists'
@@ -34,7 +34,7 @@ Describe 'Split-SPClientExpressionString' {
                 InputString = 'Id,Title'
                 Separator = ','
             }
-            $Result = Split-SPClientExpressionString @Params
+            $Result = Split-RetrievalExpressionString @Params
             $Result | Should Not BeNullOrEmpty
             $Result[0] | Should Be 'Id'
             $Result[1] | Should Be 'Title'
@@ -45,7 +45,7 @@ Describe 'Split-SPClientExpressionString' {
                 InputString = 'Id,Lists.Include(Id,Title),ServerRelativeUrl'
                 Separator = ','
             }
-            $Result = Split-SPClientExpressionString @Params
+            $Result = Split-RetrievalExpressionString @Params
             $Result | Should Not BeNullOrEmpty
             $Result[0] | Should Be 'Id'
             $Result[1] | Should Be 'Lists.Include(Id,Title)'

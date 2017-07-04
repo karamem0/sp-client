@@ -11,8 +11,7 @@ Grant-SPClientPermission [-ClientContext <ClientContext>] [-ClientObject] <Secur
 ```
 
 ## DESCRIPTION
-The Grant-SPClientPermission function grants role assignments to the specified
-object.
+The Grant-SPClientPermission function grants role assignments to the specified object.
 
 ## EXAMPLES
 
@@ -40,7 +39,7 @@ Accept wildcard characters: False
 ```
 
 ### -ClientObject
-Indicates the web, list or item.
+Indicates the site, list or item.
 
 ```yaml
 Type: SecurableObject

@@ -2,7 +2,7 @@
 
 . "$($PSScriptRoot)\..\TestInitialize.ps1"
 
-Describe 'Invoke-SPClientLoadQuery' {
+Describe 'Invoke-ClientContextLoad' {
 
     Context 'Success' {
 
@@ -11,7 +11,7 @@ Describe 'Invoke-SPClientLoadQuery' {
                 ClientContext = $SPClient.ClientContext
                 ClientObject = $SPClient.ClientContext.Web
             }
-            $Result = Invoke-SPClientLoadQuery @Params
+            $Result = Invoke-ClientContextLoad @Params
             $Result | Should BeNullOrEmpty
         }
 
@@ -19,9 +19,9 @@ Describe 'Invoke-SPClientLoadQuery' {
             $Params = @{
                 ClientContext = $SPClient.ClientContext
                 ClientObject = $SPClient.ClientContext.Web
-                Retrievals = 'Id, RootFolder.ServerRelativeUrl'
+                Retrieval = 'Id, RootFolder.ServerRelativeUrl'
             }
-            $Result = Invoke-SPClientLoadQuery @Params
+            $Result = Invoke-ClientContextLoad @Params
             $Result | Should BeNullOrEmpty
         }
 
@@ -29,9 +29,9 @@ Describe 'Invoke-SPClientLoadQuery' {
             $Params = @{
                 ClientContext = $SPClient.ClientContext
                 ClientObject = $SPClient.ClientContext.Web
-                Retrievals = '*, RootFolder.ServerRelativeUrl'
+                Retrieval = '*, RootFolder.ServerRelativeUrl'
             }
-            $Result = Invoke-SPClientLoadQuery @Params
+            $Result = Invoke-ClientContextLoad @Params
             $Result | Should BeNullOrEmpty
         }
 
@@ -40,7 +40,7 @@ Describe 'Invoke-SPClientLoadQuery' {
                 ClientContext = $SPClient.ClientContext
                 ClientObject = $SPClient.ClientContext.Web.Lists
             }
-            $Result = Invoke-SPClientLoadQuery @Params
+            $Result = Invoke-ClientContextLoad @Params
             $Result | Should BeNullOrEmpty
         }
 
@@ -48,9 +48,9 @@ Describe 'Invoke-SPClientLoadQuery' {
             $Params = @{
                 ClientContext = $SPClient.ClientContext
                 ClientObject = $SPClient.ClientContext.Web.Lists
-                Retrievals = 'Include(RootFolder.ServerRelativeUrl)'
+                Retrieval = 'Include(RootFolder.ServerRelativeUrl)'
             }
-            $Result = Invoke-SPClientLoadQuery @Params
+            $Result = Invoke-ClientContextLoad @Params
             $Result | Should BeNullOrEmpty
         }
 
@@ -58,9 +58,9 @@ Describe 'Invoke-SPClientLoadQuery' {
             $Params = @{
                 ClientContext = $SPClient.ClientContext
                 ClientObject = $SPClient.ClientContext.Web.Lists
-                Retrievals = 'Include(*, RootFolder.ServerRelativeUrl)'
+                Retrieval = 'Include(*, RootFolder.ServerRelativeUrl)'
             }
-            $Result = Invoke-SPClientLoadQuery @Params
+            $Result = Invoke-ClientContextLoad @Params
             $Result | Should BeNullOrEmpty
         }
 

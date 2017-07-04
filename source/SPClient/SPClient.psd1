@@ -12,7 +12,7 @@
 # RootModule = 'Module.psd1'
 
 # Version number of this module.
-ModuleVersion = '0.11'
+ModuleVersion = '0.12'
 
 # ID used to uniquely identify this module
 GUID = '70F6C652-6C79-4B8B-B4A9-79635EA6AE9C'
@@ -103,9 +103,9 @@ FunctionsToExport = @(
     'Get-SPClientListItem'
     'New-SPClientListItem'
     'Remove-SPClientListItem'
-    'Get-SPClientListItemAttachment'
-    'New-SPClientListItemAttachment'
-    'Remove-SPClientListItemAttachment'
+    'Get-SPClientAttachment'
+    'New-SPClientAttachment'
+    'Remove-SPClientAttachment'
     'Grant-SPClientPermission'
     'Clear-SPClientPermission'
     'Revoke-SPClientPermission'

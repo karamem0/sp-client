@@ -24,7 +24,7 @@ Describe 'New-SPClientFieldCalculated' {
                 }
             }
 
-            It 'Creates a new field with mandatory parameters' {
+            It 'Creates a new column with mandatory parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -43,7 +43,7 @@ Describe 'New-SPClientFieldCalculated' {
                 $Result.OutputType | Should Be 'Text'
             }
 
-            It 'Creates a new field of Number' {
+            It 'Creates a new column of Number' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -68,7 +68,7 @@ Describe 'New-SPClientFieldCalculated' {
                 $Result.OutputType | Should Be 'Number'
             }
 
-            It 'Creates a new field of Currency' {
+            It 'Creates a new column of Currency' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -93,7 +93,7 @@ Describe 'New-SPClientFieldCalculated' {
                 $Result.OutputType | Should Be 'Currency'
             }
 
-            It 'Creates a new field of DateTime' {
+            It 'Creates a new column of DateTime' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -118,7 +118,7 @@ Describe 'New-SPClientFieldCalculated' {
                 $Result.DateFormat | Should Be 'DateOnly'
             }
 
-            It 'Creates a new field of Boolean' {
+            It 'Creates a new column of Boolean' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
                     ParentObject = $Web
@@ -161,7 +161,7 @@ Describe 'New-SPClientFieldCalculated' {
                 }
             }
 
-            It 'Creates a new field with mandatory parameters' {
+            It 'Creates a new column with mandatory parameters' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -181,7 +181,7 @@ Describe 'New-SPClientFieldCalculated' {
                 $Result.OutputType | Should Be 'Text'
             }
 
-            It 'Creates a new field of Number' {
+            It 'Creates a new column of Number' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -207,7 +207,7 @@ Describe 'New-SPClientFieldCalculated' {
                 $Result.OutputType | Should Be 'Number'
             }
 
-            It 'Creates a new field of Currency' {
+            It 'Creates a new column of Currency' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -233,7 +233,7 @@ Describe 'New-SPClientFieldCalculated' {
                 $Result.OutputType | Should Be 'Currency'
             }
 
-            It 'Creates a new field of DateTime' {
+            It 'Creates a new column of DateTime' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
@@ -259,7 +259,7 @@ Describe 'New-SPClientFieldCalculated' {
                 $Result.DateFormat | Should Be 'DateOnly'
             }
 
-            It 'Creates a new field of Boolean' {
+            It 'Creates a new column of Boolean' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
