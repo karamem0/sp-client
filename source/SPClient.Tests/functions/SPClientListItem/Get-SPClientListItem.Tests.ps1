@@ -41,12 +41,27 @@ Describe 'Get-SPClientListItem' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.ListItem'
         }
 
-        It 'Returns list items with view columns' {
+        It 'Returns list items with view column names' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentObject = $List
                 ViewFields = @('ID', 'FileRef')
+            }
+            $Result = Get-SPClientListItem @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.ListItem'
+        }
+
+        It 'Returns list items with view column client objects' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+            $Params = @{
+                ParentObject = $List
+                ViewFields = @(
+                    $List.Fields.GetByInternalNameOrTitle('ID')
+                    $List.Fields.GetByInternalNameOrTitle('FileRef')
+                )
             }
             $Result = Get-SPClientListItem @Params
             $Result | Should Not BeNullOrEmpty

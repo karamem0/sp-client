@@ -82,6 +82,6 @@ Get-SPClientWeb -Default |
     %{ Write-Host $_.Title }
 
 # Get all lists 'ServerRelativeUrl'
-Get-SPClientWeb -Default | Get-SPClientList -Retrievals 'Include(RootFolder.ServerRelativeUrl)' |
+Get-SPClientWeb -Default | Get-SPClientList -Retrieval 'Include(RootFolder.ServerRelativeUrl)' |
     %{ Write-Host $_.RootFolder.ServerRelativeUrl }
 ```

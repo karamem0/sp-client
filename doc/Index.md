@@ -4,6 +4,7 @@
   - [Use-SPClientType](Use-SPClientType.md)
   - [Connect-SPClientContext](Connect-SPClientContext.md)
   - [Disconnect-SPClientContext](Disconnect-SPClientContext.md)
+  - [Debug-SPClientObject](Debug-SPClientObject.md)
 - Web
   - [Get-SPClientWeb](Get-SPClientWeb.md)
   - [New-SPClientWeb](New-SPClientWeb.md)
@@ -12,6 +13,8 @@
   - [Get-SPClientContentType](Get-SPClientContentType.md)
   - [New-SPClientContentType](New-SPClientContentType.md)
   - [Remove-SPClientContentType](Remove-SPClientContentType.md)
+  - [Add-SPClientContentTypeField](Add-SPClientContentTypeField.md)
+  - [Remove-SPClientContentTypeField](Remomve-SPClientContentTypeField.md)
 - List
   - [Get-SPClientList](Get-SPClientList.md)
   - [New-SPClientList](New-SPClientList.md)
@@ -53,6 +56,8 @@
   - [Get-SPClientFolder](Get-SPClientFolder.md)
   - [New-SPClientFolder](New-SPClientFolder.md)
   - [Remove-SPClientFolder](Remove-SPClientFolder.md)
+- Web Template
+  - [Get-SPClientWebTemplate](Get-SPClientWebTemplate.md)
 - User and Group
   - [Get-SPClientGroup](Get-SPClientGroup.md)
   - [New-SPClientGroup](New-SPClientGroup.md)

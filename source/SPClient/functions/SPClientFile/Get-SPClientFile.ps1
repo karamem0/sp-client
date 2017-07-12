@@ -45,7 +45,7 @@
 .INPUTS
   None or SPClient.SPClientFileParentParameter
 .OUTPUTS
-  Microsoft.SharePoint.Client.FileCollection or Microsoft.SharePoint.Client.File
+  Microsoft.SharePoint.Client.File[]
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientFile.md
 #>

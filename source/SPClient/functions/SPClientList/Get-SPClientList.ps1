@@ -45,7 +45,7 @@ function Get-SPClientList {
 .INPUTS
   None or SPClient.SPClientListParentParameter
 .OUTPUTS
-  Microsoft.SharePoint.Client.ListCollection or Microsoft.SharePoint.Client.List
+  Microsoft.SharePoint.Client.List[]
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientList.md
 #>

@@ -41,7 +41,7 @@ function Get-SPClientContentType {
 .INPUTS
   None or SPClient.SPClientContentTypeParentParameter
 .OUTPUTS
-  Microsoft.SharePoint.Client.ContentTypeCollection or Microsoft.SharePoint.Client.ContentType
+  Microsoft.SharePoint.Client.ContentType[]
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientContentType.md
 #>

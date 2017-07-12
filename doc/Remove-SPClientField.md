@@ -23,7 +23,7 @@ Remove-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientF
 ```
 
 ## DESCRIPTION
-The Remove-SPClientField function removes the column from the list.
+The Remove-SPClientField function removes the column from the site or list.
 
 ## EXAMPLES
 
@@ -76,7 +76,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentObject
-Indicates the list which the column is contained.
+Indicates the site or list which the column is contained.
 
 ```yaml
 Type: SPClientFieldParentParameter

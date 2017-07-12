@@ -75,7 +75,7 @@ Describe 'Get-SPClientView' {
                 $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
                 $Params = @{
                     ParentObject = $List
-                    Identity = [guid]::Empty
+                    Identity = '538BAEA3-24BE-4411-AA54-4700C5735AF7'
                 }
                 $Result = Get-SPClientView @Params
                 $Result | Should Not BeNullOrEmpty

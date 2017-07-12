@@ -188,7 +188,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### Microsoft.SharePoint.Client.FolderCollection or Microsoft.SharePoint.Client.Folder
+### Microsoft.SharePoint.Client.Folder[]
 
 ## NOTES
 

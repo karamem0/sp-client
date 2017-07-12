@@ -10,21 +10,21 @@
 namespace SPClient {
 
     /// <summary>
-    /// Represents the SPClientView functions parameter.
+    /// Represents a parameter that stores a client object that is the parent of views.
     /// </summary>
     public class SPClientViewParentParameter {
         
         /// <summary>
-        /// Gets the parent client object.
+        /// Gets the client object.
         /// </summary>
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
         /// Initializes the new instance of <see cref="SPClient.SPClientViewParentParameter"/> class.
         /// </summary>
-        /// <param name="clientObject">the parent client object which contains views.</param>
-        public SPClientViewParentParameter(Microsoft.SharePoint.Client.List clientObject) {
-            this.ClientObject = clientObject;
+        /// <param name="list">the list which contains views.</param>
+        public SPClientViewParentParameter(Microsoft.SharePoint.Client.List list) {
+            this.ClientObject = list;
         }
 
     }

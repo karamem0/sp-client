@@ -188,7 +188,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### Microsoft.SharePoint.Client.FileCollection or Microsoft.SharePoint.Client.File
+### Microsoft.SharePoint.Client.File[]
 
 ## NOTES
 

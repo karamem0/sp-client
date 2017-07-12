@@ -37,7 +37,7 @@ function Get-SPClientAttachment {
 .INPUTS
   None or SPClient.SPClientAttachmentParentParameter
 .OUTPUTS
-  Microsoft.SharePoint.Client.AttachmentCollection or Microsoft.SharePoint.Client.Attachment
+  Microsoft.SharePoint.Client.Attachment[]
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientAttachment.md
 #>

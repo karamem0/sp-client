@@ -8,8 +8,8 @@ Gets one or more list items.
 ### All (Default)
 ```
 Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
- [-FolderUrl <String>] [-Scope <String>] [-ViewFields <String[]>] [-Query <String>] [-RowLimit <Int32>]
- [-Position <ListItemCollectionPosition>] [-NoEnumerate] [-Retrieval <String>]
+ [-FolderUrl <String>] [-Scope <String>] [-ViewFields <SPClientFieldIdentityParameter[]>] [-Query <String>]
+ [-RowLimit <Int32>] [-Position <ListItemCollectionPosition>] [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Identity
@@ -125,7 +125,7 @@ Accept wildcard characters: False
 Indicates the collection of view columns.
 
 ```yaml
-Type: String[]
+Type: SPClientFieldIdentityParameter[]
 Parameter Sets: All
 Aliases: 
 
@@ -249,7 +249,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### Microsoft.SharePoint.Client.ListItemCollection or Microsoft.SharePoint.Client.ListItem
+### Microsoft.SharePoint.Client.ListItem[]
 
 ## NOTES
 

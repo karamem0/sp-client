@@ -26,7 +26,7 @@ function New-SPClientWeb {
   Indicates the title. If not specified, uses default title of the site template.
 .PARAMETER Description
   Indicates the description.
-.PARAMETER Language
+.PARAMETER Locale
   Indicates the locale ID in which the language is used. If not specified, uses the parent site language.
 .PARAMETER Template
   Indicates the template name.
@@ -62,10 +62,11 @@ function New-SPClientWeb {
         [string]
         $Description,
         [Parameter(Mandatory = $false)]
+        [Alias('Language')]
         [string]
-        $Language,
+        $Locale,
         [Parameter(Mandatory = $false)]
-        [string]
+        [SPClient.SPClientWebTemplateIdentityParameter]
         $Template,
         [Parameter(Mandatory = $false)]
         [switch]
@@ -81,8 +82,10 @@ function New-SPClientWeb {
         }
         $Creation = New-Object Microsoft.SharePoint.Client.WebCreationInformation
         $Creation.Url = $Url
-        $Creation.Language = $Language
-        $Creation.WebTemplate = $Template
+        $Creation.Language = $Locale
+        if ($PSBoundParameters.ContainsKey('Template')) {
+            $Creation.WebTemplate = $Template.GetValue($ClientContext)
+        }
         $Creation.Title = $Title
         $Creation.Description = $Description
         $Creation.UseSamePermissionsAsParentSite = -not $UniquePermissions

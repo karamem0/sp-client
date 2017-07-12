@@ -201,7 +201,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### Microsoft.SharePoint.Client.ViewCollection or Microsoft.SharePoint.Client.View
+### Microsoft.SharePoint.Client.View[]
 
 ## NOTES
 

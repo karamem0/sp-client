@@ -57,7 +57,7 @@ function Get-SPClientListItem {
 .INPUTS
   None or SPClient.SPClientListItemParentParameter
 .OUTPUTS
-  Microsoft.SharePoint.Client.ListItemCollection or Microsoft.SharePoint.Client.ListItem
+  Microsoft.SharePoint.Client.ListItem[]
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientListItem.md
 #>
@@ -78,7 +78,7 @@ function Get-SPClientListItem {
         [string]
         $Scope,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [string[]]
+        [SPClient.SPClientFieldIdentityParameter[]]
         $ViewFields,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [string]
@@ -123,7 +123,7 @@ function Get-SPClientListItem {
                 $ViewFieldsElement = $ViewElement.AppendChild($XmlDocument.CreateElement('ViewFields'))
                 foreach ($ViewField in $ViewFields) {
                     $FieldRefElement = $ViewFieldsElement.AppendChild($XmlDocument.CreateElement('FieldRef'))
-                    $FieldRefElement.SetAttribute('Name', $ViewField)
+                    $FieldRefElement.SetAttribute('Name', $ViewField.GetValue($ClientContext))
                 }
             }
             if ($PSBoundParameters.ContainsKey('Query')) {

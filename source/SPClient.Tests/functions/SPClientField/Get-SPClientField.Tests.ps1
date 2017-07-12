@@ -110,6 +110,60 @@ Describe 'Get-SPClientField' {
 
         }
 
+        Context 'Content Type Column' {
+
+            It 'Returns all columns' {
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $ContentType = $Web.ContentTypes.GetById($SPClient.TestConfig.WebContentTypeId)
+                $Params = @{
+                    ParentObject = $ContentType
+                }
+                $Result = Get-SPClientField @Params
+                $Result | Should Not BeNullOrEmpty
+                $Result | Should BeOfType 'Microsoft.SharePoint.Client.Field'
+            }
+
+            It 'Returns a column by id' {
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $ContentType = $Web.ContentTypes.GetById($SPClient.TestConfig.WebContentTypeId)
+                $Params = @{
+                    ParentObject = $ContentType
+                    Identity = $SPClient.TestConfig.FieldId
+                }
+                $Result = Get-SPClientField @Params
+                $Result | Should Not BeNullOrEmpty
+                $Result | Should BeOfType 'Microsoft.SharePoint.Client.Field'
+                $Result.Id | Should Be $Params.Identity
+            }
+
+            It 'Returns a column by title' {
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $ContentType = $Web.ContentTypes.GetById($SPClient.TestConfig.WebContentTypeId)
+                $Params = @{
+                    ParentObject = $ContentType
+                    Name = $SPClient.TestConfig.FieldTitle
+                }
+                $Result = Get-SPClientField @Params
+                $Result | Should Not BeNullOrEmpty
+                $Result | Should BeOfType 'Microsoft.SharePoint.Client.Field'
+                $Result.Title | Should Be $Params.Name
+            }
+
+            It 'Returns a column by internal name' {
+                $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+                $ContentType = $Web.ContentTypes.GetById($SPClient.TestConfig.WebContentTypeId)
+                $Params = @{
+                    ParentObject = $ContentType
+                    Name = $SPClient.TestConfig.FieldName
+                }
+                $Result = Get-SPClientField @Params
+                $Result | Should Not BeNullOrEmpty
+                $Result | Should BeOfType 'Microsoft.SharePoint.Client.Field'
+                $Result.InternalName | Should Be $Params.Name
+            }
+
+        }
+
     }
 
     Context 'Failure' {

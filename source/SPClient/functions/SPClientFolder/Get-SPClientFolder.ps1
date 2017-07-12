@@ -45,7 +45,7 @@
 .INPUTS
   None or SPClient.SPClientFolderParentParameter
 .OUTPUTS
-  Microsoft.SharePoint.Client.FolderCollection or Microsoft.SharePoint.Client.Folder
+  Microsoft.SharePoint.Client.Folder[]
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientFolder.md
 #>

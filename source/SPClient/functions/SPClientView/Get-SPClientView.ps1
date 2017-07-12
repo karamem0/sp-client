@@ -49,7 +49,7 @@ function Get-SPClientView {
 .INPUTS
   None or SPClient.SPClientViewParentParameter
 .OUTPUTS
-  Microsoft.SharePoint.Client.ViewCollection or Microsoft.SharePoint.Client.View
+  Microsoft.SharePoint.Client.View[]
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientView.md
 #>

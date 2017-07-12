@@ -176,7 +176,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### Microsoft.SharePoint.Client.UserCollection or Microsoft.SharePoint.Client.User
+### Microsoft.SharePoint.Client.User[]
 
 ## NOTES
 

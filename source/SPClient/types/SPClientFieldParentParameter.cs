@@ -10,29 +10,37 @@
 namespace SPClient {
 
     /// <summary>
-    /// Represents the SPClientField functions parameter.
+    /// Represents a parameter that stores a client object that is the parent of columns.
     /// </summary>
     public class SPClientFieldParentParameter {
         
         /// <summary>
-        /// Gets the parent client object.
+        /// Gets the client object.
         /// </summary>
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
         /// Initializes the new instance of <see cref="SPClient.SPClientFieldParentParameter"/> class.
         /// </summary>
-        /// <param name="clientObject">the parent client object which contains columns.</param>
-        public SPClientFieldParentParameter(Microsoft.SharePoint.Client.Web clientObject) {
-            this.ClientObject = clientObject;
+        /// <param name="web">the site which contains columns.</param>
+        public SPClientFieldParentParameter(Microsoft.SharePoint.Client.Web web) {
+            this.ClientObject = web;
         }
-        
+
         /// <summary>
         /// Initializes the new instance of <see cref="SPClient.SPClientFieldParentParameter"/> class.
         /// </summary>
-        /// <param name="clientObject">the parent client object which contains columns.</param>
-        public SPClientFieldParentParameter(Microsoft.SharePoint.Client.List clientObject) {
-            this.ClientObject = clientObject;
+        /// <param name="list">the list which contains columns.</param>
+        public SPClientFieldParentParameter(Microsoft.SharePoint.Client.List list) {
+            this.ClientObject = list;
+        }
+
+        /// <summary>
+        /// Initializes the new instance of <see cref="SPClient.SPClientFieldParentParameter"/> class.
+        /// </summary>
+        /// <param name="contentType">the content type which contains columns.</param>
+        public SPClientFieldParentParameter(Microsoft.SharePoint.Client.ContentType contentType) {
+            this.ClientObject = contentType;
         }
 
     }

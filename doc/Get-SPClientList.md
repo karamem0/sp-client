@@ -175,7 +175,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### Microsoft.SharePoint.Client.ListCollection or Microsoft.SharePoint.Client.List
+### Microsoft.SharePoint.Client.List[]
 
 ## NOTES
 

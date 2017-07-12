@@ -18,7 +18,7 @@ Describe 'Get-SPClientAttachment' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Attachment'
         }
 
-        It 'Returns a list by file name' {
+        It 'Returns a attachment by file name' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $ListItem = $List.GetItemById($SPClient.TestConfig.ListItemId)

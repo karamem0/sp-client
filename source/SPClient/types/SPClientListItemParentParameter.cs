@@ -10,21 +10,21 @@
 namespace SPClient {
 
     /// <summary>
-    /// Represents the SPClientListItem functions parameter.
+    /// Represents a parameter that stores a client object that is the parent of list items.
     /// </summary>
     public class SPClientListItemParentParameter {
         
         /// <summary>
-        /// Gets the parent client object.
+        /// Gets the client object.
         /// </summary>
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
         /// Initializes the new instance of <see cref="SPClient.SPClientListItemParentParameter"/> class.
         /// </summary>
-        /// <param name="clientObject">the parent client object which contains list items.</param>
-        public SPClientListItemParentParameter(Microsoft.SharePoint.Client.List clientObject) {
-            this.ClientObject = clientObject;
+        /// <param name="clientObject">the list which contains list items.</param>
+        public SPClientListItemParentParameter(Microsoft.SharePoint.Client.List list) {
+            this.ClientObject = list;
         }
 
     }

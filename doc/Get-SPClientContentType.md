@@ -149,7 +149,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### Microsoft.SharePoint.Client.ContentTypeCollection or Microsoft.SharePoint.Client.ContentType
+### Microsoft.SharePoint.Client.ContentType[]
 
 ## NOTES
 

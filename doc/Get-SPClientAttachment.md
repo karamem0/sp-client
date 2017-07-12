@@ -123,7 +123,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### Microsoft.SharePoint.Client.AttachmentCollection or Microsoft.SharePoint.Client.Attachment
+### Microsoft.SharePoint.Client.Attachment[]
 
 ## NOTES
 

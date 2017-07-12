@@ -12,7 +12,7 @@
 # RootModule = 'Module.psd1'
 
 # Version number of this module.
-ModuleVersion = '0.12'
+ModuleVersion = '0.13'
 
 # ID used to uniquely identify this module
 GUID = '70F6C652-6C79-4B8B-B4A9-79635EA6AE9C'
@@ -67,9 +67,14 @@ NestedModules = @('SPClient.psm1')
 
 # Functions to export from this module
 FunctionsToExport = @(
+    'Get-SPClientAttachment'
+    'New-SPClientAttachment'
+    'Remove-SPClientAttachment'
+    'Add-SPClientContentTypeField'
     'Get-SPClientContentType'
     'New-SPClientContentType'
     'Remove-SPClientContentType'
+    'Remove-SPClientContentTypeField'
     'Connect-SPClientContext'
     'Disconnect-SPClientContext'
     'Convert-SPClientField'
@@ -103,11 +108,9 @@ FunctionsToExport = @(
     'Get-SPClientListItem'
     'New-SPClientListItem'
     'Remove-SPClientListItem'
-    'Get-SPClientAttachment'
-    'New-SPClientAttachment'
-    'Remove-SPClientAttachment'
-    'Grant-SPClientPermission'
+    'Debug-SPClientObject'
     'Clear-SPClientPermission'
+    'Grant-SPClientPermission'
     'Revoke-SPClientPermission'
     'Use-SPClientType'
     'Disable-SPClientUniquePermission'
@@ -122,6 +125,7 @@ FunctionsToExport = @(
     'Get-SPClientWeb'
     'New-SPClientWeb'
     'Remove-SPClientWeb'
+    'Get-SPClientWebTemplate'
 )
 
 # Cmdlets to export from this module

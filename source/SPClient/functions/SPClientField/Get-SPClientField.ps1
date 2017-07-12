@@ -41,7 +41,7 @@ function Get-SPClientField {
 .INPUTS
   None or SPClient.SPClientFieldParentParameter
 .OUTPUTS
-  Microsoft.SharePoint.Client.FieldCollection or Microsoft.SharePoint.Client.Field
+  Microsoft.SharePoint.Client.Field[]
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientField.md
 #>

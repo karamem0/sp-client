@@ -32,6 +32,27 @@ Describe 'New-SPClientWeb' {
             $Result.Configuration | Should Be 0
         }
 
+        It 'Creates a new site with a site template client object' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $WebTemplateCollection = $Web.GetAvailableWebTemplates(1041, $true)
+            $SPClient.ClientContext.Load($WebTemplateCollection)
+            $SPClient.ClientContext.ExecuteQuery()
+            $WebTemplate = $WebTemplateCollection | Where-Object { $_.Name -eq 'STS#1' }
+            $Params = @{
+                ParentObject = $Web
+                Url = 'TestWeb0'
+                Template = $WebTemplate
+            }
+            $Result = New-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.Title | Should Be 'Team Site'
+            $Result.Description | Should Be ''
+            $Result.Language | Should Be 1033
+            $Result.WebTemplate | Should Be 'STS'
+            $Result.Configuration | Should Be 1
+        }
+
         It 'Creates a new site with all parameters' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{

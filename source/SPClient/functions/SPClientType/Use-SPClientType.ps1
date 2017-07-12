@@ -13,14 +13,14 @@ function Use-SPClientType {
 
 <#
 .SYNOPSIS
-  Loads SharePoint Client Components assemblies.
+  Loads SharePoint client components assemblies.
 .DESCRIPTION
-  The Use-SPClientType function loads SharePoint Client Components assemblies.
+  The Use-SPClientType function loads SharePoint client components assemblies.
     - Microsoft.SharePoint.Client.dll
     - Microsoft.SharePoint.Client.Runtime.dll
+  Usually, this function is called first in your script.
 .PARAMETER LiteralPath
-  Indicates the path that locates SharePoint Client Components. If not
-  specified, loads from the location below.
+  Indicates the path that locates SharePoint client components. If not specified, loads from the location below.
     - Current working directory
     - Global assembly cache (GAC)
 .PARAMETER PassThru

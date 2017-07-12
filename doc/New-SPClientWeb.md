@@ -7,8 +7,8 @@ Creates a new subsite.
 
 ```
 New-SPClientWeb [-ClientContext <ClientContext>] [-ParentObject] <SPClientWebParentParameter> -Url <String>
- [-Title <String>] [-Description <String>] [-Language <String>] [-Template <String>] [-UniquePermissions]
- [-Retrieval <String>]
+ [-Title <String>] [-Description <String>] [-Locale <String>]
+ [-Template <SPClientWebTemplateIdentityParameter>] [-UniquePermissions] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
@@ -100,14 +100,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Language
+### -Locale
 Indicates the locale ID in which the language is used.
 If not specified, uses the parent site language.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases: Language
 
 Required: False
 Position: Named
@@ -120,7 +120,7 @@ Accept wildcard characters: False
 Indicates the template name.
 
 ```yaml
-Type: String
+Type: SPClientWebTemplateIdentityParameter
 Parameter Sets: (All)
 Aliases: 
 

@@ -149,7 +149,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### Microsoft.SharePoint.Client.FieldCollection or Microsoft.SharePoint.Client.Field
+### Microsoft.SharePoint.Client.Field[]
 
 ## NOTES
 

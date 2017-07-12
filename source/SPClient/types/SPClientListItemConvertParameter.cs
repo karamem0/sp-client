@@ -10,29 +10,29 @@
 namespace SPClient {
 
     /// <summary>
-    /// Represents the SPClientListItem functions parameter.
+    /// Represents a parameter that stores a client object that can be converted to a list item.
     /// </summary>
     public class SPClientListItemConvertParameter {
         
         /// <summary>
-        /// Gets the parent client object.
+        /// Gets the client object.
         /// </summary>
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
         /// Initializes the new instance of <see cref="SPClient.SPClientListItemConvertParameter"/> class.
         /// </summary>
-        /// <param name="clientObject">the client object which converts to a list item.</param>
-        public SPClientListItemConvertParameter(Microsoft.SharePoint.Client.Folder clientObject) {
-            this.ClientObject = clientObject;
+        /// <param name="folder">the folder which converts to a list item.</param>
+        public SPClientListItemConvertParameter(Microsoft.SharePoint.Client.Folder folder) {
+            this.ClientObject = folder;
         }
 
         /// <summary>
         /// Initializes the new instance of <see cref="SPClient.SPClientListItemConvertParameter"/> class.
         /// </summary>
-        /// <param name="clientObject">the client object which converts to a list item.</param>
-        public SPClientListItemConvertParameter(Microsoft.SharePoint.Client.File clientObject) {
-            this.ClientObject = clientObject;
+        /// <param name="file">the file which converts to a list item.</param>
+        public SPClientListItemConvertParameter(Microsoft.SharePoint.Client.File file) {
+            this.ClientObject = file;
         }
 
     }

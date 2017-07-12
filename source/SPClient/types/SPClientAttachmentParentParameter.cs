@@ -10,21 +10,21 @@
 namespace SPClient {
 
     /// <summary>
-    /// Represents the SPClientAttachment functions parameter.
+    /// Represents a parameter that stores a client object that is the parent of attachments.
     /// </summary>
     public class SPClientAttachmentParentParameter {
         
         /// <summary>
-        /// Gets the parent client object.
+        /// Gets the client object.
         /// </summary>
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
         /// Initializes the new instance of <see cref="SPClient.SPClientContentTypeParentParameter"/> class.
         /// </summary>
-        /// <param name="clientObject">the parent client object which contains attachments.</param>
-        public SPClientAttachmentParentParameter(Microsoft.SharePoint.Client.ListItem clientObject) {
-            this.ClientObject = clientObject;
+        /// <param name="listItem">the list item which contains attachments.</param>
+        public SPClientAttachmentParentParameter(Microsoft.SharePoint.Client.ListItem listItem) {
+            this.ClientObject = listItem;
         }
 
     }

@@ -39,7 +39,7 @@ function Get-SPClientGroup {
 .INPUTS
   None
 .OUTPUTS
-  Microsoft.SharePoint.Client.GroupCollection Microsoft.SharePoint.Client.Group
+  Microsoft.SharePoint.Client.Group[]
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientGroup.md
 #>

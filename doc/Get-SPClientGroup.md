@@ -131,7 +131,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### Microsoft.SharePoint.Client.GroupCollection Microsoft.SharePoint.Client.Group
+### Microsoft.SharePoint.Client.Group[]
 
 ## NOTES
 

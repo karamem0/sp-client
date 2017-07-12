@@ -10,29 +10,29 @@
 namespace SPClient {
 
     /// <summary>
-    /// Represents the SPClientContentType functions parameter.
+    /// Represents a parameter that stores a client object that is the parent of content types.
     /// </summary>
     public class SPClientContentTypeParentParameter {
         
         /// <summary>
-        /// Gets the parent client object.
+        /// Gets the client object.
         /// </summary>
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
         /// Initializes the new instance of <see cref="SPClient.SPClientContentTypeParentParameter"/> class.
         /// </summary>
-        /// <param name="clientObject">the parent client object which contains content types.</param>
-        public SPClientContentTypeParentParameter(Microsoft.SharePoint.Client.Web clientObject) {
-            this.ClientObject = clientObject;
+        /// <param name="web">the site which contains content types.</param>
+        public SPClientContentTypeParentParameter(Microsoft.SharePoint.Client.Web web) {
+            this.ClientObject = web;
         }
         
         /// <summary>
         /// Initializes the new instance of <see cref="SPClient.SPClientContentTypeParentParameter"/> class.
         /// </summary>
-        /// <param name="clientObject">the parent client object which contains content types.</param>
-        public SPClientContentTypeParentParameter(Microsoft.SharePoint.Client.List clientObject) {
-            this.ClientObject = clientObject;
+        /// <param name="list">the list which contains content types.</param>
+        public SPClientContentTypeParentParameter(Microsoft.SharePoint.Client.List list) {
+            this.ClientObject = list;
         }
 
     }

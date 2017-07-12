@@ -45,7 +45,7 @@ function Get-SPClientUser {
 .INPUTS
   None
 .OUTPUTS
-  Microsoft.SharePoint.Client.UserCollection or Microsoft.SharePoint.Client.User
+  Microsoft.SharePoint.Client.User[]
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientUser.md
 #>

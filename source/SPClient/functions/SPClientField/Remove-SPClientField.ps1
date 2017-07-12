@@ -15,13 +15,13 @@ function Remove-SPClientField {
 .SYNOPSIS
   Deletes the column.
 .DESCRIPTION
-  The Remove-SPClientField function removes the column from the list. 
+  The Remove-SPClientField function removes the column from the site or list. 
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ClientObject
   Indicates the column to delete.
 .PARAMETER ParentObject
-  Indicates the list which the column is contained.
+  Indicates the site or list which the column is contained.
 .PARAMETER Identity
   Indicates the column GUID.
 .PARAMETER Name

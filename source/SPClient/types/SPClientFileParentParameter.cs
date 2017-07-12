@@ -10,21 +10,21 @@
 namespace SPClient {
 
     /// <summary>
-    /// Represents the SPClientFile functions parameter.
+    /// Represents a parameter that stores a client object that is the parent of files.
     /// </summary>
     public class SPClientFileParentParameter {
         
         /// <summary>
-        /// Gets the parent client object.
+        /// Gets the client object.
         /// </summary>
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
         /// Initializes the new instance of <see cref="SPClient.SPClientFileParentParameter"/> class.
         /// </summary>
-        /// <param name="clientObject">the parent client object which contains files.</param>
-        public SPClientFileParentParameter(Microsoft.SharePoint.Client.Folder clientObject) {
-            this.ClientObject = clientObject;
+        /// <param name="folder">the folder which contains files.</param>
+        public SPClientFileParentParameter(Microsoft.SharePoint.Client.Folder folder) {
+            this.ClientObject = folder;
         }
 
     }
