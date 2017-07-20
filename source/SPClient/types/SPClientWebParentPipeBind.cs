@@ -1,5 +1,5 @@
 ﻿/*
- * SPClientWebParentParameter.cs
+ * SPClientWebParentPipeBind.cs
  *
  * Copyright (c) 2017 karamem0
  *
@@ -12,7 +12,7 @@ namespace SPClient {
     /// <summary>
     /// Represents a parameter that stores a client object that is the parent of subsites.
     /// </summary>
-    public class SPClientWebParentParameter {
+    public class SPClientWebParentPipeBind {
         
         /// <summary>
         /// Gets the client object.
@@ -20,11 +20,11 @@ namespace SPClient {
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
-        /// Initializes the new instance of <see cref="SPClient.SPClientWebParentParameter"/> class.
+        /// Initializes the new instance of <see cref="SPClient.SPClientWebParentPipeBind"/> class.
         /// </summary>
-        /// <param name="site">the site which contains subsites.</param>
-        public SPClientWebParentParameter(Microsoft.SharePoint.Client.Web site) {
-            this.ClientObject = site;
+        /// <param name="web">the site which contains subsites.</param>
+        public SPClientWebParentPipeBind(Microsoft.SharePoint.Client.Web web) {
+            this.ClientObject = web;
         }
 
     }

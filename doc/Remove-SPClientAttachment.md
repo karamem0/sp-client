@@ -12,7 +12,7 @@ Remove-SPClientAttachment [-ClientContext <ClientContext>] [-ClientObject] <Atta
 
 ### FileName
 ```
-Remove-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentParameter>
+Remove-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentPipeBind>
  -FileName <String>
 ```
 
@@ -68,7 +68,7 @@ Accept wildcard characters: False
 Indicates the list item which the attachment is contained.
 
 ```yaml
-Type: SPClientAttachmentParentParameter
+Type: SPClientAttachmentParentPipeBind
 Parameter Sets: FileName
 Aliases: 
 
@@ -96,7 +96,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Attachment or SPClient.SPClientAttachmentParentParameter
+### None or Microsoft.SharePoint.Client.Attachment or SPClient.SPClientAttachmentParentPipeBind
 
 ## OUTPUTS
 

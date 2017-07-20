@@ -16,12 +16,12 @@ function Get-SPClientField {
   Gets one or more columns.
 .DESCRIPTION
   The Get-SPClientField function lists all columns or retrieves the specified column.
-  If not specified filterable parameter, returns all columns of the site or list.
+  If not specified filterable parameter, returns all columns of the site, content type or list.
   Otherwise, returns a column which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentObject
-  Indicates the site or list which the columns are contained.
+  Indicates the site, content type or list which the columns are contained.
 .PARAMETER NoEnumerate
   If specified, suppresses enumeration in output.
 .PARAMETER Identity
@@ -39,7 +39,7 @@ function Get-SPClientField {
 .EXAMPLE
   Get-SPClientField $list -Retrieval "Title"
 .INPUTS
-  None or SPClient.SPClientFieldParentParameter
+  None or SPClient.SPClientFieldParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.Field[]
 .LINK
@@ -52,7 +52,7 @@ function Get-SPClientField {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientFieldParentParameter]
+        [SPClient.SPClientFieldParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [switch]

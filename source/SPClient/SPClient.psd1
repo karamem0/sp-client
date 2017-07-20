@@ -12,7 +12,7 @@
 # RootModule = 'Module.psd1'
 
 # Version number of this module.
-ModuleVersion = '0.13'
+ModuleVersion = '0.14'
 
 # ID used to uniquely identify this module
 GUID = '70F6C652-6C79-4B8B-B4A9-79635EA6AE9C'
@@ -78,6 +78,7 @@ FunctionsToExport = @(
     'Connect-SPClientContext'
     'Disconnect-SPClientContext'
     'Convert-SPClientField'
+    'Get-SPClientFeature'
     'Get-SPClientField'
     'New-SPClientFieldBoolean'
     'New-SPClientFieldCalculated'

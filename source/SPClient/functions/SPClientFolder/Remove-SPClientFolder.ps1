@@ -37,7 +37,7 @@ function Remove-SPClientFolder {
 .EXAMPLE
   Remove-SPClientFolder -Web $web -Url "http://example.com/DocLib1/Folder"
 .INPUTS
-  None or SPClient.SPClientFolderParentParameter
+  None or SPClient.SPClientFolderParentPipeBind
 .OUTPUTS
   None
 .LINK
@@ -53,7 +53,7 @@ function Remove-SPClientFolder {
         [Microsoft.SharePoint.Client.Folder]
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [SPClient.SPClientFolderParentParameter]
+        [SPClient.SPClientFolderParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
         [Alias('Title')]

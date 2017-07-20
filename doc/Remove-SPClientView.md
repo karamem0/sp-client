@@ -12,19 +12,18 @@ Remove-SPClientView [-ClientContext <ClientContext>] [-ClientObject] <View>
 
 ### Title
 ```
-Remove-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter>
+Remove-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentPipeBind>
  -Title <String>
 ```
 
 ### Url
 ```
-Remove-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter>
- -Url <String>
+Remove-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentPipeBind> -Url <String>
 ```
 
 ### Identity
 ```
-Remove-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter>
+Remove-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentPipeBind>
  -Identity <Guid>
 ```
 
@@ -90,7 +89,7 @@ Accept wildcard characters: False
 Indicates the list which the view is contained.
 
 ```yaml
-Type: SPClientViewParentParameter
+Type: SPClientViewParentPipeBind
 Parameter Sets: Title, Url, Identity
 Aliases: 
 
@@ -148,7 +147,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.View or SPClient.SPClientViewParentParameter
+### None or Microsoft.SharePoint.Client.View or SPClient.SPClientViewParentPipeBind
 
 ## OUTPUTS
 

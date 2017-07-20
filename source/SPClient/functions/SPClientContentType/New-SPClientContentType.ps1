@@ -33,7 +33,7 @@ function New-SPClientContentType {
 .EXAMPLE
   New-SPClientContentType $web -Name "Custom Content Type"
 .INPUTS
-  None or SPClient.SPClientContentTypeParentParameter
+  None or SPClient.SPClientContentTypeParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.ContentType
 .LINK
@@ -46,7 +46,7 @@ function New-SPClientContentType {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientContentTypeParentParameter]
+        [SPClient.SPClientContentTypeParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true)]
         [string]

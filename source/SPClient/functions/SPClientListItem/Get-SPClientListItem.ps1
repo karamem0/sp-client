@@ -55,7 +55,7 @@ function Get-SPClientListItem {
 .EXAMPLE
   Get-SPClientListItem -Retrieval "Title"
 .INPUTS
-  None or SPClient.SPClientListItemParentParameter
+  None or SPClient.SPClientListItemParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.ListItem[]
 .LINK
@@ -68,7 +68,7 @@ function Get-SPClientListItem {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientListItemParentParameter]
+        [SPClient.SPClientListItemParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [string]
@@ -78,7 +78,7 @@ function Get-SPClientListItem {
         [string]
         $Scope,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [SPClient.SPClientFieldIdentityParameter[]]
+        [SPClient.SPClientFieldIdentityPipeBind[]]
         $ViewFields,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [string]

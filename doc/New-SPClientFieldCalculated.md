@@ -6,7 +6,7 @@ Creates a new calclated column.
 ## SYNTAX
 
 ```
-New-SPClientFieldCalculated [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentParameter>]
+New-SPClientFieldCalculated [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentPipeBind>]
  -Name <String> [-Title <String>] [-Identity <Guid>] [-Description <String>] -Formula <String>
  -FieldRefs <String[]> -OutputType <String> [-Decimals <Int32>] [-Percentage <Boolean>] [-LocaleId <Int32>]
  [-DateFormat <String>] [-AddToDefaultView <Boolean>] [-Retrieval <String>]
@@ -45,7 +45,7 @@ Accept wildcard characters: False
 Indicates the site or list which a column to be created.
 
 ```yaml
-Type: SPClientFieldParentParameter
+Type: SPClientFieldParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -266,7 +266,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFieldParentParameter
+### None or SPClient.SPClientFieldParentPipeBind
 
 ## OUTPUTS
 

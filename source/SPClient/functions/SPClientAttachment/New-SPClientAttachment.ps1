@@ -33,7 +33,7 @@ function New-SPClientAttachment {
 .EXAMPLE
   New-SPClientAttachment $item -ContentPath "C:\Users\admin\Documents\CustomAttachment.xlsx"
 .INPUTS
-  None or SPClient.SPClientAttachmentParentParameter
+  None or SPClient.SPClientAttachmentParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.Attachment
 .LINK
@@ -46,7 +46,7 @@ function New-SPClientAttachment {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientAttachmentParentParameter]
+        [SPClient.SPClientAttachmentParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'ContentStream')]
         [System.IO.Stream]

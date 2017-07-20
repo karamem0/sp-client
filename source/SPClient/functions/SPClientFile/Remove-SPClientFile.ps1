@@ -39,7 +39,7 @@ function Remove-SPClientFile {
 .EXAMPLE
   Remove-SPClientFile -Web $web -Url "http://example.com/DocLib1/CustomFile.xlsx"
 .INPUTS
-  None or SPClient.SPClientFileParentParameter
+  None or SPClient.SPClientFileParentPipeBind
 .OUTPUTS
   None
 .LINK
@@ -55,7 +55,7 @@ function Remove-SPClientFile {
         [Microsoft.SharePoint.Client.File]
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [SPClient.SPClientFileParentParameter]
+        [SPClient.SPClientFileParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
         [Alias('Title')]

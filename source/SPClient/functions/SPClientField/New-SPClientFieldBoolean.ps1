@@ -40,7 +40,7 @@ function New-SPClientFieldBoolean {
 .EXAMPLE
   New-SPClientFieldBoolean $list -Name "CustomField" -Title "Custom Field"
 .INPUTS
-  None or SPClient.SPClientFieldParentParameter
+  None or SPClient.SPClientFieldParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.FieldBoolean
 .LINK
@@ -53,7 +53,7 @@ function New-SPClientFieldBoolean {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientFieldParentParameter]
+        [SPClient.SPClientFieldParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true)]
         [string]

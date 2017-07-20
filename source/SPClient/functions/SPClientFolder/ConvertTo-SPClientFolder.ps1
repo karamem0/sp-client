@@ -25,7 +25,7 @@ function ConvertTo-SPClientFolder {
 .EXAMPLE
   ConvertTo-SPClientFolder $item
 .INPUTS
-  None or SPClient.SPClientFolderConvertParameter
+  None or SPClient.SPClientFolderConvertPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.Folder
 .LINK
@@ -38,7 +38,7 @@ function ConvertTo-SPClientFolder {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientFolderConvertParameter]
+        [SPClient.SPClientFolderConvertPipeBind]
         $InputObject,
         [Parameter(Mandatory = $false)]
         [string]

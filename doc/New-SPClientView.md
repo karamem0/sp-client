@@ -6,7 +6,7 @@ Creates a new view.
 ## SYNTAX
 
 ```
-New-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter> -Name <String>
+New-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentPipeBind> -Name <String>
  [-Title <String>] [-ViewFields <String[]>] [-Query <String>] [-RowLimit <Int32>] [-Paged <Boolean>]
  [-SetAsDefaultView <Boolean>] [-ViewType <String>] [-PersonalView <Boolean>] [-Retrieval <String>]
 ```
@@ -43,7 +43,7 @@ Accept wildcard characters: False
 Indicates the list which a view to be created.
 
 ```yaml
-Type: SPClientViewParentParameter
+Type: SPClientViewParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -207,7 +207,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientViewParentParameter
+### None or SPClient.SPClientViewParentPipeBind
 
 ## OUTPUTS
 

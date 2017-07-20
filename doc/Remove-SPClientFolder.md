@@ -12,7 +12,7 @@ Remove-SPClientFolder [-ClientContext <ClientContext>] [-ClientObject] <Folder>
 
 ### Name
 ```
-Remove-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentParameter>
+Remove-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentPipeBind>
  -Name <String>
 ```
 
@@ -83,7 +83,7 @@ Accept wildcard characters: False
 Indicates the folder which the folders are contained.
 
 ```yaml
-Type: SPClientFolderParentParameter
+Type: SPClientFolderParentPipeBind
 Parameter Sets: Name
 Aliases: 
 
@@ -156,7 +156,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFolderParentParameter
+### None or SPClient.SPClientFolderParentPipeBind
 
 ## OUTPUTS
 

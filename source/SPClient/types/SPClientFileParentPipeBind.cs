@@ -1,5 +1,5 @@
 ﻿/*
- * SPClientFolderParentParameter.cs
+ * SPClientFileParentPipeBind.cs
  *
  * Copyright (c) 2017 karamem0
  *
@@ -10,9 +10,9 @@
 namespace SPClient {
 
     /// <summary>
-    /// Represents a parameter that stores a client object that is the parent of subfolders.
+    /// Represents a parameter that stores a client object that is the parent of files.
     /// </summary>
-    public class SPClientFolderParentParameter {
+    public class SPClientFileParentPipeBind {
         
         /// <summary>
         /// Gets the client object.
@@ -20,10 +20,10 @@ namespace SPClient {
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
-        /// Initializes the new instance of <see cref="SPClient.SPClientFolderParentParameter"/> class.
+        /// Initializes the new instance of <see cref="SPClient.SPClientFileParentPipeBind"/> class.
         /// </summary>
-        /// <param name="folder">the folder which contains subfolders.</param>
-        public SPClientFolderParentParameter(Microsoft.SharePoint.Client.Folder folder) {
+        /// <param name="folder">the folder which contains files.</param>
+        public SPClientFileParentPipeBind(Microsoft.SharePoint.Client.Folder folder) {
             this.ClientObject = folder;
         }
 

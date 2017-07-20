@@ -9,7 +9,14 @@ $Credentials = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredential
 $ClientContext = New-Object Microsoft.SharePoint.Client.ClientContext($Env:LoginUrl)
 $ClientContext.Credentials = $credentials
 
-$ClientContext.Load($ClientContext.Site)
+$Site = $ClientContext.Site
+$ClientContext.Load($Site)
+
+$SiteFeature1 = $Site.Features.Add('B21B090C-C796-4B0F-AC0F-7EF1659C20AE', $true, [Microsoft.SharePoint.Client.FeatureDefinitionScope]::None)
+$ClientContext.Load($SiteFeature1)
+
+$SiteFeature2 = $Site.Features.Add('8581A8A7-CF16-4770-AC54-260265DDB0B2', $true, [Microsoft.SharePoint.Client.FeatureDefinitionScope]::None)
+$ClientContext.Load($SiteFeature2)
 
 $ClientContext.ExecuteQuery()
 
@@ -57,6 +64,14 @@ $Web4.UseSamePermissionsAsParentSite = $false
 $Web4 = $Web3.Webs.Add($Web4)
 $Web4.Update()
 $ClientContext.Load($Web4)
+
+$ClientContext.ExecuteQuery()
+
+$WebFeature1 = $Web1.Features.Add('99FE402E-89A0-45AA-9163-85342E865DC8', $true, [Microsoft.SharePoint.Client.FeatureDefinitionScope]::None)
+$ClientContext.Load($WebFeature1)
+
+$WebFeature2 = $Web1.Features.Add('0806D127-06E6-447A-980E-2E90B03101B8', $true, [Microsoft.SharePoint.Client.FeatureDefinitionScope]::None)
+$ClientContext.Load($WebFeature2)
 
 $ClientContext.ExecuteQuery()
 
@@ -546,10 +561,12 @@ $ClientContext.Load($File4.ListItemAllFields)
 $ClientContext.ExecuteQuery()
 
 $TestConfig = [ordered]@{
-    SiteUrl = $ClientContext.Site.ServerRelativeUrl
+    SiteUrl = $Site.ServerRelativeUrl
+    SiteFeatureId = $SiteFeature1.DefinitionId
     WebId = $Web1.Id
     WebTitle = $Web1.Title
     WebUrl = $Web1.ServerRelativeUrl
+    WebFeatureId = $WebFeature1.DefinitionId
     WebContentTypeId = $WebContentType1.StringId
     WebContentTypeName = $WebContentType1.Name
     ListId = $List1.Id

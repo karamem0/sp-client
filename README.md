@@ -7,8 +7,9 @@ PowerShell module for SharePoint client-side object model (CSOM).
 
 ## Features
 
-- Automatically called `ClientContext.Load()` method. You do not have to consider call timing, you  will be released from "`ClientContext.Load()` Hell".
+- Automatically called `ClientContext.Load()` method. You do not have to consider call timing, you will be released from "Load hell".
 - String-based (in other words, JSOM-liked) data retrieval expression.
+- Easily debug client objects. You can get loaded properties only.
 
 ## Prerequisites
 
@@ -31,8 +32,8 @@ If you write PowerShell script using the CSOM, it will be like below.
 
 ```
 # Load assemblies
-Add-Type -Path 'C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.dll'
-Add-Type -Path 'C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.Runtime.dll'
+Add-Type -Path 'C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.dll'
+Add-Type -Path 'C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\16\ISAPI\Microsoft.SharePoint.Client.Runtime.dll'
 
 # Create credentials
 $userName = 'administrator'
@@ -78,10 +79,8 @@ Connect-SPClientContext -Network `
     -Domain 'domain.local'
 
 # Get web title
-Get-SPClientWeb -Default |
-    %{ Write-Host $_.Title }
+Get-SPClientWeb -Default | %{ Write-Host $_.Title }
 
 # Get all lists 'ServerRelativeUrl'
-Get-SPClientWeb -Default | Get-SPClientList -Retrieval 'Include(RootFolder.ServerRelativeUrl)' |
-    %{ Write-Host $_.RootFolder.ServerRelativeUrl }
+Get-SPClientWeb -Default | Get-SPClientList -Retrieval 'Include(RootFolder.ServerRelativeUrl)' | %{ Write-Host $_.RootFolder.ServerRelativeUrl }
 ```

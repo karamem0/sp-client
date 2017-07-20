@@ -51,7 +51,7 @@ function New-SPClientFieldDateTime {
 .EXAMPLE
   New-SPClientFieldDateTime $list -Name "CustomField" -Title "Custom Field"
 .INPUTS
-  None or SPClient.SPClientFieldParentParameter
+  None or SPClient.SPClientFieldParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.FieldDateTime
 .LINK
@@ -64,7 +64,7 @@ function New-SPClientFieldDateTime {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientFieldParentParameter]
+        [SPClient.SPClientFieldParentPipeBind]
         $ParentObject,
         [string]
         $Name,

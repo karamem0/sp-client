@@ -6,7 +6,7 @@ Creates a new folder.
 ## SYNTAX
 
 ```
-New-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentParameter>
+New-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentPipeBind>
  -Name <String> [-Retrieval <String>]
 ```
 
@@ -42,7 +42,7 @@ Accept wildcard characters: False
 Indicates the folder which a subfolder to be created.
 
 ```yaml
-Type: SPClientFolderParentParameter
+Type: SPClientFolderParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -85,7 +85,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFolderParentParameter
+### None or SPClient.SPClientFolderParentPipeBind
 
 ## OUTPUTS
 

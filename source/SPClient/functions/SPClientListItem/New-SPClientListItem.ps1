@@ -27,7 +27,7 @@ function New-SPClientListItem {
 .EXAMPLE
   New-SPClientListItem $list -FieldValues @{ Title = "Custom List Item" }
 .INPUTS
-  None or SPClient.SPClientListItemParentParameter
+  None or SPClient.SPClientListItemParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.ListItem
 .LINK
@@ -40,7 +40,7 @@ function New-SPClientListItem {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientListItemParentParameter]
+        [SPClient.SPClientListItemParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $false)]
         [hashtable]

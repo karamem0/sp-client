@@ -29,7 +29,7 @@ function Remove-SPClientAttachment {
 .EXAMPLE
   Remove-SPClientAttachment $item -FileName "CustomAttachment.xlsx"
 .INPUTS
-  None or Microsoft.SharePoint.Client.Attachment or SPClient.SPClientAttachmentParentParameter
+  None or Microsoft.SharePoint.Client.Attachment or SPClient.SPClientAttachmentParentPipeBind
 .OUTPUTS
   None
 .LINK
@@ -45,7 +45,7 @@ function Remove-SPClientAttachment {
         [Microsoft.SharePoint.Client.Attachment]
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'FileName')]
-        [SPClient.SPClientAttachmentParentParameter]
+        [SPClient.SPClientAttachmentParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'FileName')]
         [string]

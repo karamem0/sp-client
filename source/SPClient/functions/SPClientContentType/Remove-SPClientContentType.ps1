@@ -33,7 +33,7 @@ function Remove-SPClientContentType {
 .EXAMPLE
   Remove-SPClientContentType $web -Name "Custom Content Type"
 .INPUTS
-  None or Microsoft.SharePoint.Client.ContentType or SPClient.SPClientContentTypeParentParameter
+  None or Microsoft.SharePoint.Client.ContentType or SPClient.SPClientContentTypeParentPipeBind
 .OUTPUTS
   None
 .LINK
@@ -50,7 +50,7 @@ function Remove-SPClientContentType {
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [SPClient.SPClientContentTypeParentParameter]
+        [SPClient.SPClientContentTypeParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]

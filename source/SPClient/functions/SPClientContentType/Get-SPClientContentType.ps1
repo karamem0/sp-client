@@ -39,7 +39,7 @@ function Get-SPClientContentType {
 .EXAMPLE
   Get-SPClientContentType $web -Retrieval "Title"
 .INPUTS
-  None or SPClient.SPClientContentTypeParentParameter
+  None or SPClient.SPClientContentTypeParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.ContentType[]
 .LINK
@@ -52,7 +52,7 @@ function Get-SPClientContentType {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientContentTypeParentParameter]
+        [SPClient.SPClientContentTypeParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [switch]

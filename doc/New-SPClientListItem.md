@@ -6,7 +6,7 @@ Creates a new list item.
 ## SYNTAX
 
 ```
-New-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
+New-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentPipeBind>
  [-FieldValues <Hashtable>] [-Retrieval <String>]
 ```
 
@@ -42,7 +42,7 @@ Accept wildcard characters: False
 Indicates the list which a list item to be created.
 
 ```yaml
-Type: SPClientListItemParentParameter
+Type: SPClientListItemParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -85,7 +85,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientListItemParentParameter
+### None or SPClient.SPClientListItemParentPipeBind
 
 ## OUTPUTS
 

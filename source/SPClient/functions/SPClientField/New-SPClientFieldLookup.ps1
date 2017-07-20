@@ -44,7 +44,7 @@ function New-SPClientFieldLookup {
 .EXAMPLE
   New-SPClientFieldLookup $list -Name "CustomField" -Title "Custom Field" -LookupList "CE5D9232-37A1-41D0-BCDB-B8C59958B831" -LookupField "Title"
 .INPUTS
-  None or SPClient.SPClientFieldParentParameter
+  None or SPClient.SPClientFieldParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.FieldLookup
 .LINK
@@ -57,7 +57,7 @@ function New-SPClientFieldLookup {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientFieldParentParameter]
+        [SPClient.SPClientFieldParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true)]
         [string]

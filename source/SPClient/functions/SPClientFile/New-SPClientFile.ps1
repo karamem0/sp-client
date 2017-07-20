@@ -33,7 +33,7 @@ function New-SPClientFile {
 .EXAMPLE
   New-SPClientFile $folder -ContentPath "C:\Users\admin\Documents\CustomFile.xlsx"
 .INPUTS
-  None or SPClient.SPClientFileParentParameter
+  None or SPClient.SPClientFileParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.File
 .LINK
@@ -46,7 +46,7 @@ function New-SPClientFile {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientFileParentParameter]
+        [SPClient.SPClientFileParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'ContentStream')]
         [System.IO.Stream]

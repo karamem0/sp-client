@@ -6,7 +6,7 @@ Creates a new date/time column.
 ## SYNTAX
 
 ```
-New-SPClientFieldDateTime [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentParameter>]
+New-SPClientFieldDateTime [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentPipeBind>]
  [-Name <String>] [-Title <String>] [-Identity <Guid>] [-Description <String>] [-Required <Boolean>]
  [-EnforceUniqueValues <Boolean>] [-DisplayFormat <String>] [-FriendlyDisplayFormat <String>]
  [-DefaultValue <String>] [-AddToDefaultView <Boolean>] [-Retrieval <String>]
@@ -45,7 +45,7 @@ Accept wildcard characters: False
 Indicates the site or list which a column to be created.
 
 ```yaml
-Type: SPClientFieldParentParameter
+Type: SPClientFieldParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -228,7 +228,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFieldParentParameter
+### None or SPClient.SPClientFieldParentPipeBind
 
 ## OUTPUTS
 

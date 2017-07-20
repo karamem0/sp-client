@@ -12,7 +12,7 @@ Remove-SPClientListItem [-ClientContext <ClientContext>] [-ClientObject] <ListIt
 
 ### Identity
 ```
-Remove-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
+Remove-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentPipeBind>
  -Identity <Int32>
 ```
 
@@ -73,7 +73,7 @@ Accept wildcard characters: False
 Indicates the list which the list item is contained.
 
 ```yaml
-Type: SPClientListItemParentParameter
+Type: SPClientListItemParentPipeBind
 Parameter Sets: Identity
 Aliases: 
 
@@ -101,7 +101,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.ListItem or SPClient.SPClientListItemParentParameter
+### None or Microsoft.SharePoint.Client.ListItem or SPClient.SPClientListItemParentPipeBind
 
 ## OUTPUTS
 

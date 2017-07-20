@@ -1,5 +1,5 @@
 ﻿/*
- * SPClientListParentParameter.cs
+ * SPClientViewParentPipeBind.cs
  *
  * Copyright (c) 2017 karamem0
  *
@@ -10,9 +10,9 @@
 namespace SPClient {
 
     /// <summary>
-    /// Represents a parameter that stores a client object that is the parent of lists.
+    /// Represents a parameter that stores a client object that is the parent of views.
     /// </summary>
-    public class SPClientListParentParameter {
+    public class SPClientViewParentPipeBind {
         
         /// <summary>
         /// Gets the client object.
@@ -20,11 +20,11 @@ namespace SPClient {
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
-        /// Initializes the new instance of <see cref="SPClient.SPClientListParentParameter"/> class.
+        /// Initializes the new instance of <see cref="SPClient.SPClientViewParentPipeBind"/> class.
         /// </summary>
-        /// <param name="web">the site which contains lists.</param>
-        public SPClientListParentParameter(Microsoft.SharePoint.Client.Web web) {
-            this.ClientObject = web;
+        /// <param name="list">the list which contains views.</param>
+        public SPClientViewParentPipeBind(Microsoft.SharePoint.Client.List list) {
+            this.ClientObject = list;
         }
 
     }

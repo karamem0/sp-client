@@ -25,7 +25,7 @@ function ConvertTo-SPClientFile {
 .EXAMPLE
   ConvertTo-SPClientFile $item
 .INPUTS
-  None or SPClient.SPClientFileConvertParameter
+  None or SPClient.SPClientFileConvertPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.File
 .LINK
@@ -38,7 +38,7 @@ function ConvertTo-SPClientFile {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientFileConvertParameter]
+        [SPClient.SPClientFileConvertPipeBind]
         $InputObject,
         [Parameter(Mandatory = $false)]
         [string]

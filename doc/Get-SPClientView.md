@@ -7,31 +7,31 @@ Gets one or more views.
 
 ### All (Default)
 ```
-Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter> [-NoEnumerate]
+Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentPipeBind> [-NoEnumerate]
  [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter>
- -Identity <Guid> [-Retrieval <String>]
+Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentPipeBind> -Identity <Guid>
+ [-Retrieval <String>]
 ```
 
 ### Url
 ```
-Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter> -Url <String>
+Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentPipeBind> -Url <String>
  [-Retrieval <String>]
 ```
 
 ### Title
 ```
-Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter> -Title <String>
+Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentPipeBind> -Title <String>
  [-Retrieval <String>]
 ```
 
 ### Default
 ```
-Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentParameter> [-Default]
+Get-SPClientView [-ClientContext <ClientContext>] [-ParentObject] <SPClientViewParentPipeBind> [-Default]
  [-Retrieval <String>]
 ```
 
@@ -94,7 +94,7 @@ Accept wildcard characters: False
 Indicates the list which the views are contained.
 
 ```yaml
-Type: SPClientViewParentParameter
+Type: SPClientViewParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -197,7 +197,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientViewParentParameter
+### None or SPClient.SPClientViewParentPipeBind
 
 ## OUTPUTS
 

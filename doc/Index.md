@@ -14,7 +14,7 @@
   - [New-SPClientContentType](New-SPClientContentType.md)
   - [Remove-SPClientContentType](Remove-SPClientContentType.md)
   - [Add-SPClientContentTypeField](Add-SPClientContentTypeField.md)
-  - [Remove-SPClientContentTypeField](Remomve-SPClientContentTypeField.md)
+  - [Remove-SPClientContentTypeField](Remove-SPClientContentTypeField.md)
 - List
   - [Get-SPClientList](Get-SPClientList.md)
   - [New-SPClientList](New-SPClientList.md)
@@ -58,6 +58,8 @@
   - [Remove-SPClientFolder](Remove-SPClientFolder.md)
 - Web Template
   - [Get-SPClientWebTemplate](Get-SPClientWebTemplate.md)
+- Feature
+  - [Get-SPClientFeature](Get-SPClientFeature.md)
 - User and Group
   - [Get-SPClientGroup](Get-SPClientGroup.md)
   - [New-SPClientGroup](New-SPClientGroup.md)

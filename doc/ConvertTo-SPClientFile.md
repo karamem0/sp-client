@@ -6,7 +6,7 @@ Converts list item to file.
 ## SYNTAX
 
 ```
-ConvertTo-SPClientFile [-ClientContext <ClientContext>] [-InputObject] <SPClientFileConvertParameter>
+ConvertTo-SPClientFile [-ClientContext <ClientContext>] [-InputObject] <SPClientFileConvertPipeBind>
  [-Retrieval <String>]
 ```
 
@@ -42,7 +42,7 @@ Accept wildcard characters: False
 Indicates the list item.
 
 ```yaml
-Type: SPClientFileConvertParameter
+Type: SPClientFileConvertPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -70,7 +70,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFileConvertParameter
+### None or SPClient.SPClientFileConvertPipeBind
 
 ## OUTPUTS
 

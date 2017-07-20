@@ -33,7 +33,7 @@ function Remove-SPClientField {
 .EXAMPLE
   Remove-SPClientField $list -Name "Custom Field"
 .INPUTS
-  None or Microsoft.SharePoint.Client.Field or SPClient.SPClientFieldParentParameter
+  None or Microsoft.SharePoint.Client.Field or SPClient.SPClientFieldParentPipeBind
 .OUTPUTS
   None
 .LINK
@@ -50,7 +50,7 @@ function Remove-SPClientField {
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [SPClient.SPClientFieldParentParameter]
+        [SPClient.SPClientFieldParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]

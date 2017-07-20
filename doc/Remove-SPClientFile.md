@@ -12,7 +12,7 @@ Remove-SPClientFile [-ClientContext <ClientContext>] [-ClientObject] <File>
 
 ### Name
 ```
-Remove-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentParameter>
+Remove-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentPipeBind>
  -Name <String>
 ```
 
@@ -88,7 +88,7 @@ Accept wildcard characters: False
 Indicates the folder which the files are contained.
 
 ```yaml
-Type: SPClientFileParentParameter
+Type: SPClientFileParentPipeBind
 Parameter Sets: Name
 Aliases: 
 
@@ -161,7 +161,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFileParentParameter
+### None or SPClient.SPClientFileParentPipeBind
 
 ## OUTPUTS
 

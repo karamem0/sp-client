@@ -37,13 +37,15 @@ function Debug-SPClientObject {
 
     process {
         if ($InputObject -is [System.Collections.IEnumerable]) {
-            $List = New-Object 'System.Collections.Generic.List`1[object]'
-            $InputObjectCollection = $InputObject.GetEnumerator()
-            foreach ($InputObject in $InputObjectCollection) {
-                $Value = Debug-SPClientObject -InputObject $InputObject
-                $List.Add($Value)
+            if ($InputObject.AreItemsAvailable -ne $false) {
+                $List = New-Object 'System.Collections.Generic.List`1[object]'
+                $InputObjectCollection = $InputObject.GetEnumerator()
+                foreach ($InputObject in $InputObjectCollection) {
+                    $Value = Debug-SPClientObject -InputObject $InputObject
+                    $List.Add($Value)
+                }
+                Write-Output $List
             }
-            Write-Output $List
         } else {
             $Dict = New-Object 'System.Collections.Generic.Dictionary`2[string,object]'
             foreach ($Property in $InputObject.GetType().GetProperties()) {

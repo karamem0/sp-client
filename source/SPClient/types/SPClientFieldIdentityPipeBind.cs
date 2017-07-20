@@ -1,5 +1,5 @@
 ﻿/*
- * SPClientFieldIdentityParameter.cs
+ * SPClientFieldIdentityPipeBind.cs
  *
  * Copyright (c) 2017 karamem0
  *
@@ -12,7 +12,7 @@ namespace SPClient {
     /// <summary>
     /// Represents a parameter that stores a value that identifies field.
     /// </summary>
-    public class SPClientFieldIdentityParameter {
+    public class SPClientFieldIdentityPipeBind {
 
         /// <summary>
         /// Indicates the value.
@@ -20,27 +20,27 @@ namespace SPClient {
         private object value;
 
         /// <summary>
-        /// Initializes the new instance of <see cref="SPClient.SPClientFieldIdentityParameter"/> class.
+        /// Initializes the new instance of <see cref="SPClient.SPClientFieldIdentityPipeBind"/> class.
         /// </summary>
         /// <param name="fieldId">the column GUID.</param>
-        public SPClientFieldIdentityParameter(System.Guid fieldId) {
+        public SPClientFieldIdentityPipeBind(System.Guid fieldId) {
             this.value = fieldId;
         }
 
         /// <summary>
-        /// Initializes the new instance of <see cref="SPClient.SPClientFieldIdentityParameter"/> class.
+        /// Initializes the new instance of <see cref="SPClient.SPClientFieldIdentityPipeBind"/> class.
         /// </summary>
         /// <param name="fieldInternalName">the column internal name.</param>
-        public SPClientFieldIdentityParameter(string fieldInternalName) {
+        public SPClientFieldIdentityPipeBind(string fieldInternalName) {
             this.value = fieldInternalName;
         }
 
         /// <summary>
-        /// Initializes the new instance of <see cref="SPClient.SPClientFieldIdentityParameter"/> class.
+        /// Initializes the new instance of <see cref="SPClient.SPClientFieldIdentityPipeBind"/> class.
         /// </summary>
-        /// <param name="siteTemplate">the column.</param>
-        public SPClientFieldIdentityParameter(Microsoft.SharePoint.Client.Field column) {
-            this.value = column;
+        /// <param name="field">the column.</param>
+        public SPClientFieldIdentityPipeBind(Microsoft.SharePoint.Client.Field field) {
+            this.value = field;
         }
 
         /// <summary>

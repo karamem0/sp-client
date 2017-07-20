@@ -31,7 +31,7 @@ function Remove-SPClientListItem {
 .EXAMPLE
   Remove-SPClientListItem $list -IdentityGuid "77DF0F67-9B13-4499-AC14-25EB18E1D3DA"
 .INPUTS
-  None or Microsoft.SharePoint.Client.ListItem or SPClient.SPClientListItemParentParameter
+  None or Microsoft.SharePoint.Client.ListItem or SPClient.SPClientListItemParentPipeBind
 .OUTPUTS
   None
 .LINK
@@ -47,7 +47,7 @@ function Remove-SPClientListItem {
         [Microsoft.SharePoint.Client.ListItem]
         $ClientObject,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
-        [SPClient.SPClientListItemParentParameter]
+        [SPClient.SPClientListItemParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]

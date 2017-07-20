@@ -7,7 +7,7 @@ Gets one or more sites.
 
 ### All (Default)
 ```
-Get-SPClientWeb [-ClientContext <ClientContext>] [-ParentObject] <SPClientWebParentParameter> [-NoEnumerate]
+Get-SPClientWeb [-ClientContext <ClientContext>] [-ParentObject] <SPClientWebParentPipeBind> [-NoEnumerate]
  [-Retrieval <String>]
 ```
 
@@ -95,7 +95,7 @@ Accept wildcard characters: False
 Indicates the site which the subsites are contained.
 
 ```yaml
-Type: SPClientWebParentParameter
+Type: SPClientWebParentPipeBind
 Parameter Sets: All
 Aliases: 
 
@@ -213,7 +213,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientWebParentParameter
+### None or SPClient.SPClientWebParentPipeBind
 
 ## OUTPUTS
 

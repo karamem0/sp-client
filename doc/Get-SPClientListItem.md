@@ -7,20 +7,20 @@ Gets one or more list items.
 
 ### All (Default)
 ```
-Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
- [-FolderUrl <String>] [-Scope <String>] [-ViewFields <SPClientFieldIdentityParameter[]>] [-Query <String>]
+Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentPipeBind>
+ [-FolderUrl <String>] [-Scope <String>] [-ViewFields <SPClientFieldIdentityPipeBind[]>] [-Query <String>]
  [-RowLimit <Int32>] [-Position <ListItemCollectionPosition>] [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
+Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentPipeBind>
  -Identity <Int32> [-Retrieval <String>]
 ```
 
 ### IdentityGuid
 ```
-Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentParameter>
+Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentPipeBind>
  -IdentityGuid <Guid> [-Retrieval <String>]
 ```
 
@@ -76,7 +76,7 @@ Accept wildcard characters: False
 Indicates the list which the list items are contained.
 
 ```yaml
-Type: SPClientListItemParentParameter
+Type: SPClientListItemParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -125,7 +125,7 @@ Accept wildcard characters: False
 Indicates the collection of view columns.
 
 ```yaml
-Type: SPClientFieldIdentityParameter[]
+Type: SPClientFieldIdentityPipeBind[]
 Parameter Sets: All
 Aliases: 
 
@@ -245,7 +245,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientListItemParentParameter
+### None or SPClient.SPClientListItemParentPipeBind
 
 ## OUTPUTS
 

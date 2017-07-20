@@ -6,7 +6,7 @@ Creates a new content type.
 ## SYNTAX
 
 ```
-New-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
+New-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentPipeBind>
  -Name <String> [-Description <String>] [-Group <String>] [-ParentContentType <ContentType>]
  [-Retrieval <String>]
 ```
@@ -43,7 +43,7 @@ Accept wildcard characters: False
 Indicates the site or list which a content type to be created.
 
 ```yaml
-Type: SPClientContentTypeParentParameter
+Type: SPClientContentTypeParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -131,7 +131,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientContentTypeParentParameter
+### None or SPClient.SPClientContentTypeParentPipeBind
 
 ## OUTPUTS
 

@@ -1,5 +1,5 @@
 ﻿/*
- * SPClientAttachmentParentParameter.cs
+ * SPClientFolderConvertPipeBind.cs
  *
  * Copyright (c) 2017 karamem0
  *
@@ -10,9 +10,9 @@
 namespace SPClient {
 
     /// <summary>
-    /// Represents a parameter that stores a client object that is the parent of attachments.
+    /// Represents a parameter that stores a client object that can be converted to a folder.
     /// </summary>
-    public class SPClientAttachmentParentParameter {
+    public class SPClientFolderConvertPipeBind {
         
         /// <summary>
         /// Gets the client object.
@@ -20,10 +20,10 @@ namespace SPClient {
         public Microsoft.SharePoint.Client.ClientObject ClientObject { get; private set; }
 
         /// <summary>
-        /// Initializes the new instance of <see cref="SPClient.SPClientContentTypeParentParameter"/> class.
+        /// Initializes the new instance of <see cref="SPClient.SPClientFolderConvertPipeBind"/> class.
         /// </summary>
-        /// <param name="listItem">the list item which contains attachments.</param>
-        public SPClientAttachmentParentParameter(Microsoft.SharePoint.Client.ListItem listItem) {
+        /// <param name="listItem">the list item which converts to a folder.</param>
+        public SPClientFolderConvertPipeBind(Microsoft.SharePoint.Client.ListItem listItem) {
             this.ClientObject = listItem;
         }
 

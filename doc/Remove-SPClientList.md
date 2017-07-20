@@ -12,19 +12,18 @@ Remove-SPClientList [-ClientContext <ClientContext>] [-ClientObject] <List>
 
 ### Name
 ```
-Remove-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter>
+Remove-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentPipeBind>
  -Name <String>
 ```
 
 ### Url
 ```
-Remove-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter>
- -Url <String>
+Remove-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentPipeBind> -Url <String>
 ```
 
 ### Identity
 ```
-Remove-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter>
+Remove-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentPipeBind>
  -Identity <Guid>
 ```
 
@@ -90,7 +89,7 @@ Accept wildcard characters: False
 Indicates the site which the list is contained.
 
 ```yaml
-Type: SPClientListParentParameter
+Type: SPClientListParentPipeBind
 Parameter Sets: Name, Url, Identity
 Aliases: 
 
@@ -148,7 +147,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.List or SPClient.SPClientListParentParameter
+### None or Microsoft.SharePoint.Client.List or SPClient.SPClientListParentPipeBind
 
 ## OUTPUTS
 

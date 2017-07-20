@@ -37,7 +37,7 @@ function Remove-SPClientList {
 .EXAMPLE
   Remove-SPClientList $web -Name "Custom List"
 .INPUTS
-  None or Microsoft.SharePoint.Client.List or SPClient.SPClientListParentParameter
+  None or Microsoft.SharePoint.Client.List or SPClient.SPClientListParentPipeBind
 .OUTPUTS
   None
 .LINK
@@ -55,7 +55,7 @@ function Remove-SPClientList {
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Url')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [SPClient.SPClientListParentParameter]
+        [SPClient.SPClientListParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]

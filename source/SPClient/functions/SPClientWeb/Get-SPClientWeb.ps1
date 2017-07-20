@@ -49,7 +49,7 @@ function Get-SPClientWeb {
 .EXAMPLE
   Get-SPClientWeb -Retrieval "Title"
 .INPUTS
-  None or SPClient.SPClientWebParentParameter
+  None or SPClient.SPClientWebParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.Web[]
 .LINK
@@ -62,7 +62,7 @@ function Get-SPClientWeb {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'All')]
-        [SPClient.SPClientWebParentParameter]
+        [SPClient.SPClientWebParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [switch]

@@ -37,7 +37,7 @@ function New-SPClientWeb {
 .EXAMPLE
   New-SPClientWeb -Url "CustomWeb" -Title "Custom Web"
 .INPUTS
-  None or SPClient.SPClientWebParentParameter
+  None or SPClient.SPClientWebParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.Web
 .LINK
@@ -50,7 +50,7 @@ function New-SPClientWeb {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientWebParentParameter]
+        [SPClient.SPClientWebParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true)]
         [string]
@@ -66,7 +66,7 @@ function New-SPClientWeb {
         [string]
         $Locale,
         [Parameter(Mandatory = $false)]
-        [SPClient.SPClientWebTemplateIdentityParameter]
+        [SPClient.SPClientWebTemplateIdentityPipeBind]
         $Template,
         [Parameter(Mandatory = $false)]
         [switch]

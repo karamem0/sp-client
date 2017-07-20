@@ -7,13 +7,13 @@ Gets one or more folders.
 
 ### All (Default)
 ```
-Get-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentParameter>
+Get-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentPipeBind>
  [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Name
 ```
-Get-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentParameter>
+Get-SPClientFolder [-ClientContext <ClientContext>] [-ParentObject] <SPClientFolderParentPipeBind>
  -Name <String> [-Retrieval <String>]
 ```
 
@@ -81,7 +81,7 @@ Accept wildcard characters: False
 Indicates the folder which the subfolders are contained.
 
 ```yaml
-Type: SPClientFolderParentParameter
+Type: SPClientFolderParentPipeBind
 Parameter Sets: All, Name
 Aliases: 
 
@@ -184,7 +184,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFolderParentParameter
+### None or SPClient.SPClientFolderParentPipeBind
 
 ## OUTPUTS
 

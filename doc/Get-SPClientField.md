@@ -7,25 +7,25 @@ Gets one or more columns.
 
 ### All (Default)
 ```
-Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
- [-NoEnumerate] [-Retrieval <String>]
+Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentPipeBind> [-NoEnumerate]
+ [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
+Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentPipeBind>
  -Identity <Guid> [-Retrieval <String>]
 ```
 
 ### Name
 ```
-Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
- -Name <String> [-Retrieval <String>]
+Get-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentPipeBind> -Name <String>
+ [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
 The Get-SPClientField function lists all columns or retrieves the specified column.
-If not specified filterable parameter, returns all columns of the site or list.
+If not specified filterable parameter, returns all columns of the site, content type or list.
 Otherwise, returns a column which matches the parameter.
 
 ## EXAMPLES
@@ -69,10 +69,10 @@ Accept wildcard characters: False
 ```
 
 ### -ParentObject
-Indicates the site or list which the columns are contained.
+Indicates the site, content type or list which the columns are contained.
 
 ```yaml
-Type: SPClientFieldParentParameter
+Type: SPClientFieldParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -145,7 +145,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFieldParentParameter
+### None or SPClient.SPClientFieldParentPipeBind
 
 ## OUTPUTS
 

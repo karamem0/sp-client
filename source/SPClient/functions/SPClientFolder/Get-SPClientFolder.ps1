@@ -43,7 +43,7 @@
 .EXAMPLE
   Get-SPClientFolder $folder -Retrieval "ServerRelativeUrl"
 .INPUTS
-  None or SPClient.SPClientFolderParentParameter
+  None or SPClient.SPClientFolderParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.Folder[]
 .LINK
@@ -59,7 +59,7 @@ function Get-SPClientFolder {
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'All')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Name')]
-        [SPClient.SPClientFolderParentParameter]
+        [SPClient.SPClientFolderParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [switch]

@@ -12,13 +12,13 @@ Remove-SPClientField [-ClientContext <ClientContext>] [-ClientObject] <Field>
 
 ### Name
 ```
-Remove-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
+Remove-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentPipeBind>
  -Name <String>
 ```
 
 ### Identity
 ```
-Remove-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentParameter>
+Remove-SPClientField [-ClientContext <ClientContext>] [-ParentObject] <SPClientFieldParentPipeBind>
  -Identity <Guid>
 ```
 
@@ -79,7 +79,7 @@ Accept wildcard characters: False
 Indicates the site or list which the column is contained.
 
 ```yaml
-Type: SPClientFieldParentParameter
+Type: SPClientFieldParentPipeBind
 Parameter Sets: Name, Identity
 Aliases: 
 
@@ -122,7 +122,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Field or SPClient.SPClientFieldParentParameter
+### None or Microsoft.SharePoint.Client.Field or SPClient.SPClientFieldParentPipeBind
 
 ## OUTPUTS
 

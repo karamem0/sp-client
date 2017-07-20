@@ -7,13 +7,13 @@ Creates a new attachment.
 
 ### ContentStream (Default)
 ```
-New-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentParameter>
+New-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentPipeBind>
  -ContentStream <Stream> -Name <String> [-Retrieval <String>]
 ```
 
 ### ContentPath
 ```
-New-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentParameter>
+New-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentPipeBind>
  -ContentPath <String> [-Name <String>] [-Retrieval <String>]
 ```
 
@@ -54,7 +54,7 @@ Accept wildcard characters: False
 Indicates the list item which a attachment to be created.
 
 ```yaml
-Type: SPClientAttachmentParentParameter
+Type: SPClientAttachmentParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -139,7 +139,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientAttachmentParentParameter
+### None or SPClient.SPClientAttachmentParentPipeBind
 
 ## OUTPUTS
 

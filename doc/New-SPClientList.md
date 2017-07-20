@@ -6,7 +6,7 @@ Creates a new list.
 ## SYNTAX
 
 ```
-New-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter> -Name <String>
+New-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentPipeBind> -Name <String>
  [-Title <String>] [-Description <String>] [-Template <Int32>] [-EnableAttachments <Boolean>]
  [-EnableFolderCreation <Boolean>] [-EnableVersioning <Boolean>] [-NoCrawl <Boolean>]
  [-OnQuickLaunch <Boolean>] [-Retrieval <String>]
@@ -44,7 +44,7 @@ Accept wildcard characters: False
 Indicates the site which a list to be created.
 
 ```yaml
-Type: SPClientListParentParameter
+Type: SPClientListParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -209,7 +209,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientListParentParameter
+### None or SPClient.SPClientListParentPipeBind
 
 ## OUTPUTS
 

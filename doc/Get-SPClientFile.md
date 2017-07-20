@@ -7,13 +7,13 @@ Gets one or more files.
 
 ### All (Default)
 ```
-Get-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentParameter> [-NoEnumerate]
+Get-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentPipeBind> [-NoEnumerate]
  [-Retrieval <String>]
 ```
 
 ### Name
 ```
-Get-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentParameter> -Name <String>
+Get-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentPipeBind> -Name <String>
  [-Retrieval <String>]
 ```
 
@@ -81,7 +81,7 @@ Accept wildcard characters: False
 Indicates the folder which the files are contained.
 
 ```yaml
-Type: SPClientFileParentParameter
+Type: SPClientFileParentPipeBind
 Parameter Sets: All, Name
 Aliases: 
 
@@ -184,7 +184,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFileParentParameter
+### None or SPClient.SPClientFileParentPipeBind
 
 ## OUTPUTS
 

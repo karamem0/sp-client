@@ -1,5 +1,5 @@
 ﻿/*
- * SPClientWebTemplateIdentityParameter.cs
+ * SPClientWebTemplateIdentityPipeBind.cs
  *
  * Copyright (c) 2017 karamem0
  *
@@ -12,7 +12,7 @@ namespace SPClient {
     /// <summary>
     /// Represents a parameter that stores a value that identifies site template.
     /// </summary>
-    public class SPClientWebTemplateIdentityParameter {
+    public class SPClientWebTemplateIdentityPipeBind {
 
         /// <summary>
         /// Indicates the value.
@@ -20,19 +20,19 @@ namespace SPClient {
         private object value;
 
         /// <summary>
-        /// Initializes the new instance of <see cref="SPClient.SPClientWebTemplateIdentityParameter"/> class.
+        /// Initializes the new instance of <see cref="SPClient.SPClientWebTemplateIdentityPipeBind"/> class.
         /// </summary>
-        /// <param name="siteTemplateName">the site template name.</param>
-        public SPClientWebTemplateIdentityParameter(string siteTemplateName) {
-            this.value = siteTemplateName;
+        /// <param name="webTemplateName">the site template name.</param>
+        public SPClientWebTemplateIdentityPipeBind(string webTemplateName) {
+            this.value = webTemplateName;
         }
 
         /// <summary>
-        /// Initializes the new instance of <see cref="SPClient.SPClientWebTemplateIdentityParameter"/> class.
+        /// Initializes the new instance of <see cref="SPClient.SPClientWebTemplateIdentityPipeBind"/> class.
         /// </summary>
-        /// <param name="siteTemplate">the site template.</param>
-        public SPClientWebTemplateIdentityParameter(Microsoft.SharePoint.Client.WebTemplate siteTemplate) {
-            this.value = siteTemplate;
+        /// <param name="webTemplate">the site template.</param>
+        public SPClientWebTemplateIdentityPipeBind(Microsoft.SharePoint.Client.WebTemplate webTemplate) {
+            this.value = webTemplate;
         }
 
         /// <summary>

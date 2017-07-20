@@ -32,7 +32,7 @@ Describe 'Get-SPClientWebTemplate' {
             It 'Gets all site templates' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    Web = $Web
+                    ParentObject = $Web
                 }
                 $Result = Get-SPClientWebTemplate @Params
                 $Result | Should Not BeNullOrEmpty
@@ -42,7 +42,7 @@ Describe 'Get-SPClientWebTemplate' {
             It 'Gets a template by name' {
                 $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
                 $Params = @{
-                    Web = $Web
+                    ParentObject = $Web
                     Name = 'STS#0'
                 }
                 $Result = Get-SPClientWebTemplate @Params

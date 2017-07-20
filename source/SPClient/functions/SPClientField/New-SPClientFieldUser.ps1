@@ -50,7 +50,7 @@ function New-SPClientFieldUser {
 .EXAMPLE
   New-SPClientFieldUser $list -Name "CustomField" -Title "Custom Field"
 .INPUTS
-  None or SPClient.SPClientFieldParentParameter
+  None or SPClient.SPClientFieldParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.FieldUser
 .LINK
@@ -63,7 +63,7 @@ function New-SPClientFieldUser {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientFieldParentParameter]
+        [SPClient.SPClientFieldParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true)]
         [string]

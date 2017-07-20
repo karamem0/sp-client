@@ -7,13 +7,13 @@ Gets one or more attachments.
 
 ### All (Default)
 ```
-Get-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentParameter>
+Get-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentPipeBind>
  [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Name
 ```
-Get-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentParameter>
+Get-SPClientAttachment [-ClientContext <ClientContext>] [-ParentObject] <SPClientAttachmentParentPipeBind>
  -Name <String> [-Retrieval <String>]
 ```
 
@@ -61,7 +61,7 @@ Accept wildcard characters: False
 Indicates the list item which the attachments are contained.
 
 ```yaml
-Type: SPClientAttachmentParentParameter
+Type: SPClientAttachmentParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -119,7 +119,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientAttachmentParentParameter
+### None or SPClient.SPClientAttachmentParentPipeBind
 
 ## OUTPUTS
 

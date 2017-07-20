@@ -6,7 +6,7 @@ Converts list item to folder.
 ## SYNTAX
 
 ```
-ConvertTo-SPClientFolder [-ClientContext <ClientContext>] [-InputObject] <SPClientFolderConvertParameter>
+ConvertTo-SPClientFolder [-ClientContext <ClientContext>] [-InputObject] <SPClientFolderConvertPipeBind>
  [-Retrieval <String>]
 ```
 
@@ -42,7 +42,7 @@ Accept wildcard characters: False
 Indicates the list item.
 
 ```yaml
-Type: SPClientFolderConvertParameter
+Type: SPClientFolderConvertPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -70,7 +70,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFolderConvertParameter
+### None or SPClient.SPClientFolderConvertPipeBind
 
 ## OUTPUTS
 

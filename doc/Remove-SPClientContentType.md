@@ -12,14 +12,14 @@ Remove-SPClientContentType [-ClientContext <ClientContext>] [-ClientObject] <Con
 
 ### Name
 ```
-Remove-SPClientContentType [-ClientContext <ClientContext>]
- [-ParentObject] <SPClientContentTypeParentParameter> -Name <String>
+Remove-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentPipeBind>
+ -Name <String>
 ```
 
 ### Identity
 ```
-Remove-SPClientContentType [-ClientContext <ClientContext>]
- [-ParentObject] <SPClientContentTypeParentParameter> -Identity <String>
+Remove-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentPipeBind>
+ -Identity <String>
 ```
 
 ## DESCRIPTION
@@ -79,7 +79,7 @@ Accept wildcard characters: False
 Indicates the site or list which the content type is contained.
 
 ```yaml
-Type: SPClientContentTypeParentParameter
+Type: SPClientContentTypeParentPipeBind
 Parameter Sets: Name, Identity
 Aliases: 
 
@@ -122,7 +122,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.ContentType or SPClient.SPClientContentTypeParentParameter
+### None or Microsoft.SharePoint.Client.ContentType or SPClient.SPClientContentTypeParentPipeBind
 
 ## OUTPUTS
 

@@ -7,13 +7,13 @@ Creates a new file.
 
 ### ContentStream (Default)
 ```
-New-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentParameter>
+New-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentPipeBind>
  -ContentStream <Stream> -Name <String> [-Retrieval <String>]
 ```
 
 ### ContentPath
 ```
-New-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentParameter>
+New-SPClientFile [-ClientContext <ClientContext>] [-ParentObject] <SPClientFileParentPipeBind>
  -ContentPath <String> [-Name <String>] [-Retrieval <String>]
 ```
 
@@ -54,7 +54,7 @@ Accept wildcard characters: False
 Indicates the folder which a file to be created.
 
 ```yaml
-Type: SPClientFileParentParameter
+Type: SPClientFileParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -139,7 +139,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFileParentParameter
+### None or SPClient.SPClientFileParentPipeBind
 
 ## OUTPUTS
 

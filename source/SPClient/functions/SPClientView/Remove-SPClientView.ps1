@@ -37,7 +37,7 @@ function Remove-SPClientView {
 .EXAMPLE
   Remove-SPClientView $list -Title "Custom View"
 .INPUTS
-  None or Microsoft.SharePoint.Client.View or SPClient.SPClientViewParentParameter
+  None or Microsoft.SharePoint.Client.View or SPClient.SPClientViewParentPipeBind
 .OUTPUTS
   None
 .LINK
@@ -55,7 +55,7 @@ function Remove-SPClientView {
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Identity')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Url')]
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ParameterSetName = 'Title')]
-        [SPClient.SPClientViewParentParameter]
+        [SPClient.SPClientViewParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]

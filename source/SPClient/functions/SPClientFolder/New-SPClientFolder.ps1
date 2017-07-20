@@ -27,7 +27,7 @@ function New-SPClientFolder {
 .EXAMPLE
   New-SPClientFolder $folder -Name "CustomFolder"
 .INPUTS
-  None or SPClient.SPClientFolderParentParameter
+  None or SPClient.SPClientFolderParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.Folder
 .LINK
@@ -40,7 +40,7 @@ function New-SPClientFolder {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientFolderParentParameter]
+        [SPClient.SPClientFolderParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true)]
         [string]

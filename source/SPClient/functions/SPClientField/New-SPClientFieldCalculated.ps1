@@ -59,7 +59,7 @@ function New-SPClientFieldCalculated {
 .EXAMPLE
   New-SPClientFieldCalculated $list -Name "CustomField" -Title "Custom Field" -Formula "=[Title]" -FieldRefs "Title" -OutputType "Text"
 .INPUTS
-  None or SPClient.SPClientFieldParentParameter
+  None or SPClient.SPClientFieldParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.FieldCalculated
 .LINK
@@ -72,7 +72,7 @@ function New-SPClientFieldCalculated {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientFieldParentParameter]
+        [SPClient.SPClientFieldParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $true)]
         [string]

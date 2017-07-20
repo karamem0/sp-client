@@ -6,7 +6,7 @@ Creates a new currency column.
 ## SYNTAX
 
 ```
-New-SPClientFieldCurrency [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentParameter>]
+New-SPClientFieldCurrency [-ClientContext <ClientContext>] [[-ParentObject] <SPClientFieldParentPipeBind>]
  -Name <String> [-Title <String>] [-Identity <Guid>] [-Description <String>] [-Required <Boolean>]
  [-EnforceUniqueValues <Boolean>] [-MinimumValue <Double>] [-MaximumValue <Double>] [-Decimals <Int32>]
  [-LocaleId <Int32>] [-DefaultValue <Double>] [-AddToDefaultView <Boolean>] [-Retrieval <String>]
@@ -45,7 +45,7 @@ Accept wildcard characters: False
 Indicates the site or list which a column to be created.
 
 ```yaml
-Type: SPClientFieldParentParameter
+Type: SPClientFieldParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -253,7 +253,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientFieldParentParameter
+### None or SPClient.SPClientFieldParentPipeBind
 
 ## OUTPUTS
 

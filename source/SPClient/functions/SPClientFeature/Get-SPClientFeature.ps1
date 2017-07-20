@@ -1,7 +1,7 @@
 ﻿#Requires -Version 3.0
 
 <#
-  Get-SPClientAttachment.ps1
+  Get-SPClientFeature.ps1
 
   Copyright (c) 2017 karamem0
 
@@ -9,37 +9,33 @@
   https://github.com/karamem0/SPClient/blob/master/LICENSE
 #>
 
-function Get-SPClientAttachment {
+function Get-SPClientFeature {
 
 <#
 .SYNOPSIS
-  Gets one or more attachments.
+  Gets one or more activated features.
 .DESCRIPTION
-  The Get-SPClientAttachment function lists all attachments or retrieves the specified attachment.
-  If not specified filterable parameter, returns all attachments of the list item.
-  Otherwise, returns a attachment which matches the parameter.
+  The Get-SPClientFeature function lists all features or retrieves the specified feature.
+  If not specified filterable parameter, returns all features of the site collection or site.
+  Otherwise, returns a feature which matches the parameter.
 .PARAMETER ClientContext
   Indicates the client context. If not specified, uses default context.
 .PARAMETER ParentObject
-  Indicates the list item which the attachments are contained.
+  Indicates the site collection or site to which the features are contained.
 .PARAMETER NoEnumerate
   If specified, suppresses enumeration in output.
-.PARAMETER FileName
-  Indicates the attachment file name.
+.PARAMETER Identity
+  Indicates the feature GUID.
 .PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
-  Get-SPClientAttachment $item
-.EXAMPLE
-  Get-SPClientAttachment $item -FileName "CustomAttachment.xlsx"
-.EXAMPLE
-  Get-SPClientAttachment $item -Retrieval "FileName"
+  Get-SPClientFeature
 .INPUTS
-  None or SPClient.SPClientAttachmentParentPipeBind
+  None or SPClient.SPClientFeatureParentPipeBind
 .OUTPUTS
-  Microsoft.SharePoint.Client.Attachment[]
+  Microsoft.SharePoint.Client.Feature[]
 .LINK
-  https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientAttachment.md
+  https://github.com/karamem0/SPClient/blob/master/doc/Get-SPClientFeature.md
 #>
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -47,15 +43,16 @@ function Get-SPClientAttachment {
         [Parameter(Mandatory = $false)]
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
-        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientAttachmentParentPipeBind]
-        $ParentObject,
+        [Parameter(Mandatory = $false, Position = 0, ValueFromPipeline = $true)]
+        [SPClient.SPClientFeatureParentPipeBind]
+        $ParentObject = $ClientContext.Site,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [switch]
         $NoEnumerate,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Name')]
+        [Parameter(Mandatory = $false, ParameterSetName = 'Identity')]
+        [Alias('Id')]
         [string]
-        $Name,
+        $Identity,
         [Parameter(Mandatory = $false)]
         [string]
         $Retrieval
@@ -65,7 +62,10 @@ function Get-SPClientAttachment {
         if ($ClientContext -eq $null) {
             throw "Cannot bind argument to parameter 'ClientContext' because it is null."
         }
-        $ClientObjectCollection = $ParentObject.ClientObject.AttachmentFiles
+        if ($ParentObject -eq $null) {
+            throw "Cannot bind argument to parameter 'ParentObject' because it is null."
+        }
+        $ClientObjectCollection = $ParentObject.ClientObject.Features
         if ($PSCmdlet.ParameterSetName -eq 'All') {
             Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
@@ -73,21 +73,21 @@ function Get-SPClientAttachment {
                 -Retrieval $Retrieval
             Write-Output $ClientObjectCollection -NoEnumerate:$NoEnumerate
         }
-        if ($PSCmdlet.ParameterSetName -eq 'Name') {
+        if ($PSCmdlet.ParameterSetName -eq 'Identity') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
                 $ClientObjectCollection.Path, `
-                'GetByFileName', `
-                [object[]]$Name)
-            $ClientObject = New-Object Microsoft.SharePoint.Client.Attachment($ClientContext, $PathMethod)
+                'GetById', `
+                [object[]]$Identity)
+            $ClientObject = New-Object Microsoft.SharePoint.Client.Feature($ClientContext, $PathMethod)
             Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObject `
                 -Retrieval $Retrieval
-            Write-Output $ClientObject
-            trap {
-                throw 'The specified attachment could not be found.'
+            if ($ClientObject.ServerObjectIsNull) {
+                throw 'The specified feature could not be found.'
             }
+            Write-Output $ClientObject
         }
     }
 

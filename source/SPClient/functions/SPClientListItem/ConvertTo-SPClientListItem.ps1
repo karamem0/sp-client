@@ -27,7 +27,7 @@ function ConvertTo-SPClientListItem {
 .EXAMPLE
   ConvertTo-SPClientListItem $folder
 .INPUTS
-  None or SPClient.SPClientListItemConvertParameter
+  None or SPClient.SPClientListItemConvertPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.ListItem
 .LINK
@@ -40,7 +40,7 @@ function ConvertTo-SPClientListItem {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientListItemConvertParameter]
+        [SPClient.SPClientListItemConvertPipeBind]
         $InputObject,
         [Parameter(Mandatory = $false)]
         [string]

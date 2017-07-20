@@ -47,7 +47,7 @@ function Get-SPClientView {
 .EXAMPLE
   Get-SPClientView $list -Retrieval "Title"
 .INPUTS
-  None or SPClient.SPClientViewParentParameter
+  None or SPClient.SPClientViewParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.View[]
 .LINK
@@ -60,7 +60,7 @@ function Get-SPClientView {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientViewParentParameter]
+        [SPClient.SPClientViewParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [switch]

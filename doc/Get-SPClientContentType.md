@@ -7,19 +7,19 @@ Gets one or more content types.
 
 ### All (Default)
 ```
-Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
+Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentPipeBind>
  [-NoEnumerate] [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
+Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentPipeBind>
  -Identity <String> [-Retrieval <String>]
 ```
 
 ### Name
 ```
-Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentParameter>
+Get-SPClientContentType [-ClientContext <ClientContext>] [-ParentObject] <SPClientContentTypeParentPipeBind>
  -Name <String> [-Retrieval <String>]
 ```
 
@@ -72,7 +72,7 @@ Accept wildcard characters: False
 Indicates the site or list which the content types are contained.
 
 ```yaml
-Type: SPClientContentTypeParentParameter
+Type: SPClientContentTypeParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -145,7 +145,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientContentTypeParentParameter
+### None or SPClient.SPClientContentTypeParentPipeBind
 
 ## OUTPUTS
 

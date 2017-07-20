@@ -6,9 +6,9 @@ Creates a new subsite.
 ## SYNTAX
 
 ```
-New-SPClientWeb [-ClientContext <ClientContext>] [-ParentObject] <SPClientWebParentParameter> -Url <String>
- [-Title <String>] [-Description <String>] [-Locale <String>]
- [-Template <SPClientWebTemplateIdentityParameter>] [-UniquePermissions] [-Retrieval <String>]
+New-SPClientWeb [-ClientContext <ClientContext>] [-ParentObject] <SPClientWebParentPipeBind> -Url <String>
+ [-Title <String>] [-Description <String>] [-Locale <String>] [-Template <SPClientWebTemplateIdentityPipeBind>]
+ [-UniquePermissions] [-Retrieval <String>]
 ```
 
 ## DESCRIPTION
@@ -43,7 +43,7 @@ Accept wildcard characters: False
 Indicates the site which a subsite to be created.
 
 ```yaml
-Type: SPClientWebParentParameter
+Type: SPClientWebParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -120,7 +120,7 @@ Accept wildcard characters: False
 Indicates the template name.
 
 ```yaml
-Type: SPClientWebTemplateIdentityParameter
+Type: SPClientWebTemplateIdentityPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -163,7 +163,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientWebParentParameter
+### None or SPClient.SPClientWebParentPipeBind
 
 ## OUTPUTS
 

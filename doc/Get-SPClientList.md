@@ -7,25 +7,25 @@ Gets one or more lists.
 
 ### All (Default)
 ```
-Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter> [-NoEnumerate]
+Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentPipeBind> [-NoEnumerate]
  [-Retrieval <String>]
 ```
 
 ### Identity
 ```
-Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter>
- -Identity <Guid> [-Retrieval <String>]
+Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentPipeBind> -Identity <Guid>
+ [-Retrieval <String>]
 ```
 
 ### Url
 ```
-Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter> -Url <String>
+Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentPipeBind> -Url <String>
  [-Retrieval <String>]
 ```
 
 ### Name
 ```
-Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentParameter> -Name <String>
+Get-SPClientList [-ClientContext <ClientContext>] [-ParentObject] <SPClientListParentPipeBind> -Name <String>
  [-Retrieval <String>]
 ```
 
@@ -83,7 +83,7 @@ Accept wildcard characters: False
 Indicates the site which the lists are contained.
 
 ```yaml
-Type: SPClientListParentParameter
+Type: SPClientListParentPipeBind
 Parameter Sets: (All)
 Aliases: 
 
@@ -171,7 +171,7 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or SPClient.SPClientListParentParameter
+### None or SPClient.SPClientListParentPipeBind
 
 ## OUTPUTS
 

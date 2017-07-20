@@ -43,7 +43,7 @@ function Get-SPClientList {
 .EXAMPLE
   Get-SPClientList $web -Retrieval "Title"
 .INPUTS
-  None or SPClient.SPClientListParentParameter
+  None or SPClient.SPClientListParentPipeBind
 .OUTPUTS
   Microsoft.SharePoint.Client.List[]
 .LINK
@@ -56,7 +56,7 @@ function Get-SPClientList {
         [Microsoft.SharePoint.Client.ClientContext]
         $ClientContext = $SPClient.ClientContext,
         [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
-        [SPClient.SPClientListParentParameter]
+        [SPClient.SPClientListParentPipeBind]
         $ParentObject,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [switch]
