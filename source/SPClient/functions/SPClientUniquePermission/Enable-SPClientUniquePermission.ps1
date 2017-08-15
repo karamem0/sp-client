@@ -31,7 +31,7 @@ function Enable-SPClientUniquePermission {
 .INPUTS
   None or Microsoft.SharePoint.Client.SecurableObject
 .OUTPUTS
-  None
+  None or Microsoft.SharePoint.Client.SecurableObject
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Enable-SPClientUniquePermission.md
 #>

@@ -29,7 +29,7 @@ function Enable-SPClientFeature {
 .INPUTS
   None or SPClient.SPClientFeatureParentPipeBind
 .OUTPUTS
-  None
+  None or Microsoft.SharePoint.Client.Site or Microsoft.SharePoint.Client.Web
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Enable-SPClientFeature.md
 #>
