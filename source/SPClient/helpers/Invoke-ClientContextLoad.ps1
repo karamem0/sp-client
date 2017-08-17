@@ -15,7 +15,7 @@ function Invoke-ClientContextLoad {
     param (
         [Parameter(Mandatory = $true)]
         [Microsoft.SharePoint.Client.ClientContext]
-        $ClientContext = $SPClient.ClientContext,
+        $ClientContext,
         [Parameter(Mandatory = $true)]
         [Microsoft.SharePoint.Client.ClientObject]
         $ClientObject,
