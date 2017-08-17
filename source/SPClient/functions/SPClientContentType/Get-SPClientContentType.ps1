@@ -19,7 +19,7 @@ function Get-SPClientContentType {
   If not specified filterable parameter, returns all content types of the site or list.
   Otherwise, returns a content type which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site or list which the content types are contained.
 .PARAMETER NoEnumerate

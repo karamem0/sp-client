@@ -17,7 +17,7 @@ function Get-SPClientListItem {
 .DESCRIPTION
   The Get-SPClientListItem function retrieves list items using CAML query.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the list which the list items are contained.
 .PARAMETER FolderUrl

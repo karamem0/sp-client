@@ -17,7 +17,7 @@ function New-SPClientFile {
 .DESCRIPTION
   The New-SPClientFile function adds a new file to the folder.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the folder which a file to be created.
 .PARAMETER ContentPath

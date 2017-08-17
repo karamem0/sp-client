@@ -17,7 +17,7 @@ function New-SPClientWeb {
 .DESCRIPTION
   The New-SPClientWeb function adds a new subsite to the site.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site which a subsite to be created.
 .PARAMETER Url

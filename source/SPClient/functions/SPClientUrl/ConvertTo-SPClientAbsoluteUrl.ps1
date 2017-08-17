@@ -17,7 +17,7 @@ function ConvertTo-SPClientAbsoluteUrl {
 .DESCRIPTION
   The ConvertTo-SPClientAbsoluteUrl function converts a server relative url to a server absolute url.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER Url
   Indicates the url.
 .EXAMPLE

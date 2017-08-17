@@ -17,7 +17,7 @@ function Remove-SPClientWeb {
 .DESCRIPTION
   The Remove-SPClientWeb function removes the subsite from the site.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the site to delete.
 .PARAMETER Identity

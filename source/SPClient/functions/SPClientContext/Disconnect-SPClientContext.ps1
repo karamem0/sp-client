@@ -17,7 +17,7 @@ function Disconnect-SPClientContext {
 .DESCRIPTION
   The Disconnect-SPClientContext function disposes the current client context.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .EXAMPLE
   Disconnect-SPClientContext
 .INPUTS

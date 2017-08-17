@@ -17,7 +17,7 @@
   If not specified filterable parameter, returns all subfolders in the folder.
   Otherwise, returns a folder which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the folder which the subfolders are contained.
 .PARAMETER NoEnumerate

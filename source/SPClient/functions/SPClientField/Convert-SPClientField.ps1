@@ -17,7 +17,7 @@ function Convert-SPClientField {
 .DESCRIPTION
   The Convert-SPClientField function converts the column to its derived type.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER Field
   Indicates the column.
 .EXAMPLE

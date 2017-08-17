@@ -17,7 +17,7 @@ function ConvertTo-SPClientRelativeUrl {
 .DESCRIPTION
   The ConvertTo-SPClientRelativeUrl function converts a server absolute url to a server relative url.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER Url
   Indicates the url.
 .EXAMPLE

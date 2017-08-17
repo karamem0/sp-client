@@ -17,7 +17,7 @@ function Enable-SPClientUniquePermission {
 .DESCRIPTION
   The Enable-SPClientUniquePermission function enables unique role assignments to the specified object.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the site, list or item.
 .PARAMETER CopyRoleAssignments

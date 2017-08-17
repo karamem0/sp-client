@@ -17,7 +17,7 @@ function Disable-SPClientFeature {
 .DESCRIPTION
   The Disable-SPClientFeature function disables a site collection feature or a site feature.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site collection or site to which the feature to be disabled.
 .PARAMETER Identity

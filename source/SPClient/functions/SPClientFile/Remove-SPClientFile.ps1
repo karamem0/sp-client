@@ -17,7 +17,7 @@ function Remove-SPClientFile {
 .DESCRIPTION
   The Remove-SPClientFile function removes the file from the folder.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the file to delete.
 .PARAMETER ParentObject

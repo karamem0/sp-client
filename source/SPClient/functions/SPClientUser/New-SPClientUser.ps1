@@ -18,7 +18,7 @@ function New-SPClientUser {
 .DESCRIPTION
   The New-SPClientUser function adds a new user to the site.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER Name
   Indicates the login name.
 .PARAMETER Title

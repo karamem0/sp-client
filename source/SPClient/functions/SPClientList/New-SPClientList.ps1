@@ -17,7 +17,7 @@ function New-SPClientList {
 .DESCRIPTION
   The New-SPClientList function adds a new list to the site.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site which a list to be created.
 .PARAMETER Name

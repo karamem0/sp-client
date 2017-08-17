@@ -17,7 +17,7 @@ function Grant-SPClientPermission {
 .DESCRIPTION
   The Grant-SPClientPermission function grants role assignments to the specified object.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the site, list or item.
 .PARAMETER Member

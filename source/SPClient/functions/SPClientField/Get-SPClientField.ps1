@@ -19,7 +19,7 @@ function Get-SPClientField {
   If not specified filterable parameter, returns all columns of the site, content type or list.
   Otherwise, returns a column which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site, content type or list which the columns are contained.
 .PARAMETER NoEnumerate

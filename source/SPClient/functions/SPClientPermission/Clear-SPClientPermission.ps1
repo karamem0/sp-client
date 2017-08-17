@@ -17,7 +17,7 @@ function Clear-SPClientPermission {
 .DESCRIPTION
   The Clear-SPClientPermission function clears all role assignments from the specified object.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the site, list or item.
 .PARAMETER PassThru

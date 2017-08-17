@@ -17,7 +17,7 @@ function New-SPClientAttachment {
 .DESCRIPTION
   The New-SPClientAttachment function adds a new attachment to the list item.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the list item which a attachment to be created.
 .PARAMETER ContentPath

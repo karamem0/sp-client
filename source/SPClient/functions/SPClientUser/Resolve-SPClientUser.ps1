@@ -17,7 +17,7 @@ function Resolve-SPClientUser {
 .DESCRIPTION
   The Resolve-SPClientUser function checks whether the specified login name belongs to a valid user.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER Name
   Indicates login name or E-mail address.
 .EXAMPLE

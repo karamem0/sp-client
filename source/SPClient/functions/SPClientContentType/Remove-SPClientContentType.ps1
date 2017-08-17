@@ -17,7 +17,7 @@ function Remove-SPClientContentType {
 .DESCRIPTION
   The Remove-SPClientContentType function removes the content type from the site.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the content type to delete.
 .PARAMETER ParentObject

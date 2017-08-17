@@ -19,7 +19,7 @@ function Get-SPClientUser {
   If not specified filterable parameter, returns site all users.
   Otherwise, returns a user which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER NoEnumerate
   If specified, suppresses enumeration in output.
 .PARAMETER Identity

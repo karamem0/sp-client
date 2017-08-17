@@ -17,7 +17,7 @@ function New-SPClientView {
 .DESCRIPTION
   The New-SPClientView function adds a new view to the list.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the list which a view to be created.
 .PARAMETER Name

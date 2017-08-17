@@ -17,7 +17,7 @@ function Remove-SPClientGroup {
 .DESCRIPTION
   The Remove-SPClientGroup function removes the group from the site.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the group to delete.
 .PARAMETER Identity

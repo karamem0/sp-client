@@ -17,7 +17,7 @@ function Remove-SPClientView {
 .DESCRIPTION
   The Remove-SPClientView function removes the view from the list.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the view to delete.
 .PARAMETER ParentObject

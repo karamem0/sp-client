@@ -17,7 +17,7 @@ function New-SPClientListItem {
 .DESCRIPTION
   The New-SPClientListItem function adds a new list item to the list.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the list which a list item to be created.
 .PARAMETER FieldValues

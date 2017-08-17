@@ -18,7 +18,7 @@ function Remove-SPClientContentTypeField {
 .DESCRIPTION
   The Remove-SPClientContentTypeField function removes a column to the specified content type.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ContentType
   Indicates the content type.
 .PARAMETER Field
