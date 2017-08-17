@@ -116,6 +116,8 @@ FunctionsToExport = @(
     'Use-SPClientType'
     'Disable-SPClientUniquePermission'
     'Enable-SPClientUniquePermission'
+    'ConvertTo-SPClientAbsoluteUrl'
+    'ConvertTo-SPClientRelativeUrl'
     'Get-SPClientUser'
     'New-SPClientUser'
     'Remove-SPClientUser'
