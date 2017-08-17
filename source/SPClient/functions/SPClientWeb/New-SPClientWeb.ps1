@@ -66,7 +66,7 @@ function New-SPClientWeb {
         [string]
         $Locale,
         [Parameter(Mandatory = $false)]
-        [SPClient.SPClientWebTemplateIdentityPipeBind]
+        [SPClient.SPClientWebTemplatePipeBind]
         $Template,
         [Parameter(Mandatory = $false)]
         [switch]
@@ -84,7 +84,7 @@ function New-SPClientWeb {
         $Creation.Url = $Url
         $Creation.Language = $Locale
         if ($PSBoundParameters.ContainsKey('Template')) {
-            $Creation.WebTemplate = $Template.GetValue($ClientContext)
+            $Creation.WebTemplate = $Template.GetWebTemplate($ParentObject.ClientObject, $Locale).Name
         }
         $Creation.Title = $Title
         $Creation.Description = $Description
