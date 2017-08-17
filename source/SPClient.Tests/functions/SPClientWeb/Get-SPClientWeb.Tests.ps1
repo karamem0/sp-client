@@ -6,16 +6,33 @@ Describe 'Get-SPClientWeb' {
 
     Context 'Success' {
 
-        It 'Gets all sites' {
+        It 'Gets child subsites' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentObject = $Web
+                Scope = 'All'
             }
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.Count | Should Be 2
             $Result[0].Title | Should Be 'Test Web 2'
             $Result[1].Title | Should Be 'Test Web 3'
+        }
+
+        It 'Gets descendant subsites' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Params = @{
+                ParentObject = $Web
+                Scope = 'RecursiveAll'
+            }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.Count | Should Be 3
+            $Result[0].Title | Should Be 'Test Web 2'
+            $Result[1].Title | Should Be 'Test Web 3'
+            $Result[2].Title | Should Be 'Test Web 4'
         }
 
         It 'Gets a site by id' {
@@ -55,15 +72,6 @@ Describe 'Get-SPClientWeb' {
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
             $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.SiteUrl
-        }
-
-        It 'Gets default site and its descendants' {
-            $Params = @{
-                RecursiveAll = $true
-            }
-            $Result = Get-SPClientWeb @Params
-            $Result | Should Not BeNullOrEmpty
-            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
         }
 
     }
