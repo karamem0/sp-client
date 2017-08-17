@@ -61,17 +61,27 @@ Describe 'Get-SPClientWeb' {
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-            $Result.Id | Should Be $Params.Identity
+            $Result.Id | Should Be $SPClient.TestConfig.WebId
         }
 
-        It 'Gets a site by url' {
+        It 'Gets a site by relative url' {
             $Params = @{
                 Url = $SPClient.TestConfig.WebUrl
             }
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-            $Result.ServerRelativeUrl | Should Be $Params.Url
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.WebUrl
+        }
+
+        It 'Gets a site by absolute url' {
+            $Params = @{
+                Url = $SPClient.TestConfig.RootUrl + $SPClient.TestConfig.WebUrl
+            }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.WebUrl
         }
 
     }
