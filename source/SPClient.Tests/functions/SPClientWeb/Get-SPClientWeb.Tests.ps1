@@ -35,6 +35,25 @@ Describe 'Get-SPClientWeb' {
             $Result[2].Title | Should Be 'Test Web 4'
         }
 
+        It 'Gets the default site' {
+            $Params = @{
+                Path = 'Default'
+            }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+        }
+
+        It 'Gets the root site' {
+            $Params = @{
+                Path = 'Root'
+            }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.SiteUrl
+        }
+
         It 'Gets a site by id' {
             $Params = @{
                 Identity = $SPClient.TestConfig.WebId
@@ -53,25 +72,6 @@ Describe 'Get-SPClientWeb' {
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
             $Result.ServerRelativeUrl | Should Be $Params.Url
-        }
-
-        It 'Gets the default site' {
-            $Params = @{
-                Default = $true
-            }
-            $Result = Get-SPClientWeb @Params
-            $Result | Should Not BeNullOrEmpty
-            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-        }
-
-        It 'Gets the root site' {
-            $Params = @{
-                Root = $true
-            }
-            $Result = Get-SPClientWeb @Params
-            $Result | Should Not BeNullOrEmpty
-            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.SiteUrl
         }
 
     }

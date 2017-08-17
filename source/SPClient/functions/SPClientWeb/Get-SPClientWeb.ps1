@@ -32,22 +32,20 @@ function Get-SPClientWeb {
   Indicates the site GUID.
 .PARAMETER Url
   Indicates the site URL.
-.PARAMETER Default
-  If specified, returns the default site of the client context.
-.PARAMETER Root
-  If specified, returns the root site.
+.PARAMETER Path
+  Indicates the site static path.
+    - Default: The default site of a client context.
+    - Root: The root site.
 .PARAMETER Retrieval
   Indicates the data retrieval expression.
 .EXAMPLE
-  Get-SPClientWeb
+  Get-SPClientWeb $web -Scope RecursiveAll
 .EXAMPLE
   Get-SPClientWeb -Identity "B7FB9B8D-A815-496F-B16B-CC1B26CCAC33"
 .EXAMPLE
   Get-SPClientWeb -Url "/CustomWeb"
 .EXAMPLE
-  Get-SPClientWeb -Default
-.EXAMPLE
-  Get-SPClientWeb -Root
+  Get-SPClientWeb -Path Root
 .EXAMPLE
   Get-SPClientWeb -Retrieval "Title"
 .INPUTS
@@ -73,6 +71,10 @@ function Get-SPClientWeb {
         [ValidateSet('All', 'RecursiveAll')]
         [string]
         $Scope = 'All',
+        [Parameter(Mandatory = $true, ParameterSetName = 'Path')]
+        [ValidateSet('Default', 'Root')]
+        [string]
+        $Path,
         [Parameter(Mandatory = $true, ParameterSetName = 'Identity')]
         [Alias('Id')]
         [guid]
@@ -80,12 +82,6 @@ function Get-SPClientWeb {
         [Parameter(Mandatory = $true, ParameterSetName = 'Url')]
         [string]
         $Url,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Default')]
-        [switch]
-        $Default,
-        [Parameter(Mandatory = $true, ParameterSetName = 'Root')]
-        [switch]
-        $Root,
         [Parameter(Mandatory = $false)]
         [string]
         $Retrieval
@@ -144,6 +140,24 @@ function Get-SPClientWeb {
                 Write-Output $ClientObjectCollection -NoEnumerate:$NoEnumerate
             }
         }
+        if ($PSCmdlet.ParameterSetName -eq 'Path') {
+            if ($Path -eq 'Default') {
+                $ClientObject = $ClientContext.Web
+                Invoke-ClientContextLoad `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject `
+                    -Retrieval $Retrieval
+                Write-Output $ClientObject
+            }
+            if ($Path -eq 'Root') {
+                $ClientObject = $ClientContext.Site.RootWeb
+                Invoke-ClientContextLoad `
+                    -ClientContext $ClientContext `
+                    -ClientObject $ClientObject `
+                    -Retrieval $Retrieval
+                Write-Output $ClientObject
+            }
+        }
         if ($PSCmdlet.ParameterSetName -eq 'Identity') {
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
@@ -175,22 +189,6 @@ function Get-SPClientWeb {
             trap {
                 throw 'The specified site could not be found.'
             }
-        }
-        if ($PSCmdlet.ParameterSetName -eq 'Default') {
-            $ClientObject = $ClientContext.Web
-            Invoke-ClientContextLoad `
-                -ClientContext $ClientContext `
-                -ClientObject $ClientObject `
-                -Retrieval $Retrieval
-            Write-Output $ClientObject
-        }
-        if ($PSCmdlet.ParameterSetName -eq 'Root') {
-            $ClientObject = $ClientContext.Site.RootWeb
-            Invoke-ClientContextLoad `
-                -ClientContext $ClientContext `
-                -ClientObject $ClientObject `
-                -Retrieval $Retrieval
-            Write-Output $ClientObject
         }
     }
 
