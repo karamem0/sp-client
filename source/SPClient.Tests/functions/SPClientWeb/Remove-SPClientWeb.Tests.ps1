@@ -56,12 +56,23 @@ Describe 'Remove-SPClientWeb' {
             $Result | Should BeNullOrEmpty
         }
 
-        It 'Removes a site by url' {
+        It 'Removes a site by relative url' {
             $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
             $SPClient.ClientContext.Load($Web)
             $SPClient.ClientContext.ExecuteQuery()
             $Params = @{
                 Url = $Web.ServerRelativeUrl
+            }
+            $Result = Remove-SPClientWeb @Params
+            $Result | Should BeNullOrEmpty
+        }
+
+        It 'Removes a site by absolute url' {
+            $Web = $SPClient.ClientContext.Site.OpenWeb("$($SPClient.TestConfig.WebUrl)/TestWeb0")
+            $SPClient.ClientContext.Load($Web)
+            $SPClient.ClientContext.ExecuteQuery()
+            $Params = @{
+                Url = $SPClient.TestConfig.RootUrl + $Web.ServerRelativeUrl
             }
             $Result = Remove-SPClientWeb @Params
             $Result | Should BeNullOrEmpty

@@ -81,6 +81,7 @@ function Remove-SPClientWeb {
                     -Retrieval 'Id'
             }
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
+                $Url = ConvertTo-SPClientRelativeUrl -ClientContext $ClientContext -Url $Url
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ClientContext.Site.Path, `
