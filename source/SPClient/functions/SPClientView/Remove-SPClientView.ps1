@@ -98,6 +98,7 @@ function Remove-SPClientView {
                 }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
+                $Url = ConvertTo-SPClientRelativeUrl -ClientContext $ClientContext -Url $Url
                 Invoke-ClientContextLoad `
                     -ClientContext $ClientContext `
                     -ClientObject $ClientObjectCollection `
