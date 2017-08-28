@@ -23,10 +23,12 @@ Describe 'Get-SPClientFolder' {
             $Params = @{
                 Web = $Web
                 Identity = $SPClient.TestConfig.FolderId
+                Retrieval = 'ListItemAllFields'
             }
             $Result = Get-SPClientFolder @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Folder'
+            $Result.ListItemAllFields['UniqueId'] | Should Be $SPClient.TestConfig.FolderId
         }
 
         It 'Returns a folder by name' {
@@ -40,9 +42,10 @@ Describe 'Get-SPClientFolder' {
             $Result = Get-SPClientFolder @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Folder'
+            $Result.Name | Should Be $SPClient.TestConfig.FolderName
         }
 
-        It 'Returns a folder by url' {
+        It 'Returns a folder by relative url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 Web = $Web
@@ -51,6 +54,19 @@ Describe 'Get-SPClientFolder' {
             $Result = Get-SPClientFolder @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Folder'
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.FolderUrl
+        }
+
+        It 'Returns a folder by absolute url' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Params = @{
+                Web = $Web
+                Url = $SPClient.TestConfig.RootUrl + $SPClient.TestConfig.FolderUrl
+            }
+            $Result = Get-SPClientFolder @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Folder'
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.FolderUrl
         }
 
     }
