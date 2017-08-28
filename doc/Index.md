@@ -5,6 +5,8 @@
   - [Connect-SPClientContext](Connect-SPClientContext.md)
   - [Disconnect-SPClientContext](Disconnect-SPClientContext.md)
   - [Debug-SPClientObject](Debug-SPClientObject.md)
+  - [ConvertTo-SPClientAbsoluteUrl](ConvertTo-SPClientAbsoluteUrl.md)
+  - [ConvertTo-SPClientRelativeUrl](ConvertTo-SPClientRelativeUrl.md)
 - Web
   - [Get-SPClientWeb](Get-SPClientWeb.md)
   - [New-SPClientWeb](New-SPClientWeb.md)
