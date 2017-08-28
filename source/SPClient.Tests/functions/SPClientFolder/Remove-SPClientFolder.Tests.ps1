@@ -65,11 +65,21 @@ Describe 'Remove-SPClientFolder' {
             $Result | Should BeNullOrEmpty
         }
 
-        It 'Removes a folder by url' {
+        It 'Removes a folder by relative url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 Web = $Web
-                Url = "$($SPClient.TestConfig.FolderUrl)/TestFolder0"
+                Url = $SPClient.TestConfig.FolderUrl + "/TestFolder0"
+            }
+            $Result = Remove-SPClientFolder @Params
+            $Result | Should BeNullOrEmpty
+        }
+
+        It 'Removes a folder by absolute url' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Params = @{
+                Web = $Web
+                Url = $SPClient.TestConfig.RootUrl + $SPClient.TestConfig.FolderUrl + "/TestFolder0"
             }
             $Result = Remove-SPClientFolder @Params
             $Result | Should BeNullOrEmpty
