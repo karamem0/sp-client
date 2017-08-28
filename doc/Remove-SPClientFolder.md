@@ -50,7 +50,7 @@ Remove-SPClientFolder -Web $web -Url "http://example.com/DocLib1/Folder"
 
 ### -ClientContext
 Indicates the client context.
-If not specified, uses default context.
+If not specified, uses a default context.
 
 ```yaml
 Type: ClientContext

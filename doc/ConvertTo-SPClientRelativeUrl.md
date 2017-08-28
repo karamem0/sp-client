@@ -1,22 +1,22 @@
-# Convert-SPClientField
+# ConvertTo-SPClientRelativeUrl
 
 ## SYNOPSIS
-Converts the column to its derived type.
+Makes a relative url.
 
 ## SYNTAX
 
 ```
-Convert-SPClientField [-ClientContext <ClientContext>] [[-Field] <Field>]
+ConvertTo-SPClientRelativeUrl [-ClientContext <ClientContext>] [-Url] <String>
 ```
 
 ## DESCRIPTION
-The Convert-SPClientField function converts the column to its derived type.
+The ConvertTo-SPClientRelativeUrl function converts a server absolute url to a server relative url.
 
 ## EXAMPLES
 
 ### -------------------------- Example 1 --------------------------
 ```
-Convert-SPClientField $field
+ConvertTo-SPClientRelativeUrl "https://example.sharepoint.com/path/to/list"
 ```
 
 ## PARAMETERS
@@ -37,15 +37,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Field
-Indicates the column.
+### -Url
+Indicates the url.
 
 ```yaml
-Type: Field
+Type: String
 Parameter Sets: (All)
 Aliases: 
 
-Required: False
+Required: True
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
@@ -54,15 +54,15 @@ Accept wildcard characters: False
 
 ## INPUTS
 
-### None or Microsoft.SharePoint.Client.Field
+### None or System.String
 
 ## OUTPUTS
 
-### Derived type of Microsoft.SharePoint.Client.Field
+### System.String
 
 ## NOTES
 
 ## RELATED LINKS
 
-[https://github.com/karamem0/SPClient/blob/master/doc/Convert-SPClientField.md](https://github.com/karamem0/SPClient/blob/master/doc/Convert-SPClientField.md)
+[https://github.com/karamem0/SPClient/blob/master/doc/ConvertTo-SPClientRelativeUrl.md](https://github.com/karamem0/SPClient/blob/master/doc/ConvertTo-SPClientRelativeUrl.md)
 

@@ -24,7 +24,7 @@ Add-SPClientContentTypeField $contentType -Field $field -UpdateChildren
 
 ### -ClientContext
 Indicates the client context.
-If not specified, uses default context.
+If not specified, uses a default context.
 
 ```yaml
 Type: ClientContext

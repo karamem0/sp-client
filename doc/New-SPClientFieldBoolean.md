@@ -26,7 +26,7 @@ New-SPClientFieldBoolean $list -Name "CustomField" -Title "Custom Field"
 
 ### -ClientContext
 Indicates the client context.
-If not specified, uses default context.
+If not specified, uses a default context.
 
 ```yaml
 Type: ClientContext

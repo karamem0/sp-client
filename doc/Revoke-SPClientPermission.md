@@ -31,7 +31,7 @@ Revoke-SPClientPermission $item -Member $user -Roles "Full Control"
 
 ### -ClientContext
 Indicates the client context.
-If not specified, uses default context.
+If not specified, uses a default context.
 
 ```yaml
 Type: ClientContext

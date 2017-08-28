@@ -40,7 +40,7 @@ Remove-SPClientListItem $list -IdentityGuid "77DF0F67-9B13-4499-AC14-25EB18E1D3D
 
 ### -ClientContext
 Indicates the client context.
-If not specified, uses default context.
+If not specified, uses a default context.
 
 ```yaml
 Type: ClientContext
