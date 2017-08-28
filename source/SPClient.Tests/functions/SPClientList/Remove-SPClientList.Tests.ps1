@@ -57,11 +57,21 @@ Describe 'Remove-SPClientList' {
             $Result | Should BeNullOrEmpty
         }
 
-        It 'Removes a list by url' {
+        It 'Removes a list by relative url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentObject = $Web
-                Url = "$($SPClient.TestConfig.WebUrl)/Lists/TestList0"
+                Url = $SPClient.TestConfig.WebUrl + "/Lists/TestList0"
+            }
+            $Result = Remove-SPClientList @Params
+            $Result | Should BeNullOrEmpty
+        }
+
+        It 'Removes a list by absolute url' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Params = @{
+                ParentObject = $Web
+                Url = $SPClient.TestConfig.RootUrl + $SPClient.TestConfig.WebUrl + "/Lists/TestList0"
             }
             $Result = Remove-SPClientList @Params
             $Result | Should BeNullOrEmpty

@@ -18,7 +18,7 @@ function New-SPClientFieldMultiLineText {
   The New-SPClientFieldMultiLineText function adds a new column to the site or list.
   The column allows the user to enter multiple lines of text.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site or list which a column to be created.
 .PARAMETER Name

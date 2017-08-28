@@ -19,7 +19,7 @@ function Get-SPClientAttachment {
   If not specified filterable parameter, returns all attachments of the list item.
   Otherwise, returns a attachment which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the list item which the attachments are contained.
 .PARAMETER NoEnumerate

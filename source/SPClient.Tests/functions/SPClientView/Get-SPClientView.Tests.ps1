@@ -29,12 +29,24 @@ Describe 'Get-SPClientView' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.View'
         }
 
-        It 'Gets a view by url' {
+        It 'Gets a view by relative url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentObject = $List
                 Url = $SPClient.TestConfig.ViewUrl
+            }
+            $Result = Get-SPClientView @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.View'
+        }
+
+        It 'Gets a view by absolute url' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+            $Params = @{
+                ParentObject = $List
+                Url = $SPClient.TestConfig.RootUrl + $SPClient.TestConfig.ViewUrl
             }
             $Result = Get-SPClientView @Params
             $Result | Should Not BeNullOrEmpty

@@ -19,7 +19,7 @@ function Get-SPClientView {
   If not specified filterable parameter, returns all views of the list.
   Otherwise, returns a view which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the list which the views are contained.
 .PARAMETER NoEnumerate
@@ -112,6 +112,7 @@ function Get-SPClientView {
             }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
+            $Url = ConvertTo-SPClientRelativeUrl -ClientContext $ClientContext -Url $Url
             Invoke-ClientContextLoad `
                 -ClientContext $ClientContext `
                 -ClientObject $ClientObjectCollection `

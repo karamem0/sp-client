@@ -17,7 +17,7 @@ function Remove-SPClientListItem {
 .DESCRIPTION
   The Remove-SPClientListItem function removes the list item from the list.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the list item to delete.
 .PARAMETER ParentObject

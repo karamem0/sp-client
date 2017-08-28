@@ -17,7 +17,7 @@ function Remove-SPClientFolder {
 .DESCRIPTION
   The Remove-SPClientFolder function removes the subfolder from the folder.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the folder to delete.
 .PARAMETER ParentObject
@@ -116,6 +116,7 @@ function Remove-SPClientFolder {
                 }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
+                $Url = ConvertTo-SPClientRelativeUrl -ClientContext $ClientContext -Url $Url
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $Web.Path, `

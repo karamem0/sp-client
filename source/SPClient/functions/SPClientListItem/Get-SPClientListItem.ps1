@@ -17,7 +17,7 @@ function Get-SPClientListItem {
 .DESCRIPTION
   The Get-SPClientListItem function retrieves list items using CAML query.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the list which the list items are contained.
 .PARAMETER FolderUrl
@@ -78,7 +78,7 @@ function Get-SPClientListItem {
         [string]
         $Scope,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
-        [SPClient.SPClientFieldIdentityPipeBind[]]
+        [SPClient.SPClientFieldPipeBind[]]
         $ViewFields,
         [Parameter(Mandatory = $false, ParameterSetName = 'All')]
         [string]
@@ -123,7 +123,7 @@ function Get-SPClientListItem {
                 $ViewFieldsElement = $ViewElement.AppendChild($XmlDocument.CreateElement('ViewFields'))
                 foreach ($ViewField in $ViewFields) {
                     $FieldRefElement = $ViewFieldsElement.AppendChild($XmlDocument.CreateElement('FieldRef'))
-                    $FieldRefElement.SetAttribute('Name', $ViewField.GetValue($ClientContext))
+                    $FieldRefElement.SetAttribute('Name', $ViewField.GetField($ParentObject.ClientObject).InternalName)
                 }
             }
             if ($PSBoundParameters.ContainsKey('Query')) {

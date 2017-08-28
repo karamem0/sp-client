@@ -561,6 +561,7 @@ $ClientContext.Load($File4.ListItemAllFields)
 $ClientContext.ExecuteQuery()
 
 $TestConfig = [ordered]@{
+    RootUrl = $Site.Url.Substring(0, $Site.Url.IndexOf($Site.ServerRelativeUrl))
     SiteUrl = $Site.ServerRelativeUrl
     SiteFeatureId = $SiteFeature1.DefinitionId
     WebId = $Web1.Id

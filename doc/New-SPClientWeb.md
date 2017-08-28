@@ -7,7 +7,7 @@ Creates a new subsite.
 
 ```
 New-SPClientWeb [-ClientContext <ClientContext>] [-ParentObject] <SPClientWebParentPipeBind> -Url <String>
- [-Title <String>] [-Description <String>] [-Locale <String>] [-Template <SPClientWebTemplateIdentityPipeBind>]
+ [-Title <String>] [-Description <String>] [-Locale <String>] [-Template <SPClientWebTemplatePipeBind>]
  [-UniquePermissions] [-Retrieval <String>]
 ```
 
@@ -25,7 +25,7 @@ New-SPClientWeb -Url "CustomWeb" -Title "Custom Web"
 
 ### -ClientContext
 Indicates the client context.
-If not specified, uses default context.
+If not specified, uses a default context.
 
 ```yaml
 Type: ClientContext
@@ -120,7 +120,7 @@ Accept wildcard characters: False
 Indicates the template name.
 
 ```yaml
-Type: SPClientWebTemplateIdentityPipeBind
+Type: SPClientWebTemplatePipeBind
 Parameter Sets: (All)
 Aliases: 
 

@@ -17,7 +17,7 @@
   If not specified filterable parameter, returns all files in the folder.
   Otherwise, returns a file which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the folder which the files are contained.
 .PARAMETER NoEnumerate
@@ -129,6 +129,7 @@ function Get-SPClientFile {
             }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
+            $Url = ConvertTo-SPClientRelativeUrl -ClientContext $ClientContext -Url $Url
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
                 $Web.Path, `

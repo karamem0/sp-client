@@ -22,10 +22,12 @@ Describe 'Get-SPClientFile' {
             $Params = @{
                 Web = $Web
                 Identity = $SPClient.TestConfig.FileId
+                Retrieval = 'ListItemAllFields'
             }
             $Result = Get-SPClientFile @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.File'
+            $Result.ListItemAllFields['UniqueId'] | Should Be $SPClient.TestConfig.FileId
         }
 
         It 'Returns a file by name' {
@@ -38,9 +40,10 @@ Describe 'Get-SPClientFile' {
             $Result = Get-SPClientFile @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.File'
+            $Result.Name | Should Be $SPClient.TestConfig.FileName
         }
 
-        It 'Returns a file by url' {
+        It 'Returns a file by relative url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 Web = $Web
@@ -49,6 +52,19 @@ Describe 'Get-SPClientFile' {
             $Result = Get-SPClientFile @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.File'
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.FileUrl
+        }
+
+        It 'Returns a file by absolute url' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Params = @{
+                Web = $Web
+                Url = $SPClient.TestConfig.RootUrl + $SPClient.TestConfig.FileUrl
+            }
+            $Result = Get-SPClientFile @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.File'
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.FileUrl
         }
 
     }

@@ -19,7 +19,7 @@ function Get-SPClientFeature {
   If not specified filterable parameter, returns all features of the site collection or site.
   Otherwise, returns a feature which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site collection or site to which the features are contained.
 .PARAMETER NoEnumerate

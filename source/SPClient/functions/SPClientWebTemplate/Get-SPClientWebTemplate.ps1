@@ -19,7 +19,7 @@ function Get-SPClientWebTemplate {
   If not specified filterable parameter, returns all site templates of the site collection or site.
   Otherwise, returns a site template which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site collection or site to which the site templates are contained.
 .PARAMETER Locale

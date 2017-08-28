@@ -23,7 +23,7 @@ Disable-SPClientUniquePermission $item
 
 ### -ClientContext
 Indicates the client context.
-If not specified, uses default context.
+If not specified, uses a default context.
 
 ```yaml
 Type: ClientContext
@@ -73,7 +73,7 @@ Accept wildcard characters: False
 
 ## OUTPUTS
 
-### None
+### None or Microsoft.SharePoint.Client.SecurableObject
 
 ## NOTES
 

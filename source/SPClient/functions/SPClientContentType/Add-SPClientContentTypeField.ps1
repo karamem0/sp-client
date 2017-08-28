@@ -18,7 +18,7 @@ function Add-SPClientContentTypeField {
 .DESCRIPTION
   The Add-SPClientContentTypeField function adds a exsiting site column to the specified content type.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ContentType
   Indicates the content type.
 .PARAMETER Field

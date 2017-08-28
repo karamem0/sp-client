@@ -17,7 +17,7 @@ function New-SPClientContentType {
 .DESCRIPTION
   The New-SPClientContentType function adds a new content type to the site.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site or list which a content type to be created.
 .PARAMETER Name

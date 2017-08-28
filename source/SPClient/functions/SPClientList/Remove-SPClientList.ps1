@@ -17,7 +17,7 @@ function Remove-SPClientList {
 .DESCRIPTION
   The Remove-SPClientList function removes the list from the site.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the list to delete.
 .PARAMETER ParentObject
@@ -99,6 +99,7 @@ function Remove-SPClientList {
                 }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
+                $Url = ConvertTo-SPClientRelativeUrl -ClientContext $ClientContext -Url $Url
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $ParentObject.ClientObject.Path, `

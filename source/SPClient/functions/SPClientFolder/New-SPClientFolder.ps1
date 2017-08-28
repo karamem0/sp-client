@@ -17,7 +17,7 @@ function New-SPClientFolder {
 .DESCRIPTION
   The New-SPClientFolder function adds a new subfolder to the folder.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the folder which a subfolder to be created.
 .PARAMETER Name

@@ -8,7 +8,7 @@ Gets one or more list items.
 ### All (Default)
 ```
 Get-SPClientListItem [-ClientContext <ClientContext>] [-ParentObject] <SPClientListItemParentPipeBind>
- [-FolderUrl <String>] [-Scope <String>] [-ViewFields <SPClientFieldIdentityPipeBind[]>] [-Query <String>]
+ [-FolderUrl <String>] [-Scope <String>] [-ViewFields <SPClientFieldPipeBind[]>] [-Query <String>]
  [-RowLimit <Int32>] [-Position <ListItemCollectionPosition>] [-NoEnumerate] [-Retrieval <String>]
 ```
 
@@ -58,7 +58,7 @@ Get-SPClientListItem -Retrieval "Title"
 
 ### -ClientContext
 Indicates the client context.
-If not specified, uses default context.
+If not specified, uses a default context.
 
 ```yaml
 Type: ClientContext
@@ -125,7 +125,7 @@ Accept wildcard characters: False
 Indicates the collection of view columns.
 
 ```yaml
-Type: SPClientFieldIdentityPipeBind[]
+Type: SPClientFieldPipeBind[]
 Parameter Sets: All
 Aliases: 
 

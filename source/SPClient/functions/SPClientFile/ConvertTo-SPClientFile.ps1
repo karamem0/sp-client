@@ -17,7 +17,7 @@ function ConvertTo-SPClientFile {
 .DESCRIPTION
   The ConvertTo-SPClientFile function converts the list item to file.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER InputObject
   Indicates the list item.
 .PARAMETER Retrieval

@@ -17,7 +17,7 @@ function Revoke-SPClientPermission {
 .DESCRIPTION
   The Revoke-SPClientPermission function revokes role assignments to the specified object.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the site, list or item.
 .PARAMETER Member

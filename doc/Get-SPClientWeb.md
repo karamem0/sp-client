@@ -8,7 +8,12 @@ Gets one or more sites.
 ### All (Default)
 ```
 Get-SPClientWeb [-ClientContext <ClientContext>] [-ParentObject] <SPClientWebParentPipeBind> [-NoEnumerate]
- [-Retrieval <String>]
+ [-Scope <String>] [-Retrieval <String>]
+```
+
+### Path
+```
+Get-SPClientWeb [-ClientContext <ClientContext>] -Path <String> [-Retrieval <String>]
 ```
 
 ### Identity
@@ -21,21 +26,6 @@ Get-SPClientWeb [-ClientContext <ClientContext>] -Identity <Guid> [-Retrieval <S
 Get-SPClientWeb [-ClientContext <ClientContext>] -Url <String> [-Retrieval <String>]
 ```
 
-### Default
-```
-Get-SPClientWeb [-ClientContext <ClientContext>] [-Default] [-Retrieval <String>]
-```
-
-### Root
-```
-Get-SPClientWeb [-ClientContext <ClientContext>] [-Root] [-Retrieval <String>]
-```
-
-### RecursiveAll
-```
-Get-SPClientWeb [-ClientContext <ClientContext>] [-RecursiveAll] [-Retrieval <String>]
-```
-
 ## DESCRIPTION
 The Get-SPClientWeb function lists all sites or retrieve the specified site.
 If not specified filterable parameter, returns all subsites of the site.
@@ -45,7 +35,7 @@ Otherwise, returns a site which matches the parameter.
 
 ### -------------------------- Example 1 --------------------------
 ```
-Get-SPClientWeb
+Get-SPClientWeb $web -Scope RecursiveAll
 ```
 
 ### -------------------------- Example 2 --------------------------
@@ -60,15 +50,10 @@ Get-SPClientWeb -Url "/CustomWeb"
 
 ### -------------------------- Example 4 --------------------------
 ```
-Get-SPClientWeb -Default
+Get-SPClientWeb -Path Root
 ```
 
 ### -------------------------- Example 5 --------------------------
-```
-Get-SPClientWeb -Root
-```
-
-### -------------------------- Example 6 --------------------------
 ```
 Get-SPClientWeb -Retrieval "Title"
 ```
@@ -77,7 +62,7 @@ Get-SPClientWeb -Retrieval "Title"
 
 ### -ClientContext
 Indicates the client context.
-If not specified, uses default context.
+If not specified, uses a default context.
 
 ```yaml
 Type: ClientContext
@@ -121,6 +106,40 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Scope
+Indicates the scope of retrievals.
+  - All: All child subsites of a specific site.
+  - RecursiveAll: All descendant subsites of a specific site.
+
+```yaml
+Type: String
+Parameter Sets: All
+Aliases: 
+
+Required: False
+Position: Named
+Default value: All
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Path
+Indicates the site static path.
+  - Default: The default site of a client context.
+  - Root: The root site.
+
+```yaml
+Type: String
+Parameter Sets: Path
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Identity
 Indicates the site GUID.
 
@@ -147,51 +166,6 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Default
-If specified, returns the default site of the client context.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Default
-Aliases: 
-
-Required: True
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Root
-If specified, returns the root site.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Root
-Aliases: 
-
-Required: True
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RecursiveAll
-If specified, returns the default site and its descendants.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: RecursiveAll
-Aliases: 
-
-Required: True
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

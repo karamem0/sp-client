@@ -41,6 +41,21 @@ Describe 'Get-SPClientListItem' {
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.ListItem'
         }
 
+        It 'Returns list items with view column ids' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+            $Params = @{
+                ParentObject = $List
+                ViewFields = @(
+                    '1D22EA11-1E32-424E-89AB-9FEDBADB6CE1'
+                    '94F89715-E097-4E8B-BA79-EA02AA8B7ADB'
+                )
+            }
+            $Result = Get-SPClientListItem @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.ListItem'
+        }
+
         It 'Returns list items with view column names' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)

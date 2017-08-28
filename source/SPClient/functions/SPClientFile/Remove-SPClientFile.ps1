@@ -17,7 +17,7 @@ function Remove-SPClientFile {
 .DESCRIPTION
   The Remove-SPClientFile function removes the file from the folder.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the file to delete.
 .PARAMETER ParentObject
@@ -118,6 +118,7 @@ function Remove-SPClientFile {
                 }
             }
             if ($PSCmdlet.ParameterSetName -eq 'Url') {
+                $Url = ConvertTo-SPClientRelativeUrl -ClientContext $ClientContext -Url $Url
                 $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                     $ClientContext, `
                     $Web.Path, `

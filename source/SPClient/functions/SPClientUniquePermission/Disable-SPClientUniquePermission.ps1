@@ -17,7 +17,7 @@ function Disable-SPClientUniquePermission {
 .DESCRIPTION
   The Disable-SPClientUniquePermission function disables unique role assignments to the specified object.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the site, list or item.
 .PARAMETER PassThru
@@ -27,7 +27,7 @@ function Disable-SPClientUniquePermission {
 .INPUTS
   None or Microsoft.SharePoint.Client.SecurableObject
 .OUTPUTS
-  None
+  None or Microsoft.SharePoint.Client.SecurableObject
 .LINK
   https://github.com/karamem0/SPClient/blob/master/doc/Disable-SPClientUniquePermission.md
 #>

@@ -19,7 +19,7 @@ function Get-SPClientList {
   If not specified filterable parameter, returns all lists of the site.
   Otherwise, returns a list which matches the parameter.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site which the lists are contained.
 .PARAMETER NoEnumerate
@@ -106,6 +106,7 @@ function Get-SPClientList {
             }
         }
         if ($PSCmdlet.ParameterSetName -eq 'Url') {
+            $Url = ConvertTo-SPClientRelativeUrl -ClientContext $ClientContext -Url $Url
             $PathMethod = New-Object Microsoft.SharePoint.Client.ObjectPathMethod( `
                 $ClientContext, `
                 $ParentObject.ClientObject.Path, `

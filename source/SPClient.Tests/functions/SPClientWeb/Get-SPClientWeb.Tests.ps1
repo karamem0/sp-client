@@ -6,16 +6,52 @@ Describe 'Get-SPClientWeb' {
 
     Context 'Success' {
 
-        It 'Gets all sites' {
+        It 'Gets child subsites' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentObject = $Web
+                Scope = 'All'
             }
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.Count | Should Be 2
             $Result[0].Title | Should Be 'Test Web 2'
             $Result[1].Title | Should Be 'Test Web 3'
+        }
+
+        It 'Gets descendant subsites' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Params = @{
+                ParentObject = $Web
+                Scope = 'RecursiveAll'
+            }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.Count | Should Be 3
+            $Result[0].Title | Should Be 'Test Web 2'
+            $Result[1].Title | Should Be 'Test Web 3'
+            $Result[2].Title | Should Be 'Test Web 4'
+        }
+
+        It 'Gets the default site' {
+            $Params = @{
+                Path = 'Default'
+            }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+        }
+
+        It 'Gets the root site' {
+            $Params = @{
+                Path = 'Root'
+            }
+            $Result = Get-SPClientWeb @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.SiteUrl
         }
 
         It 'Gets a site by id' {
@@ -25,45 +61,27 @@ Describe 'Get-SPClientWeb' {
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-            $Result.Id | Should Be $Params.Identity
+            $Result.Id | Should Be $SPClient.TestConfig.WebId
         }
 
-        It 'Gets a site by url' {
+        It 'Gets a site by relative url' {
             $Params = @{
                 Url = $SPClient.TestConfig.WebUrl
             }
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-            $Result.ServerRelativeUrl | Should Be $Params.Url
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.WebUrl
         }
 
-        It 'Gets the default site' {
+        It 'Gets a site by absolute url' {
             $Params = @{
-                Default = $true
+                Url = $SPClient.TestConfig.RootUrl + $SPClient.TestConfig.WebUrl
             }
             $Result = Get-SPClientWeb @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-        }
-
-        It 'Gets the root site' {
-            $Params = @{
-                Root = $true
-            }
-            $Result = Get-SPClientWeb @Params
-            $Result | Should Not BeNullOrEmpty
-            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
-            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.SiteUrl
-        }
-
-        It 'Gets default site and its descendants' {
-            $Params = @{
-                RecursiveAll = $true
-            }
-            $Result = Get-SPClientWeb @Params
-            $Result | Should Not BeNullOrEmpty
-            $Result | Should BeOfType 'Microsoft.SharePoint.Client.Web'
+            $Result.ServerRelativeUrl | Should Be $SPClient.TestConfig.WebUrl
         }
 
     }

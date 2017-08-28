@@ -18,7 +18,7 @@ function New-SPClientFieldBoolean {
   The New-SPClientFieldBoolean function adds a new column to the site or list.
   The column allows the user to enter a true/false value.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site or list which a column to be created.
 .PARAMETER Name

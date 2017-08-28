@@ -18,7 +18,7 @@ function Remove-SPClientUser {
   The Remove-SPClientUser function removes the user from the site.
   If the user could not be found, throws exception.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ClientObject
   Indicates the user to delete.
 .PARAMETER Identity

@@ -25,10 +25,10 @@ Describe 'Get-SPClientList' {
             $Result = Get-SPClientList @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.List'
-            $Result.Id | Should Be $Params.Identity
+            $Result.Id | Should Be $SPClient.TestConfig.ListId
         }
 
-        It 'Returns a list by url' {
+        It 'Returns a list by relative url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 ParentObject = $Web
@@ -38,7 +38,20 @@ Describe 'Get-SPClientList' {
             $Result = Get-SPClientList @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.List'
-            $Result.RootFolder.ServerRelativeUrl | Should Be $Params.Url   
+            $Result.RootFolder.ServerRelativeUrl | Should Be $SPClient.TestConfig.ListUrl
+        }
+
+        It 'Returns a list by absolute url' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Params = @{
+                ParentObject = $Web
+                Url = $SPClient.TestConfig.RootUrl + $SPClient.TestConfig.ListUrl
+                Retrieval = 'Title,RootFolder.ServerRelativeUrl'
+            }
+            $Result = Get-SPClientList @Params
+            $Result | Should Not BeNullOrEmpty
+            $Result | Should BeOfType 'Microsoft.SharePoint.Client.List'
+            $Result.RootFolder.ServerRelativeUrl | Should Be $SPClient.TestConfig.ListUrl  
         }
 
         It 'Returns a list by title' {
@@ -50,7 +63,7 @@ Describe 'Get-SPClientList' {
             $Result = Get-SPClientList @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.List'
-            $Result.Title | Should Be $Params.Name
+            $Result.Title | Should Be $SPClient.TestConfig.ListTitle
         }
 
         It 'Returns a list by internal name' {
@@ -63,7 +76,7 @@ Describe 'Get-SPClientList' {
             $Result = Get-SPClientList @Params
             $Result | Should Not BeNullOrEmpty
             $Result | Should BeOfType 'Microsoft.SharePoint.Client.List'
-            $Result.RootFolder.Name | Should Be $Params.Name 
+            $Result.RootFolder.Name | Should Be $SPClient.TestConfig.ListName
         }
 
     }

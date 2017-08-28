@@ -17,7 +17,7 @@ function New-SPClientGroup {
 .DESCRIPTION
   The New-SPClientGroup function adds a new group to the site.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER Name
   Indicates the group name.
 .PARAMETER Description

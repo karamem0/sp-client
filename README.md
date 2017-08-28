@@ -79,8 +79,8 @@ Connect-SPClientContext -Network `
     -Domain 'domain.local'
 
 # Get web title
-Get-SPClientWeb -Default | %{ Write-Host $_.Title }
+Get-SPClientWeb -Path Default | %{ Write-Host $_.Title }
 
 # Get all lists 'ServerRelativeUrl'
-Get-SPClientWeb -Default | Get-SPClientList -Retrieval 'Include(RootFolder.ServerRelativeUrl)' | %{ Write-Host $_.RootFolder.ServerRelativeUrl }
+Get-SPClientWeb -Path Default | Get-SPClientList -Retrieval 'Include(RootFolder.ServerRelativeUrl)' | %{ Write-Host $_.RootFolder.ServerRelativeUrl }
 ```

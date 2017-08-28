@@ -17,7 +17,7 @@ function New-SPClientWeb {
 .DESCRIPTION
   The New-SPClientWeb function adds a new subsite to the site.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER ParentObject
   Indicates the site which a subsite to be created.
 .PARAMETER Url
@@ -66,7 +66,7 @@ function New-SPClientWeb {
         [string]
         $Locale,
         [Parameter(Mandatory = $false)]
-        [SPClient.SPClientWebTemplateIdentityPipeBind]
+        [SPClient.SPClientWebTemplatePipeBind]
         $Template,
         [Parameter(Mandatory = $false)]
         [switch]
@@ -84,7 +84,7 @@ function New-SPClientWeb {
         $Creation.Url = $Url
         $Creation.Language = $Locale
         if ($PSBoundParameters.ContainsKey('Template')) {
-            $Creation.WebTemplate = $Template.GetValue($ClientContext)
+            $Creation.WebTemplate = $Template.GetWebTemplate($ParentObject.ClientObject, $Locale).Name
         }
         $Creation.Title = $Title
         $Creation.Description = $Description

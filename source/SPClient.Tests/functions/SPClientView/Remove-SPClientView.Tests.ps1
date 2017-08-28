@@ -61,12 +61,23 @@ Describe 'Remove-SPClientView' {
             $Result | Should BeNullOrEmpty
         }
 
-        It 'Removes a view by url' {
+        It 'Removes a view by relative url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
             $Params = @{
                 ParentObject = $List
-                Url = "$($SPClient.TestConfig.ListUrl)/TestView0.aspx"
+                Url = $SPClient.TestConfig.ListUrl + "/TestView0.aspx"
+            }
+            $Result = Remove-SPClientView @Params
+            $Result | Should BeNullOrEmpty
+        }
+
+        It 'Removes a view by absolute url' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $List = $Web.Lists.GetById($SPClient.TestConfig.ListId)
+            $Params = @{
+                ParentObject = $List
+                Url = $SPClient.TestConfig.RootUrl + $SPClient.TestConfig.ListUrl + "/TestView0.aspx"
             }
             $Result = Remove-SPClientView @Params
             $Result | Should BeNullOrEmpty

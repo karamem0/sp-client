@@ -17,7 +17,7 @@ function ConvertTo-SPClientFolder {
 .DESCRIPTION
   The ConvertTo-SPClientFolder function converts the list item to folder.
 .PARAMETER ClientContext
-  Indicates the client context. If not specified, uses default context.
+  Indicates the client context. If not specified, uses a default context.
 .PARAMETER InputObject
   Indicates the list item.
 .PARAMETER Retrieval
