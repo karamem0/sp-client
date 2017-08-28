@@ -73,11 +73,21 @@ Describe 'Remove-SPClientFile' {
             $Result | Should BeNullOrEmpty
         }
 
-        It 'Removes a file by url' {
+        It 'Removes a file by relative url' {
             $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
             $Params = @{
                 Web = $Web
-                Url = "$($SPClient.TestConfig.FolderUrl)/TestFile0.txt"
+                Url = $SPClient.TestConfig.FolderUrl + "/TestFile0.txt"
+            }
+            $Result = Remove-SPClientFile @Params
+            $Result | Should BeNullOrEmpty
+        }
+
+        It 'Removes a file by absolute url' {
+            $Web = $SPClient.ClientContext.Site.OpenWebById($SPClient.TestConfig.WebId)
+            $Params = @{
+                Web = $Web
+                Url = $SPClient.TestConfig.RootUrl + $SPClient.TestConfig.FolderUrl + "/TestFile0.txt"
             }
             $Result = Remove-SPClientFile @Params
             $Result | Should BeNullOrEmpty
