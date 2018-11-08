@@ -2,7 +2,6 @@
 
 PowerShell module for SharePoint client-side object model (CSOM).
 
-[![Build status](https://img.shields.io/appveyor/ci/karamem0/SPClient.svg?style=flat-square)](https://ci.appveyor.com/project/karamem0/SPClient)
 [![License](https://img.shields.io/github/license/karamem0/SPClient.svg?style=flat-square)](https://github.com/karamem0/SPClient/blob/master/LICENSE)
 
 ## Features
